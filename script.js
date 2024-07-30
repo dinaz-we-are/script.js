@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   //
-  
+  //
   //
   function changeLogoColor(
     navLogoColor = "",
