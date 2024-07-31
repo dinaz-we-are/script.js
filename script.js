@@ -6,13 +6,6 @@ async function initializeScripts() {
   await loadGSAP();
   await loadAdditionalScripts();
   initializeMainFunctions();
-
-  if (document.body.classList.contains('home')) {
-    await loadScript("https://dinaz-we-are.github.io/script-home.js/script-home.js");
-    if (typeof pageSpecificFunctions === "function") {
-      pageSpecificFunctions();
-    }
-  }
 }
 
 async function loadGSAP() {
@@ -65,6 +58,10 @@ function initializeMainFunctions() {
   initializeSimpleHoverTouchAnimations();
   ctaAnimations();
   info();
+
+  if (typeof pageSpecificFunctions === "function") {
+    pageSpecificFunctions();
+  }
 }
 
 function debounce(func, wait) {
