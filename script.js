@@ -48,22 +48,19 @@ function initializeAllFunctions() {
   if (typeof pageSpecificFunctions === "function") {
       pageSpecificFunctions();
   }
-  
-  // Utility function to debounce events
-  window.addEventListener(
-    "resize",
-    debounce(() => {
+
+  window.addEventListener("resize", debounce(() => {
       ScrollTrigger.refresh();
-    }, 200)
-  );
-  
-  function debounce(func, wait) {
-    let timeout;
-    return function (...args) {
+  }, 200));
+}
+
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-  }
+  };
+}
   
   //
   //Burger
