@@ -6,6 +6,9 @@ async function initializeScripts() {
   await loadGSAP();
   await loadAdditionalScripts();
   initializeMainFunctions();
+  if (document.body.classList.contains('home')) {
+      loadScript("https://dinaz-we-are.github.io/script-home.js/script-home.js");
+  }
 }
 
 async function loadGSAP() {
@@ -26,7 +29,6 @@ async function loadAdditionalScripts() {
       "https://unpkg.com/split-type",
       "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
       "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js",
-      "https://dinaz-we-are.github.io/script.js/script.js",
   ];
   for (const script of additionalScripts) {
       await loadScript(script);
@@ -49,12 +51,7 @@ function initializeMainFunctions() {
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
-  window.addEventListener(
-      "resize",
-      debounce(() => {
-          ScrollTrigger.refresh();
-      }, 200)
-  );
+  window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));
 
   burgerAnimation();
   changeLogoColor();
