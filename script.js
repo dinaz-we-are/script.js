@@ -1,40 +1,60 @@
 document.addEventListener("DOMContentLoaded", function () {
-  loadScriptsAndInitialize();
+  initializeScripts();
 });
 
-function loadScriptsAndInitialize() {
-  // Carica gli script necessari in modo asincrono
-  loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js", () => {
-      loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js", () => {
-          loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js", () => {
-              loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js", () => {
-                  loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js", () => {
-                      loadScript("https://unpkg.com/split-type", () => {
-                          loadScript("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js", () => {
-                              loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js', () => {
-                                  initializeAllFunctions();
-                              });
-                          });
-                      });
-                  });
-              });
-          });
-      });
+async function initializeScripts() {
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
+}
+
+async function loadGSAP() {
+  const gsapScripts = [
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+  for (const script of gsapScripts) {
+      await loadScript(script);
+  }
+}
+
+async function loadAdditionalScripts() {
+  const additionalScripts = [
+      "https://unpkg.com/split-type",
+      "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+      "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js",
+      "https://dinaz-we-are.github.io/script.js/script.js",
+  ];
+  for (const script of additionalScripts) {
+      await loadScript(script);
+  }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
   });
 }
 
-function loadScript(src, callback) {
-  let script = document.createElement('script');
-  script.src = src;
-  script.async = true;
-  script.onload = callback;
-  document.head.appendChild(script);
-}
-
-function initializeAllFunctions() {
+function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
+
+  window.addEventListener(
+      "resize",
+      debounce(() => {
+          ScrollTrigger.refresh();
+      }, 200)
+  );
 
   burgerAnimation();
   changeLogoColor();
@@ -48,10 +68,6 @@ function initializeAllFunctions() {
   if (typeof pageSpecificFunctions === "function") {
       pageSpecificFunctions();
   }
-
-  window.addEventListener("resize", debounce(() => {
-      ScrollTrigger.refresh();
-  }, 200));
 }
 
 function debounce(func, wait) {
