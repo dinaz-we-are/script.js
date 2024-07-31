@@ -6,43 +6,47 @@ async function initializeScripts() {
   await loadGSAP();
   await loadAdditionalScripts();
   initializeMainFunctions();
+
   if (document.body.classList.contains('home')) {
-      loadScript("https://dinaz-we-are.github.io/script-home.js/script-home.js");
+    await loadScript("https://dinaz-we-are.github.io/script-home.js/script-home.js");
+    if (typeof pageSpecificFunctions === "function") {
+      pageSpecificFunctions();
+    }
   }
 }
 
 async function loadGSAP() {
   const gsapScripts = [
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
   ];
   for (const script of gsapScripts) {
-      await loadScript(script);
+    await loadScript(script);
   }
 }
 
 async function loadAdditionalScripts() {
   const additionalScripts = [
-      "https://unpkg.com/split-type",
-      "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-      "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js",
+    "https://unpkg.com/split-type",
+    "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+    "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js",
   ];
   for (const script of additionalScripts) {
-      await loadScript(script);
+    await loadScript(script);
   }
 }
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.async = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
   });
 }
 
@@ -61,19 +65,16 @@ function initializeMainFunctions() {
   initializeSimpleHoverTouchAnimations();
   ctaAnimations();
   info();
-
-  if (typeof pageSpecificFunctions === "function") {
-      pageSpecificFunctions();
-  }
 }
 
 function debounce(func, wait) {
   let timeout;
   return function (...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
   
   //
   //Burger
