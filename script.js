@@ -25,10 +25,16 @@ async function loadAdditionalScripts() {
   const additionalScripts = [
     "https://unpkg.com/split-type",
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-    "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js",
   ];
+
+  const fullCalendarScript = "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
+
   for (const script of additionalScripts) {
     await loadScript(script);
+  }
+
+  if (!window.FullCalendar) {
+    await loadScript(fullCalendarScript);
   }
 }
 
