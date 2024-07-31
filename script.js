@@ -1,21 +1,53 @@
 document.addEventListener("DOMContentLoaded", function () {
-    burgerAnimation();
-    changeLogoColor();
-    dataColor();
-    initializeScrollControlButtons();
-    initializeHoverAnimations();
-    initializeSimpleHoverTouchAnimations();
-    ctaAnimations();
-    info();
-    // Chiamate funzioni specifiche per pagina, se definite
-    if (typeof pageSpecificFunctions === "function") {
-      pageSpecificFunctions();
-    }
+  loadScriptsAndInitialize();
+});
+
+function loadScriptsAndInitialize() {
+  // Carica gli script necessari in modo asincrono
+  loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js", () => {
+      loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js", () => {
+          loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js", () => {
+              loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js", () => {
+                  loadScript("https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js", () => {
+                      loadScript("https://unpkg.com/split-type", () => {
+                          loadScript("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js", () => {
+                              loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js', () => {
+                                  initializeAllFunctions();
+                              });
+                          });
+                      });
+                  });
+              });
+          });
+      });
   });
-  
+}
+
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+  script.async = true;
+  script.onload = callback;
+  document.head.appendChild(script);
+}
+
+function initializeAllFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
+
+  burgerAnimation();
+  changeLogoColor();
+  dataColor();
+  initializeScrollControlButtons();
+  initializeHoverAnimations();
+  initializeSimpleHoverTouchAnimations();
+  ctaAnimations();
+  info();
+
+  if (typeof pageSpecificFunctions === "function") {
+      pageSpecificFunctions();
+  }
   
   // Utility function to debounce events
   window.addEventListener(
