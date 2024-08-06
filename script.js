@@ -1652,9 +1652,6 @@ function debounce(func, wait) {
     });
   }
   
-  
-
-  
   //
   
   window.onbeforeunload = function () {
