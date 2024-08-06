@@ -1631,7 +1631,8 @@ function debounce(func, wait) {
             "/" +
             ("0" + (date.getMonth() + 1)).slice(-2) +
             "/" +
-            date.getFullYear() + "T" + button.innerText + ":00.000Z";
+            date.getFullYear() +
+            " " + button.innerText;
           currentInputField.value = formattedDate;
           timeSelectionModal.style.display = "none";
           calendarModal.style.display = "none";
