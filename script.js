@@ -1574,7 +1574,7 @@ function debounce(func, wait) {
         today: "oggi",
       },
       dayHeaderFormat: { weekday: "short" },
-      events: function(fetchInfo, successCallback, failureCallback) {
+      events: function (fetchInfo, successCallback, failureCallback) {
         fetch('/getEvents', {
           method: 'POST',
           headers: {
@@ -1585,25 +1585,31 @@ function debounce(func, wait) {
             timeMax: fetchInfo.endStr
           })
         }).then(response => response.json())
-          .then(events => successCallback(events))
+          .then(events => {
+            // Aggiungi la classe CSS per gli eventi non selezionabili
+            events.forEach(event => {
+              event.classNames = ['unavailable-event'];
+            });
+            successCallback(events);
+          })
           .catch(err => failureCallback(err));
       },
-      select: function(info) {
+      select: function (info) {
         openTimeSelection(info.start);
       },
-      dateClick: function(info) {
+      dateClick: function (info) {
         openTimeSelection(info.date);
       },
       eventOverlap: false,
-      selectOverlap: function(event) {
+      selectOverlap: function (event) {
         return !event; // disable selection if there is an event
-      }
+      },
     });
   
     calendar.render();
   
-    inputFields.forEach(function(inputField) {
-      inputField.addEventListener("click", function() {
+    inputFields.forEach(function (inputField) {
+      inputField.addEventListener("click", function () {
         calendarModal.style.display = "block";
         calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
         currentInputField = inputField;
@@ -1621,11 +1627,11 @@ function debounce(func, wait) {
       }
       times.push({ hour: 20, minute: 0 });
   
-      times.forEach(function(time) {
+      times.forEach(function (time) {
         var button = document.createElement("button");
         button.innerText =
           ("0" + time.hour).slice(-2) + ":" + ("0" + time.minute).slice(-2);
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
           var formattedDate =
             ("0" + date.getDate()).slice(-2) +
             "/" +
@@ -1640,7 +1646,7 @@ function debounce(func, wait) {
       });
     }
   
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
       if (
         !calendarModal.contains(event.target) &&
         !timeSelectionModal.contains(event.target) &&
@@ -1651,6 +1657,7 @@ function debounce(func, wait) {
       }
     });
   }
+  
 
   
   //
