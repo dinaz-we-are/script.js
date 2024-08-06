@@ -1560,7 +1560,7 @@ function debounce(func, wait) {
     var timeSelectionModal = document.getElementById("time-selection-modal");
     var timeSelectionEl = document.getElementById("time-selection");
     var calendarEl = document.getElementById("calendar");
-  
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
       selectable: true,
@@ -1599,9 +1599,9 @@ function debounce(func, wait) {
         return !event; // disable selection if there is an event
       }
     });
-  
+
     calendar.render();
-  
+
     inputFields.forEach(function(inputField) {
       inputField.addEventListener("click", function() {
         calendarModal.style.display = "block";
@@ -1609,18 +1609,18 @@ function debounce(func, wait) {
         currentInputField = inputField;
       });
     });
-  
+
     function openTimeSelection(date) {
       timeSelectionEl.innerHTML = "";
       timeSelectionModal.style.display = "block";
-  
+
       var times = [];
       for (var hour = 10; hour <= 19; hour++) {
         times.push({ hour: hour, minute: 0 });
         times.push({ hour: hour, minute: 30 });
       }
       times.push({ hour: 20, minute: 0 });
-  
+
       times.forEach(function(time) {
         var button = document.createElement("button");
         button.innerText =
@@ -1631,15 +1631,20 @@ function debounce(func, wait) {
             "/" +
             ("0" + (date.getMonth() + 1)).slice(-2) +
             "/" +
-            date.getFullYear();
-          currentInputField.value = formattedDate + " " + button.innerText;
+            date.getFullYear() + 
+            "T" + 
+            ("0" + time.hour).slice(-2) + 
+            ":" + 
+            ("0" + time.minute).slice(-2) + 
+            ":00";
+          currentInputField.value = formattedDate;
           timeSelectionModal.style.display = "none";
           calendarModal.style.display = "none";
         });
         timeSelectionEl.appendChild(button);
       });
     }
-  
+
     document.addEventListener("click", function(event) {
       if (
         !calendarModal.contains(event.target) &&
@@ -1650,8 +1655,8 @@ function debounce(func, wait) {
         timeSelectionModal.style.display = "none";
       }
     });
-  }
-  
+}
+
   
   //
   
