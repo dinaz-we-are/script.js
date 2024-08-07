@@ -1642,7 +1642,7 @@ function debounce(func, wait) {
         times.push({ hour: hour, minute: 0 });
         times.push({ hour: hour, minute: 30 });
       }
-      times.push({ hour: 20, minute 0 });
+      times.push({ hour: 20, minute: 0 });
   
       times.forEach(function (time) {
         var dateTime = new Date(date);
