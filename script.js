@@ -1577,10 +1577,10 @@ function debounce(func, wait) {
         },
         dayHeaderFormat: { weekday: "short" },
         selectAllow: function(selectInfo) {
-            // Disallow selection on weekends (Saturday is 6, Sunday is 0)
-            var day = selectInfo.start.getDay();
+            // Disallow selection on weekends (Saturday is 5, Sunday is 6)
+            var day = selectInfo.start.getUTCDay();
             console.log("Checking if day is selectable:", day); // Log for debugging
-            return day !== 6 && day !== 0;
+            return day !== 5 && day !== 6;
         },
         events: function(fetchInfo, successCallback, failureCallback) {
             console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
@@ -1615,8 +1615,8 @@ function debounce(func, wait) {
             });
         },
         select: function(info) {
-            var day = info.start.getDay();
-            if (day === 6 || day === 0) {
+            var day = info.start.getUTCDay();
+            if (day === 5 || day === 6) {
                 console.log("Selected day is a weekend, not allowed."); // Log for debugging
                 return; // Ensure weekends are not selectable
             }
@@ -1624,8 +1624,8 @@ function debounce(func, wait) {
             openTimeSelection(info.start);
         },
         dateClick: function(info) {
-            var day = info.date.getDay();
-            if (day === 6 || day === 0) {
+            var day = info.date.getUTCDay();
+            if (day === 5 || day === 6) {
                 console.log("Clicked day is a weekend, not allowed."); // Log for debugging
                 return; // Ensure weekends are not clickable
             }
@@ -1651,8 +1651,8 @@ function debounce(func, wait) {
     });
 
     function openTimeSelection(date) {
-        var day = date.getDay();
-        if (day === 6 || day === 0) {
+        var day = date.getUTCDay();
+        if (day === 5 || day === 6) {
             console.log("Day is a weekend, not allowed for time selection."); // Log for debugging
             return; // Ensure weekends are not selectable
         }
