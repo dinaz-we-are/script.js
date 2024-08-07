@@ -1585,8 +1585,14 @@ function debounce(func, wait) {
             timeMax: fetchInfo.endStr
           })
         }).then(response => response.json())
-          .then(events => successCallback(events))
-          .catch(err => failureCallback(err));
+          .then(events => {
+            console.log("Events fetched from backend: ", events);
+            successCallback(events);
+          })
+          .catch(err => {
+            console.error("Error fetching events: ", err);
+            failureCallback(err);
+          });
       },
       select: function(info) {
         openTimeSelection(info.start);
@@ -1633,6 +1639,7 @@ function debounce(func, wait) {
             "/" +
             date.getFullYear() +
             " " + button.innerText;
+          console.log("Selected Date: ", formattedDate);
           currentInputField.value = formattedDate;
           timeSelectionModal.style.display = "none";
           calendarModal.style.display = "none";
