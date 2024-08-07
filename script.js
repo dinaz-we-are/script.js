@@ -1560,11 +1560,9 @@ function debounce(func, wait) {
     var timeSelectionModal = document.getElementById("time-selection-modal");
     var timeSelectionEl = document.getElementById("time-selection");
     var calendarEl = document.getElementById("calendar");
-    var currentInputField;
-
+  
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
-      firstDay: 1, // Set the first day of the week to Monday
       selectable: true,
       headerToolbar: {
         left: "prev",
@@ -1576,11 +1574,6 @@ function debounce(func, wait) {
         today: "oggi",
       },
       dayHeaderFormat: { weekday: "short" },
-      selectAllow: function(selectInfo) {
-        // Disallow selection on weekends
-        var day = selectInfo.start.getUTCDay();
-        return day !== 0 && day !== 6;
-      },
       events: function (fetchInfo, successCallback, failureCallback) {
         console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
         fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
@@ -1604,7 +1597,7 @@ function debounce(func, wait) {
             console.log("Events fetched from backend: ", events);
             // Nascondere gli eventi nel calendario impostando il display su 'none'
             events.forEach(event => {
-              event.classNames = (event.classNames || []).concat('hidden-event');
+              event.display = 'none';
             });
             successCallback(events);
           })
@@ -1627,9 +1620,9 @@ function debounce(func, wait) {
       },
       eventBackgroundColor: "red", // color for occupied events
     });
-
+  
     calendar.render();
-
+  
     inputFields.forEach(function (inputField) {
       inputField.addEventListener("click", function () {
         console.log("Input field clicked: ", inputField);
@@ -1638,19 +1631,19 @@ function debounce(func, wait) {
         currentInputField = inputField;
       });
     });
-
+  
     function openTimeSelection(date) {
       console.log("Opening time selection for date: ", date);
       timeSelectionEl.innerHTML = "";
       timeSelectionModal.style.display = "block";
-
+  
       var times = [];
       for (var hour = 10; hour <= 19; hour++) {
         times.push({ hour: hour, minute: 0 });
         times.push({ hour: hour, minute: 30 });
       }
       times.push({ hour: 20, minute: 0 });
-
+  
       times.forEach(function (time) {
         var dateTime = new Date(date);
         dateTime.setHours(time.hour, time.minute, 0, 0);
@@ -1675,7 +1668,7 @@ function debounce(func, wait) {
         }
       });
     }
-
+  
     function isTimeSlotOccupied(dateTime) {
       var events = calendar.getEvents();
       for (var i = 0; i < events.length; i++) {
@@ -1688,7 +1681,7 @@ function debounce(func, wait) {
       }
       return false;
     }
-
+  
     document.addEventListener("click", function (event) {
       if (
         !calendarModal.contains(event.target) &&
@@ -1700,7 +1693,7 @@ function debounce(func, wait) {
       }
     });
   }
-  
+
   //
   
   window.onbeforeunload = function () {
