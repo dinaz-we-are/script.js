@@ -1593,40 +1593,38 @@ function debounce(func, wait) {
             timeMax: fetchInfo.endStr,
           }),
         })
-          .then((response) => {
-            if (!response.ok) {
-              console.error("Network response was not ok ", response.statusText);
-              throw new Error("Network response was not ok " + response.statusText);
-            }
-            return response.json();
-          })
-          .then((events) => {
-            console.log("Events fetched from backend: ", events);
-            // Nascondere gli eventi nel calendario impostando il display su 'none'
-            events.forEach(event => {
-              event.className = 'hidden-event';
-            });
-            successCallback(events);
-          })
-          .catch((err) => {
-            console.error("Error fetching events: ", err);
-            failureCallback(err);
+        .then((response) => {
+          if (!response.ok) {
+            console.error("Network response was not ok ", response.statusText);
+            throw new Error("Network response was not ok " + response.statusText);
+          }
+          return response.json();
+        })
+        .then((events) => {
+          console.log("Events fetched from backend: ", events);
+          // Nascondere gli eventi nel calendario impostando il display su 'none'
+          events.forEach(event => {
+            event.className = 'hidden-event';
           });
+          successCallback(events);
+        })
+        .catch((err) => {
+          console.error("Error fetching events: ", err);
+          failureCallback(err);
+        });
       },
       select: function(info) {
-        // Ensure weekends are not selectable
         var day = info.start.getUTCDay();
         if (day === 0 || day === 6) {
-          return;
+          return; // Ensure weekends are not selectable
         }
         console.log("Date selected: ", info.start);
         openTimeSelection(info.start);
       },
       dateClick: function(info) {
-        // Ensure weekends are not clickable
         var day = info.date.getUTCDay();
         if (day === 0 || day === 6) {
-          return;
+          return; // Ensure weekends are not clickable
         }
         console.log("Date clicked: ", info.date);
         openTimeSelection(info.date);
@@ -1650,6 +1648,11 @@ function debounce(func, wait) {
     });
   
     function openTimeSelection(date) {
+      var day = date.getUTCDay();
+      if (day === 0 || day === 6) {
+        return; // Ensure weekends are not selectable
+      }
+      
       console.log("Opening time selection for date: ", date);
       timeSelectionEl.innerHTML = "";
       timeSelectionModal.style.display = "block";
