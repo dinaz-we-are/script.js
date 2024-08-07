@@ -1595,6 +1595,10 @@ function debounce(func, wait) {
           })
           .then((events) => {
             console.log("Events fetched from backend: ", events);
+            // Nascondere gli eventi nel calendario impostando il display su 'none'
+            events.forEach(event => {
+              event.display = 'none';
+            });
             successCallback(events);
           })
           .catch((err) => {
@@ -1689,7 +1693,6 @@ function debounce(func, wait) {
       }
     });
   }
-  
   //
   
   window.onbeforeunload = function () {
