@@ -1560,139 +1560,146 @@ function debounce(func, wait) {
     var timeSelectionModal = document.getElementById("time-selection-modal");
     var timeSelectionEl = document.getElementById("time-selection");
     var calendarEl = document.getElementById("calendar");
-  
+    var currentInputField;
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      selectable: true,
-      headerToolbar: {
-        left: "prev",
-        center: "title",
-        right: "next",
-      },
-      locale: "it",
-      buttonText: {
-        today: "oggi",
-      },
-      dayHeaderFormat: { weekday: "short" },
-      events: function (fetchInfo, successCallback, failureCallback) {
-        console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
-        fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            timeMin: fetchInfo.startStr,
-            timeMax: fetchInfo.endStr,
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              console.error("Network response was not ok ", response.statusText);
-              throw new Error("Network response was not ok " + response.statusText);
-            }
-            return response.json();
-          })
-          .then((events) => {
-            console.log("Events fetched from backend: ", events);
-            // Nascondere gli eventi nel calendario impostando il display su 'none'
-            events.forEach(event => {
-              event.display = 'none';
+        initialView: "dayGridMonth",
+        firstDay: 1, // Set the first day of the week to Monday
+        selectable: true,
+        headerToolbar: {
+            left: "prev",
+            center: "title",
+            right: "next",
+        },
+        locale: "it",
+        buttonText: {
+            today: "oggi",
+        },
+        dayHeaderFormat: { weekday: "short" },
+        selectAllow: function(selectInfo) {
+            // Disallow selection on weekends
+            var day = selectInfo.start.getUTCDay();
+            return day !== 0 && day !== 6;
+        },
+        events: function (fetchInfo, successCallback, failureCallback) {
+            console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
+            fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    timeMin: fetchInfo.startStr,
+                    timeMax: fetchInfo.endStr,
+                }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    console.error("Network response was not ok ", response.statusText);
+                    throw new Error("Network response was not ok " + response.statusText);
+                }
+                return response.json();
+            })
+            .then((events) => {
+                console.log("Events fetched from backend: ", events);
+                // Nascondere gli eventi nel calendario impostando il display su 'none'
+                events.forEach(event => {
+                    event.className = 'hidden-event';
+                });
+                successCallback(events);
+            })
+            .catch((err) => {
+                console.error("Error fetching events: ", err);
+                failureCallback(err);
             });
-            successCallback(events);
-          })
-          .catch((err) => {
-            console.error("Error fetching events: ", err);
-            failureCallback(err);
-          });
-      },
-      select: function (info) {
-        console.log("Date selected: ", info.start);
-        openTimeSelection(info.start);
-      },
-      dateClick: function (info) {
-        console.log("Date clicked: ", info.date);
-        openTimeSelection(info.date);
-      },
-      eventOverlap: false,
-      selectOverlap: function (event) {
-        return !event; // disable selection if there is an event
-      },
-      eventBackgroundColor: "red", // color for occupied events
+        },
+        select: function (info) {
+            console.log("Date selected: ", info.start);
+            openTimeSelection(info.start);
+        },
+        dateClick: function (info) {
+            console.log("Date clicked: ", info.date);
+            openTimeSelection(info.date);
+        },
+        eventOverlap: false,
+        selectOverlap: function (event) {
+            return !event; // disable selection if there is an event
+        },
+        eventBackgroundColor: "red", // color for occupied events
     });
-  
+
     calendar.render();
-  
+
     inputFields.forEach(function (inputField) {
-      inputField.addEventListener("click", function () {
-        console.log("Input field clicked: ", inputField);
-        calendarModal.style.display = "block";
-        calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
-        currentInputField = inputField;
-      });
+        inputField.addEventListener("click", function () {
+            console.log("Input field clicked: ", inputField);
+            calendarModal.style.display = "block";
+            calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
+            currentInputField = inputField;
+        });
     });
-  
+
     function openTimeSelection(date) {
-      console.log("Opening time selection for date: ", date);
-      timeSelectionEl.innerHTML = "";
-      timeSelectionModal.style.display = "block";
-  
-      var times = [];
-      for (var hour = 10; hour <= 19; hour++) {
-        times.push({ hour: hour, minute: 0 });
-        times.push({ hour: hour, minute: 30 });
-      }
-      times.push({ hour: 20, minute: 0 });
-  
-      times.forEach(function (time) {
-        var dateTime = new Date(date);
-        dateTime.setHours(time.hour, time.minute, 0, 0);
-        if (!isTimeSlotOccupied(dateTime)) {
-          var button = document.createElement("button");
-          button.innerText =
-            ("0" + time.hour).slice(-2) + ":" + ("0" + time.minute).slice(-2);
-          button.addEventListener("click", function () {
-            var formattedDate =
-              ("0" + date.getDate()).slice(-2) +
-              "/" +
-              ("0" + (date.getMonth() + 1)).slice(-2) +
-              "/" +
-              date.getFullYear() +
-              " " + button.innerText;
-            console.log("Selected Date: ", formattedDate);
-            currentInputField.value = formattedDate;
-            timeSelectionModal.style.display = "none";
-            calendarModal.style.display = "none";
-          });
-          timeSelectionEl.appendChild(button);
+        console.log("Opening time selection for date: ", date);
+        timeSelectionEl.innerHTML = "";
+        timeSelectionModal.style.display = "block";
+
+        var times = [];
+        for (var hour = 10; hour <= 19; hour++) {
+            times.push({ hour: hour, minute: 0 });
+            times.push({ hour: hour, minute: 30 });
         }
-      });
+        times.push({ hour: 20, minute: 0 });
+
+        times.forEach(function (time) {
+            var dateTime = new Date(date);
+            dateTime.setHours(time.hour, time.minute, 0, 0);
+            if (!isTimeSlotOccupied(dateTime)) {
+                var button = document.createElement("button");
+                button.innerText =
+                    ("0" + time.hour).slice(-2) + ":" + ("0" + time.minute).slice(-2);
+                button.addEventListener("click", function () {
+                    var formattedDate =
+                        ("0" + date.getDate()).slice(-2) +
+                        "/" +
+                        ("0" + (date.getMonth() + 1)).slice(-2) +
+                        "/" +
+                        date.getFullYear() +
+                        " " + button.innerText;
+                    console.log("Selected Date: ", formattedDate);
+                    currentInputField.value = formattedDate;
+                    timeSelectionModal.style.display = "none";
+                    calendarModal.style.display = "none";
+                });
+                timeSelectionEl.appendChild(button);
+            }
+        });
     }
-  
+
     function isTimeSlotOccupied(dateTime) {
-      var events = calendar.getEvents();
-      for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = new Date(event.start);
-        var end = new Date(event.end);
-        if (dateTime >= start && dateTime < end) {
-          return true;
+        var events = calendar.getEvents();
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            var start = new Date(event.start);
+            var end = new Date(event.end);
+            if (dateTime >= start && dateTime < end) {
+                return true;
+            }
         }
-      }
-      return false;
+        return false;
     }
-  
+
     document.addEventListener("click", function (event) {
-      if (
-        !calendarModal.contains(event.target) &&
-        !timeSelectionModal.contains(event.target) &&
-        !event.target.classList.contains("form-text-field-2")
-      ) {
-        calendarModal.style.display = "none";
-        timeSelectionModal.style.display = "none";
-      }
+        if (
+            !calendarModal.contains(event.target) &&
+            !timeSelectionModal.contains(event.target) &&
+            !event.target.classList.contains("form-text-field-2")
+        ) {
+            calendarModal.style.display = "none";
+            timeSelectionModal.style.display = "none";
+        }
     });
-  }
+}
 
   //
   
