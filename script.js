@@ -1576,7 +1576,7 @@ function debounce(func, wait) {
       dayHeaderFormat: { weekday: "short" },
       events: function (fetchInfo, successCallback, failureCallback) {
         console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
-        fetch("/getCalendarEvents", {
+        fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
