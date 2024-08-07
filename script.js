@@ -1578,11 +1578,7 @@ function debounce(func, wait) {
         dayHeaderFormat: { weekday: "short" },
         selectAllow: function(selectInfo) {
             var day = selectInfo.start.getUTCDay();
-            if (day === 0 || day === 6) {
-                console.log("Selection not allowed on weekends");
-                return false; // Disallow selection on weekends
-            }
-            return true;
+            return day !== 0 && day !== 6; // Disallow selection on weekends
         },
         events: function (fetchInfo, successCallback, failureCallback) {
             console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
