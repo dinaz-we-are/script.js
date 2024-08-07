@@ -1601,7 +1601,6 @@ function debounce(func, wait) {
             })
             .then((events) => {
                 console.log("Events fetched from backend: ", events);
-                // Nascondere gli eventi nel calendario impostando il display su 'none'
                 events.forEach(event => {
                     event.className = 'hidden-event';
                 });
@@ -1710,6 +1709,7 @@ function debounce(func, wait) {
         }
     });
 }
+
 
   //
   
