@@ -1595,9 +1595,9 @@ function debounce(func, wait) {
           })
           .then((events) => {
             console.log("Events fetched from backend: ", events);
-            // Nascondere gli eventi nel calendario impostando il display su 'none'
+            // Aggiungere la classe 'hidden-event' per nascondere gli eventi
             events.forEach(event => {
-              event.display = 'none';
+              event.classNames = (event.classNames || []).concat('hidden-event');
             });
             successCallback(events);
           })
@@ -1642,7 +1642,7 @@ function debounce(func, wait) {
         times.push({ hour: hour, minute: 0 });
         times.push({ hour: hour, minute: 30 });
       }
-      times.push({ hour: 20, minute: 0 });
+      times.push({ hour: 20, minute 0 });
   
       times.forEach(function (time) {
         var dateTime = new Date(date);
@@ -1693,6 +1693,7 @@ function debounce(func, wait) {
       }
     });
   }
+
   //
   
   window.onbeforeunload = function () {
