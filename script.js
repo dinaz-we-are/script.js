@@ -1577,9 +1577,12 @@ function debounce(func, wait) {
         },
         dayHeaderFormat: { weekday: "short" },
         selectAllow: function(selectInfo) {
-            // Disallow selection on weekends
             var day = selectInfo.start.getUTCDay();
-            return day !== 0 && day !== 6;
+            if (day === 0 || day === 6) {
+                console.log("Selection not allowed on weekends");
+                return false; // Disallow selection on weekends
+            }
+            return true;
         },
         events: function (fetchInfo, successCallback, failureCallback) {
             console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
