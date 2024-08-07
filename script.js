@@ -1568,10 +1568,10 @@ function debounce(func, wait) {
         left: "prev",
         center: "title",
         right: "next",
-        locale: "it",
-        buttonText: {
-          today: "oggi",
-        },
+      },
+      locale: "it",
+      buttonText: {
+        today: "oggi",
       },
       dayHeaderFormat: { weekday: "short" },
       events: function (fetchInfo, successCallback, failureCallback) {
@@ -1658,10 +1658,12 @@ function debounce(func, wait) {
       var events = calendar.getEvents();
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
-        var start = new Date(event.start);
-        var end = new Date(event.end);
-        if (dateTime >= start && dateTime < end) {
-          return true;
+        if (event.start && event.end) {  // Add a check to ensure start and end are defined
+          var start = new Date(event.start);
+          var end = new Date(event.end);
+          if (dateTime >= start && dateTime < end) {
+            return true;
+          }
         }
       }
       return false;
@@ -1678,6 +1680,7 @@ function debounce(func, wait) {
       }
     });
   }
+  
   
   
 
