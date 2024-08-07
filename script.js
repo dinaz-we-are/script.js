@@ -1554,13 +1554,12 @@ function debounce(func, wait) {
     });
   }
   //calendar
-  document.addEventListener('DOMContentLoaded', function () {
+  function calendar() {
     var inputFields = document.querySelectorAll(".form-text-field-2");
     var calendarModal = document.getElementById("calendar-modal");
     var timeSelectionModal = document.getElementById("time-selection-modal");
     var timeSelectionEl = document.getElementById("time-selection");
     var calendarEl = document.getElementById("calendar");
-    var currentInputField;
   
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
@@ -1596,8 +1595,9 @@ function debounce(func, wait) {
           })
           .then((events) => {
             console.log("Events fetched from backend: ", events);
+            // Nascondere gli eventi nel calendario impostando il display su 'none'
             events.forEach(event => {
-              event.classNames = (event.classNames || []).concat('hidden-event');
+              event.display = 'none';
             });
             successCallback(events);
           })
@@ -1692,8 +1692,8 @@ function debounce(func, wait) {
         timeSelectionModal.style.display = "none";
       }
     });
-  });
-  
+  }
+
   //
   
   window.onbeforeunload = function () {
