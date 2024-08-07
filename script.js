@@ -1575,6 +1575,7 @@ function debounce(func, wait) {
       },
       dayHeaderFormat: { weekday: "short" },
       events: function (fetchInfo, successCallback, failureCallback) {
+        console.log("Fetching events for range: ", fetchInfo.startStr, " to ", fetchInfo.endStr);
         fetch("/getCalendarEvents", {
           method: "POST",
           headers: {
@@ -1587,6 +1588,7 @@ function debounce(func, wait) {
         })
           .then((response) => {
             if (!response.ok) {
+              console.error("Network response was not ok ", response.statusText);
               throw new Error("Network response was not ok " + response.statusText);
             }
             return response.json();
@@ -1601,9 +1603,11 @@ function debounce(func, wait) {
           });
       },
       select: function (info) {
+        console.log("Date selected: ", info.start);
         openTimeSelection(info.start);
       },
       dateClick: function (info) {
+        console.log("Date clicked: ", info.date);
         openTimeSelection(info.date);
       },
       eventOverlap: false,
@@ -1617,6 +1621,7 @@ function debounce(func, wait) {
   
     inputFields.forEach(function (inputField) {
       inputField.addEventListener("click", function () {
+        console.log("Input field clicked: ", inputField);
         calendarModal.style.display = "block";
         calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
         currentInputField = inputField;
@@ -1624,6 +1629,7 @@ function debounce(func, wait) {
     });
   
     function openTimeSelection(date) {
+      console.log("Opening time selection for date: ", date);
       timeSelectionEl.innerHTML = "";
       timeSelectionModal.style.display = "block";
   
@@ -1683,7 +1689,6 @@ function debounce(func, wait) {
       }
     });
   }
-  
   
   //
   
