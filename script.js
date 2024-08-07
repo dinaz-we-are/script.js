@@ -1614,10 +1614,21 @@ function debounce(func, wait) {
             });
         },
         select: function (info) {
+            var day = info.start.getUTCDay();
+            if (day === 0 || day === 6) {
+                console.log("Weekend day selected, ignoring.");
+                calendar.unselect();
+                return;
+            }
             console.log("Date selected: ", info.start);
             openTimeSelection(info.start);
         },
         dateClick: function (info) {
+            var day = info.date.getUTCDay();
+            if (day === 0 || day === 6) {
+                console.log("Weekend day clicked, ignoring.");
+                return;
+            }
             console.log("Date clicked: ", info.date);
             openTimeSelection(info.date);
         },
