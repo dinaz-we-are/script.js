@@ -16,9 +16,7 @@ async function loadGSAP() {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
   ];
-  for (const script of gsapScripts) {
-    await loadScript(script);
-  }
+  await Promise.all(gsapScripts.map(loadScript));
 }
 
 async function loadAdditionalScripts() {
@@ -27,11 +25,10 @@ async function loadAdditionalScripts() {
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
 
-  const fullCalendarScript = "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
+  const fullCalendarScript =
+    "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
 
-  for (const script of additionalScripts) {
-    await loadScript(script);
-  }
+  await Promise.all(additionalScripts.map(loadScript));
 
   if (!window.FullCalendar) {
     await loadScript(fullCalendarScript);
