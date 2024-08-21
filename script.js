@@ -49,16 +49,11 @@ function initializeMainFunctions() {
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
-  window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));
-
-  burgerAnimation();
-  changeLogoColor();
-  dataColor();
+  window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));  
+  changeLogoColor();  
   initializeScrollControlButtons();
   initializeHoverAnimations();
-  initializeSimpleHoverTouchAnimations();
-  ctaAnimations();
-  info();
+  initializeSimpleHoverTouchAnimations(); 
 
   if (typeof pageSpecificFunctions === "function") {
     pageSpecificFunctions();
@@ -71,9 +66,7 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}
-
-  //
+}  
   //Burger
   function burgerAnimation(isHomePage = false) {
     const burgerButton = document.querySelector("#burger");
@@ -1686,7 +1679,6 @@ function debounce(func, wait) {
             }
         });
     }
-
     function isTimeSlotOccupied(dateTime) {
         var events = calendar.getEvents();
         for (var i = 0; i < events.length; i++) {
@@ -1711,7 +1703,6 @@ function debounce(func, wait) {
         }
     });
 }
-
   //
   
   window.onbeforeunload = function () {
