@@ -16,9 +16,8 @@ async function loadGSAP() {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
   ];
-  for (const script of gsapScripts) {
-    await loadScript(script);
-  }
+  
+  await Promise.all(gsapScripts.map(src => loadScript(src)));
 }
 
 async function loadAdditionalScripts() {
@@ -27,11 +26,9 @@ async function loadAdditionalScripts() {
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
 
-  const fullCalendarScript = "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
+  await Promise.all(additionalScripts.map(src => loadScript(src)));
 
-  for (const script of additionalScripts) {
-    await loadScript(script);
-  }
+  const fullCalendarScript = "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
 
   if (!window.FullCalendar) {
     await loadScript(fullCalendarScript);
@@ -40,12 +37,16 @@ async function loadAdditionalScripts() {
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
+    if (!document.querySelector(`script[src="${src}"]`)) { // Controlla se lo script è già stato caricato
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    } else {
+      resolve(); // Risolvi subito se lo script è già stato caricato
+    }
   });
 }
 
@@ -77,6 +78,7 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
 
   
   //
