@@ -53,7 +53,8 @@ function initializeMainFunctions() {
   changeLogoColor();  
   initializeScrollControlButtons();
   initializeHoverAnimations();
-  initializeSimpleHoverTouchAnimations(); 
+  initializeSimpleHoverTouchAnimations();
+  info();
 
   if (typeof pageSpecificFunctions === "function") {
     pageSpecificFunctions();
@@ -271,9 +272,7 @@ function debounce(func, wait) {
     }
   }
   
-  //
-  //
-  //
+   //
   function changeLogoColor(
     navLogoColor = "",
     shapeColor = "",
