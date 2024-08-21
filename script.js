@@ -27,12 +27,6 @@ async function loadAdditionalScripts() {
   ];
 
   await Promise.all(additionalScripts.map(src => loadScript(src)));
-
-  const fullCalendarScript = "https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js";
-
-  if (!window.FullCalendar) {
-    await loadScript(fullCalendarScript);
-  }
 }
 
 function loadScript(src) {
