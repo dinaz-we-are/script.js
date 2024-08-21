@@ -50,10 +50,13 @@ function initializeMainFunctions() {
   gsap.set(".menu-wrapper-row", { width: 0 });
 
   window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));  
-  changeLogoColor();  
+  burgerAnimation();
+  changeLogoColor();
+  dataColor();
   initializeScrollControlButtons();
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
+  ctaAnimations();
   info();
 
   if (typeof pageSpecificFunctions === "function") {
