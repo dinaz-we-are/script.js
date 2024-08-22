@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
-  initializeScripts();
+document.addEventListener("DOMContentLoaded", async function () {
+  await initializeScripts();
 });
 
 async function initializeScripts() {
