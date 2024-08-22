@@ -3,22 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function initializeScripts() {
-  await loadGSAP();
-  await loadAdditionalScripts();
+   await loadAdditionalScripts();
   initializeMainFunctions();
 }
 
-async function loadGSAP() {
-  const gsapScripts = [
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
-    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-  ];
-  
-  await Promise.all(gsapScripts.map(src => loadScript(src)));
-}
 
 async function loadAdditionalScripts() {
   const additionalScripts = [
