@@ -1,31 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
   initializeScripts();
 });
-
 async function initializeScripts() {
-  await loadGSAP();
-  await loadAdditionalScripts(); 
-  loadLenisScript();
-  initializeMainFunctions();
-}
-async function loadGSAP() {
-  const gsapScripts = [
+  // Carica tutte le librerie necessarie
+  await loadScripts([
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-  ];
-  
-  await Promise.all(gsapScripts.map(src => loadScript(src)));
-}
-async function loadAdditionalScripts() {
-  const additionalScripts = [
     "https://unpkg.com/split-type",
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-  ];
-
-  await Promise.all(additionalScripts.map(src => loadScript(src)));
+    "https://cdn.jsdelivr.net/gh/dinaz-we-are/CALLTOACTION-global@latest/globalscript.js"
+  ]);
+  initializeMainFunctions();
+  await loadLenisCta();
+}
+async function loadScripts(scripts) {
+  await Promise.all(scripts.map(src => loadScript(src)));
 }
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -33,6 +25,7 @@ function loadScript(src) {
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
+      script.defer = true; 
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
@@ -41,10 +34,13 @@ function loadScript(src) {
     }
   });
 }
-function loadLenisScript() {
-  if (!document.querySelector('script[src*="lenis-cta.js"]')) {
+function loadLenisCta() {
+  return new Promise((resolve, reject) => {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/gh/dinaz-we-are/lenis-cta@latest/lenis-cta.js";
+    script.async = true;
+    script.defer = true;
+    
     script.setAttribute("data-id-scroll", "");
     script.setAttribute("data-autoinit", "true");
     script.setAttribute("data-duration", "1.2");
@@ -58,11 +54,10 @@ function loadLenisScript() {
     script.setAttribute("data-useAnchor", "true");
     script.setAttribute("data-useRaf", "true");
     script.setAttribute("data-infinite", "false");
-    script.defer = true;
-    script.async = true;
-
+    script.onload = resolve;
+    script.onerror = reject;
     document.head.appendChild(script);
-  }
+  });
 }
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
