@@ -3,10 +3,22 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function initializeScripts() {
-   await loadAdditionalScripts();
+  await loadGSAP();
+  await loadAdditionalScripts();
   initializeMainFunctions();
 }
 
+async function loadGSAP() {
+  const gsapScripts = [
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
+    "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+
+  await Promise.all(gsapScripts.map((src) => loadScript(src)));
+}
 
 async function loadAdditionalScripts() {
   const additionalScripts = [
@@ -14,12 +26,13 @@ async function loadAdditionalScripts() {
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   ];
 
-  await Promise.all(additionalScripts.map(src => loadScript(src)));
+  await Promise.all(additionalScripts.map((src) => loadScript(src)));
 }
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    if (!document.querySelector(`script[src="${src}"]`)) { // Corretto l'uso delle backtick
+    if (!document.querySelector(script[(src = "${src}")])) {
+      // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
@@ -27,7 +40,7 @@ function loadScript(src) {
       script.onerror = reject;
       document.head.appendChild(script);
     } else {
-      resolve(); 
+      resolve(); // Risolvi subito se lo script è già stato caricato
     }
   });
 }
@@ -37,7 +50,10 @@ function initializeMainFunctions() {
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
   gsap.set(".menu-wrapper-row", { width: 0 });
 
-  window.addEventListener("resize", debounce(() => ScrollTrigger.refresh(), 200));  
+  window.addEventListener(
+    "resize",
+    debounce(() => ScrollTrigger.refresh(), 200)
+  );
   burgerAnimation();
   changeLogoColor();
   dataColor();
@@ -58,7 +74,7 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}  
+}
   //Burger
   function burgerAnimation(isHomePage = false) {
     const burgerButton = document.querySelector("#burger");
