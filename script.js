@@ -1,64 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
   initializeScripts();
 });
+
 async function initializeScripts() {
-  // Carica tutte le librerie necessarie
-  await loadScripts([
+  await loadGSAP();
+  await loadAdditionalScripts();
+  initializeMainFunctions();
+}
+
+async function loadGSAP() {
+  const gsapScripts = [
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
+  ];
+  
+  await Promise.all(gsapScripts.map(src => loadScript(src)));
+}
+
+async function loadAdditionalScripts() {
+  const additionalScripts = [
     "https://unpkg.com/split-type",
     "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
-    "https://cdn.jsdelivr.net/gh/dinaz-we-are/CALLTOACTION-global@latest/globalscript.js"
-  ]);
-  initializeMainFunctions();
-  await loadLenisCta();
+  ];
+
+  await Promise.all(additionalScripts.map(src => loadScript(src)));
 }
-async function loadScripts(scripts) {
-  await Promise.all(scripts.map(src => loadScript(src)));
-}
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    if (!document.querySelector(`script[src="${src}"]`)) {
+    if (!document.querySelector(script[src="${src}"])) { // Controlla se lo script è già stato caricato
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
-      script.defer = true; 
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
     } else {
-      resolve();
+      resolve(); // Risolvi subito se lo script è già stato caricato
     }
   });
 }
-function loadLenisCta() {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/gh/dinaz-we-are/lenis-cta@latest/lenis-cta.js";
-    script.async = true;
-    script.defer = true;
-    
-    script.setAttribute("data-id-scroll", "");
-    script.setAttribute("data-autoinit", "true");
-    script.setAttribute("data-duration", "1.2");
-    script.setAttribute("data-orientation", "vertical");
-    script.setAttribute("data-smoothWheel", "true");
-    script.setAttribute("data-smoothTouch", "false");
-    script.setAttribute("data-wheelMultiplier", "1.5");
-    script.setAttribute("data-easing", "(t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t))");
-    script.setAttribute("data-useOverscroll", "true");
-    script.setAttribute("data-useControls", "true");
-    script.setAttribute("data-useAnchor", "true");
-    script.setAttribute("data-useRaf", "true");
-    script.setAttribute("data-infinite", "false");
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
+
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
@@ -78,13 +63,14 @@ function initializeMainFunctions() {
     pageSpecificFunctions();
   }
 }
+
 function debounce(func, wait) {
   let timeout;
   return function (...args) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}
+}  
   //Burger
   function burgerAnimation(isHomePage = false) {
     const burgerButton = document.querySelector("#burger");
