@@ -23,7 +23,7 @@ async function initializeScripts() {
       "data-useAnchor": "true",
       "data-useRaf": "true",
       "data-infinite": "false",
-      "defer": "https://cdn.jsdelivr.net/gh/dinaz-we-are/lenis-cta@latest/lenis-cta.js"
+      "defer": ""
     }
   );
 
