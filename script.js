@@ -31,7 +31,7 @@ async function loadAdditionalScripts() {
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    if (!document.querySelector(script[src="${src}"])) { // Controlla se lo script è già stato caricato
+    if (!document.querySelector(`script[src="${src}"]`)) { // Corretto l'uso delle backtick
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
