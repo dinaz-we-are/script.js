@@ -43,7 +43,7 @@ function loadScript(src) {
       script.onerror = reject;
       document.head.appendChild(script);
     } else {
-      resolve(); // Risolvi subito se lo script è già stato caricato
+      resolve();
     }
   });
 }
