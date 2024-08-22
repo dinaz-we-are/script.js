@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function initializeScripts() {
   await loadGSAP();
+  if (typeof gsap === 'undefined') {
+    console.error('GSAP non è stato caricato correttamente');
+    return;
+  }
   await loadAdditionalScripts();
   initializeMainFunctions();
 }
@@ -31,8 +35,7 @@ async function loadAdditionalScripts() {
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    if (!document.querySelector(script[(src = "${src}")])) {
-      // Controlla se lo script è già stato caricato
+    if (!document.querySelector(`script[src="${src}"]`)) {
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
@@ -75,6 +78,7 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
   //Burger
   function burgerAnimation(isHomePage = false) {
     const burgerButton = document.querySelector("#burger");
