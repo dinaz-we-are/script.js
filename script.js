@@ -5,6 +5,28 @@ document.addEventListener("DOMContentLoaded", function () {
 async function initializeScripts() {
   await loadGSAP();
   await loadAdditionalScripts();
+  
+  // Aggiungi lo script lenis-cta.js con tutti gli attributi specificati
+  await loadScriptWithAttributes(
+    "https://cdn.jsdelivr.net/gh/dinaz-we-are/lenis-cta@latest/lenis-cta.js", 
+    {
+      "data-id-scroll": "",
+      "data-autoinit": "true",
+      "data-duration": "1.2",
+      "data-orientation": "vertical",
+      "data-smoothWheel": "true",
+      "data-smoothTouch": "false",
+      "data-wheelMultiplier": "1.5",
+      "data-easing": "(t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t))",
+      "data-useOverscroll": "true",
+      "data-useControls": "true",
+      "data-useAnchor": "true",
+      "data-useRaf": "true",
+      "data-infinite": "false",
+      "defer": "https://cdn.jsdelivr.net/gh/dinaz-we-are/lenis-cta@latest/lenis-cta.js"
+    }
+  );
+
   initializeMainFunctions();
 }
 
@@ -44,6 +66,23 @@ function loadScript(src) {
   });
 }
 
+function loadScriptWithAttributes(src, attributes) {
+  return new Promise((resolve, reject) => {
+    if (!document.querySelector(`script[src="${src}"]`)) {
+      const script = document.createElement("script");
+      script.src = src;
+      for (const [key, value] of Object.entries(attributes)) {
+        script.setAttribute(key, value);
+      }
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    } else {
+      resolve();
+    }
+  });
+}
+
 function initializeMainFunctions() {
   gsap.registerPlugin(ScrollTrigger, Flip, ScrollToPlugin, Observer);
   gsap.set(".menu-container", { x: "-100vw", opacity: 0 });
@@ -70,7 +109,8 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}  
+}
+
   //Burger
   function burgerAnimation(isHomePage = false) {
     const burgerButton = document.querySelector("#burger");
