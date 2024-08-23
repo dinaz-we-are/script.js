@@ -1287,7 +1287,6 @@ function navbarRepo(isHomePage = false) {
     subtree: true,
   });
 }
-
 //
 //togglePortfolio
 function togglePortfolio() {
@@ -1366,12 +1365,12 @@ function portfolioInfo() {
         if (!btn.classList.contains("active")) {
           gsap.to(btn.querySelector(".portfolio-btn"), {
             scale: 1,
-            color: "currentcolor",
+            color: "",
             duration: 0.5,
             ease: "ease.out",
           });
           gsap.to(btn.querySelector(".text-btn-portfolio"), {
-            color: "currentcolor",
+            color: "",
             duration: 0.5,
             ease: "linear",
           });
@@ -1439,12 +1438,12 @@ function portfolioInfo() {
           gsap.to(button.querySelector(".portfolio-btn"), {
             rotation: 0,
             scale: 1,
-            color: "currentcolor",
+            color: "",
             duration: 0.5,
             ease: "ease.out",
           });
           gsap.to(button.querySelector(".text-btn-portfolio"), {
-            color: "currentcolor",
+            color: "",
             duration: 0.5,
             ease: "linear",
           });
