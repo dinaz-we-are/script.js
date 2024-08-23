@@ -1348,8 +1348,7 @@ function portfolioInfo() {
         if (!btn.classList.contains("active")) {
           gsap.to(btn.querySelector(".portfolio-btn"), {
             rotation: 0,
-            scale: 1.1,
-            color: "#f06",
+            scale: 1.1,          
             duration: 0.5,
             ease: "ease.out",
           });
@@ -1364,8 +1363,7 @@ function portfolioInfo() {
       function handleHoverOut() {
         if (!btn.classList.contains("active")) {
           gsap.to(btn.querySelector(".portfolio-btn"), {
-            scale: 1,
-            color: "",
+            scale: 1,            
             duration: 0.5,
             ease: "ease.out",
           });
@@ -1420,8 +1418,7 @@ function portfolioInfo() {
         button.classList.add("active");
         gsap.to(button.querySelector(".portfolio-btn"), {
           rotation: 90,
-          scale: 1.1,
-          color: "#f06",
+          scale: 1.1,          
           duration: 0.5,
           ease: "ease.out",
         });
@@ -1437,8 +1434,7 @@ function portfolioInfo() {
           button.classList.remove("active");
           gsap.to(button.querySelector(".portfolio-btn"), {
             rotation: 0,
-            scale: 1,
-            color: "",
+            scale: 1,            
             duration: 0.5,
             ease: "ease.out",
           });
