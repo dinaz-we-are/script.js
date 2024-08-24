@@ -1288,170 +1288,177 @@ function navbarRepo(isHomePage = false) {
   });
 }
 //
-//togglePortfolio
-function togglePortfolio() {
-  document.querySelectorAll(".case-wrapper").forEach((cases) => {
-    const caseContainer = cases.querySelector(".c-toggle");
-    const dropBtn = cases.querySelector(".case-toggle");
-    const trigger = cases.querySelector(".case-container");
+//Oggetto Portfolio
+const portfolioFunctions = {
+  togglePortfolio: function () {
+    document.querySelectorAll(".case-wrapper").forEach((cases) => {
+      const caseContainer = cases.querySelector(".c-toggle");
+      const dropBtn = cases.querySelector(".case-toggle");
+      const trigger = cases.querySelector(".case-container");
 
-    trigger.addEventListener("click", () => {
-      const isOpen = caseContainer.classList.contains("open");
-      if (isOpen) {
-        // Close the service section
-        gsap.to(caseContainer, { height: 0, duration: 0.5 });
-        gsap.to(dropBtn, {
-          rotation: 0,
-          duration: 0.5,
-          color: "",
-          ease: "ease.out",
-        });
-
-        caseContainer.classList.remove("open");
-      } else {
-        // Open the service section
-        gsap.set(caseContainer, { height: "auto" });
-        const height = caseContainer.offsetHeight;
-        gsap.fromTo(
-          caseContainer,
-          { height: 0 },
-          { height: height, duration: 0.5 }
-        );
-        gsap.to(dropBtn, {
-          rotation: 180,
-          duration: 0.5,
-          color: "#f06",
-          ease: "ease.out",
-        });
-
-        caseContainer.classList.add("open");
-      }
-    });
-  });
-}
-//
-//portfolio info
-function portfolioInfo() {
-  let currentOpenContainer = null;
-  let currentOpenButton = null;
-
-  document.querySelectorAll(".div-content-portfolio").forEach((portfolio) => {
-    const buttons = portfolio.querySelectorAll(".portfolio-btn-link");
-    buttons.forEach((btn) => {
-      const targetSelector = btn.getAttribute("data-btn");
-      const serviceContainer = portfolio.querySelector(
-        `.btn-link[data-btn="${targetSelector}"]`
-      );
-
-      // Funzione per gestire l'hover e il touch
-      function handleHover() {
-        if (!btn.classList.contains("active")) {
-          gsap.to(btn.querySelector(".portfolio-btn"), {
-            color: "#f06",
-            rotation: 0,
-            scale: 1.2,          
-            duration: 0.5,
-            ease: "ease.out",
-          });
-          gsap.to(btn.querySelector(".text-btn-portfolio"), {
-            color: "#f06",
-            duration: 0.5,
-            ease: "linear",
-          });
-        }
-      }
-
-      function handleHoverOut() {
-        if (!btn.classList.contains("active")) {
-          gsap.to(btn.querySelector(".portfolio-btn"), {
-            color: "#f06",
-            scale: 1,            
-            duration: 0.5,
-            ease: "ease.out",
-          });
-          gsap.to(btn.querySelector(".text-btn-portfolio"), {
-            color: "currentcolor",
-            duration: 0.5,
-            ease: "linear",
-          });
-        }
-      }
-
-      // Aggiungi eventi hover e touch
-      btn.addEventListener("mouseenter", handleHover);
-      btn.addEventListener("mouseleave", handleHoverOut);
-      btn.addEventListener("touchstart", handleHover);
-      btn.addEventListener("touchend", handleHoverOut);
-
-      btn.addEventListener("click", () => {
-        const isOpen = serviceContainer.classList.contains("open");
-
-        if (currentOpenContainer && currentOpenContainer !== serviceContainer) {
-          // Chiudi il container attualmente aperto
-          gsap.to(currentOpenContainer, { height: 0, duration: 0.5 });
-          currentOpenContainer.classList.remove("open");
-          resetButtonState(currentOpenButton);
-        }
-
+      trigger.addEventListener("click", () => {
+        const isOpen = caseContainer.classList.contains("open");
         if (isOpen) {
-          // Chiudi il container abbinato al pulsante
-          gsap.to(serviceContainer, { height: 0, duration: 0.5 });
-          serviceContainer.classList.remove("open");
-          resetButtonState(btn);
-          currentOpenContainer = null;
-          currentOpenButton = null;
+          // Close the service section
+          gsap.to(caseContainer, { height: 0, duration: 0.5 });
+          gsap.to(dropBtn, {
+            rotation: 0,
+            duration: 0.5,
+            color: "",
+            ease: "ease.out",
+          });
+
+          caseContainer.classList.remove("open");
         } else {
-          // Apri il container abbinato al pulsante
-          gsap.set(serviceContainer, { height: "100%" });
-          const height = serviceContainer.offsetHeight;
+          // Open the service section
+          gsap.set(caseContainer, { height: "auto" });
+          const height = caseContainer.offsetHeight;
           gsap.fromTo(
-            serviceContainer,
+            caseContainer,
             { height: 0 },
             { height: height, duration: 0.5 }
           );
-          serviceContainer.classList.add("open");
-          currentOpenContainer = serviceContainer;
-          currentOpenButton = btn;
-          setButtonState(btn);
+          gsap.to(dropBtn, {
+            rotation: 180,
+            duration: 0.5,
+            color: "#f06",
+            ease: "ease.out",
+          });
+
+          caseContainer.classList.add("open");
         }
       });
+    });
+  },
+  portfolioInfo: function () {
+    let currentOpenContainer = null;
+    let currentOpenButton = null;
 
-      function setButtonState(button) {
-        button.classList.add("active");
-        gsap.to(button.querySelector(".portfolio-btn"), {
-          color: "#f06",
-          rotation: 90,
-          scale: 1.1,          
-          duration: 0.5,
-          ease: "ease.out",
-        });
-        gsap.to(button.querySelector(".text-btn-portfolio"), {
-          color: "#f06",
-          duration: 0.5,
-          ease: "linear",
-        });
-      }
+    document.querySelectorAll(".div-content-portfolio").forEach((portfolio) => {
+      const buttons = portfolio.querySelectorAll(".portfolio-btn-link");
+      buttons.forEach((btn) => {
+        const targetSelector = btn.getAttribute("data-btn");
+        const serviceContainer = portfolio.querySelector(
+          `.btn-link[data-btn="${targetSelector}"]`
+        );
 
-      function resetButtonState(button) {
-        if (button) {
-          button.classList.remove("active");
+        // Funzione per gestire l'hover e il touch
+        function handleHover() {
+          if (!btn.classList.contains("active")) {
+            gsap.to(btn.querySelector(".portfolio-btn"), {
+              color: "#f06",
+              rotation: 0,
+              scale: 1.2,
+              duration: 0.5,
+              ease: "ease.out",
+            });
+            gsap.to(btn.querySelector(".text-btn-portfolio"), {
+              color: "#f06",
+              duration: 0.5,
+              ease: "linear",
+            });
+          }
+        }
+
+        function handleHoverOut() {
+          if (!btn.classList.contains("active")) {
+            gsap.to(btn.querySelector(".portfolio-btn"), {
+              color: "#f06",
+              scale: 1,
+              duration: 0.5,
+              ease: "ease.out",
+            });
+            gsap.to(btn.querySelector(".text-btn-portfolio"), {
+              color: "currentcolor",
+              duration: 0.5,
+              ease: "linear",
+            });
+          }
+        }
+
+        // Aggiungi eventi hover e touch
+        btn.addEventListener("mouseenter", handleHover);
+        btn.addEventListener("mouseleave", handleHoverOut);
+        btn.addEventListener("touchstart", handleHover);
+        btn.addEventListener("touchend", handleHoverOut);
+
+        btn.addEventListener("click", () => {
+          const isOpen = serviceContainer.classList.contains("open");
+
+          if (
+            currentOpenContainer &&
+            currentOpenContainer !== serviceContainer
+          ) {
+            // Chiudi il container attualmente aperto
+            gsap.to(currentOpenContainer, { height: 0, duration: 0.5 });
+            currentOpenContainer.classList.remove("open");
+            resetButtonState(currentOpenButton);
+          }
+
+          if (isOpen) {
+            // Chiudi il container abbinato al pulsante
+            gsap.to(serviceContainer, { height: 0, duration: 0.5 });
+            serviceContainer.classList.remove("open");
+            resetButtonState(btn);
+            currentOpenContainer = null;
+            currentOpenButton = null;
+          } else {
+            // Apri il container abbinato al pulsante
+            gsap.set(serviceContainer, { height: "100%" });
+            const height = serviceContainer.offsetHeight;
+            gsap.fromTo(
+              serviceContainer,
+              { height: 0 },
+              { height: height, duration: 0.5 }
+            );
+            serviceContainer.classList.add("open");
+            currentOpenContainer = serviceContainer;
+            currentOpenButton = btn;
+            setButtonState(btn);
+          }
+        });
+
+        function setButtonState(button) {
+          button.classList.add("active");
           gsap.to(button.querySelector(".portfolio-btn"), {
             color: "#f06",
-            rotation: 0,
-            scale: 1,            
+            rotation: 90,
+            scale: 1.1,
             duration: 0.5,
             ease: "ease.out",
           });
           gsap.to(button.querySelector(".text-btn-portfolio"), {
-            color: "currentcolor",
+            color: "#f06",
             duration: 0.5,
             ease: "linear",
           });
         }
-      }
+
+        function resetButtonState(button) {
+          if (button) {
+            button.classList.remove("active");
+            gsap.to(button.querySelector(".portfolio-btn"), {
+              color: "#f06",
+              rotation: 0,
+              scale: 1,
+              duration: 0.5,
+              ease: "ease.out",
+            });
+            gsap.to(button.querySelector(".text-btn-portfolio"), {
+              color: "currentcolor",
+              duration: 0.5,
+              ease: "linear",
+            });
+          }
+        }
+      });
     });
-  });
-}
+  },
+  init: function () {
+    this.togglePortfolio(); 
+    this.portfolioInfo(); 
+  },
+};
 //
 //calendar
 function calendar() {
