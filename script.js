@@ -55,13 +55,17 @@ function initializeMainFunctions() {
     debounce(() => ScrollTrigger.refresh(), 200)
   );
   burgerAnimation();
-  changeLogoColor();
-  dataColor();
-  initializeScrollControlButtons();
+  changeLogoColor();  
+initializeScrollControlButtons();
+
+  requestIdleCallback(() => {
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
+  dataColor();
   ctaAnimations();
   info();
+});
+
 
   if (typeof pageSpecificFunctions === "function") {
     pageSpecificFunctions();
