@@ -1013,10 +1013,13 @@ function ctaAnimations() {
       startX = event.touches[0].clientX;
     });
 
-    box.addEventListener("touchmove", (event) => {
-      const diffX = event.touches[0].clientX - startX;
+    box.addEventListener("touchend", (event) => {
+      const diffX = event.changedTouches[0].clientX - startX;
       if (Math.abs(diffX) > 50) { // Soglia per considerare uno swipe
         diffX > 0 ? playAnimation() : reverseAnimation(); // Swipe destra o sinistra
+      } else {
+        // Se lo swipe non è abbastanza, ritorna all'inizio
+        reverseAnimation();
       }
     });
 
