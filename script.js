@@ -976,79 +976,115 @@ function ctaAnimations() {
       return;
     }
 
-    const color1 = getComputedStyle(gradientDiv).getPropertyValue("--background-first").trim();
-    const color2 = getComputedStyle(gradientDiv).getPropertyValue("--primary").trim();
+    const color1 = getComputedStyle(gradientDiv)
+      .getPropertyValue("--background-first")
+      .trim();
+    const color2 = getComputedStyle(gradientDiv)
+      .getPropertyValue("--primary")
+      .trim();
 
-    // Creazione della timeline
-    const animationTimeline = gsap.timeline({ paused: true });
+    // Crea una timeline per hover e touch
+    const createTimeline = (width) => {
+      const animationTimeline = gsap.timeline({ paused: true });
 
-    animationTimeline.to(gradientDiv, {
-      backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
-      duration: 0.8,
-      ease: "linear",
-    }, 0).to(box.querySelector(".button-spacer"), {
-      width: "10%", // Ottimizzato per desktop
-      duration: 0.6,
-      ease: "back.out(1.7)",
-    }, 0).to(":root", {
-      "--padding-button": "20",
-      duration: 0.6,
-      ease: "power2.out",
-    }, 0).to(box.querySelector(".text-cta"), {
-      scale: 1.1,
-      duration: 0.6,
-      ease: "power1.out",
-    }, 0);
+      animationTimeline.to(
+        gradientDiv,
+        {
+          backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
+          duration: 0.8,
+          ease: "linear",
+        },
+        0
+      );
+      animationTimeline.to(
+        box.querySelector(".button-spacer"),
+        {
+          width: width,
+          duration: 0.6,
+          ease: "back.out(1.7)",
+        },
+        0
+      );
+      animationTimeline.to(
+        ":root",
+        {
+          "--padding-button": "20",
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        0
+      );
+      animationTimeline.to(
+        box.querySelector(".text-cta"),
+        {
+          scale: 1.1,
+          duration: 0.6,
+          ease: "power1.out",
+        },
+        0
+      );
 
-    // Eventi ottimizzati con un singolo listener
-    const playAnimation = () => animationTimeline.play();
-    const reverseAnimation = () => animationTimeline.reverse();
+      // Gestisci gli eventi hover e touch
+      const playAnimation = () => animationTimeline.play();
+      const reverseAnimation = () => animationTimeline.reverse();
 
-    box.addEventListener("mouseenter", playAnimation);
-    box.addEventListener("mouseleave", reverseAnimation);
+      box.addEventListener("mouseenter", playAnimation);
+      box.addEventListener("mouseleave", reverseAnimation);
+      box.addEventListener("touchstart", playAnimation);
+      box.addEventListener("touchend", reverseAnimation);
 
-    // Swipe detection
-    let startX;
-    box.addEventListener("touchstart", (event) => {
-      startX = event.touches[0].clientX;
+      return animationTimeline;
+    };
+
+    gsap.matchMedia().add("(min-width: 992px)", () => {
+      createTimeline("10%");
     });
 
-    box.addEventListener("touchend", (event) => {
-      const diffX = event.changedTouches[0].clientX - startX;
-      if (Math.abs(diffX) > 50) { // Soglia per considerare uno swipe
-        diffX > 0 ? playAnimation() : reverseAnimation(); // Swipe destra o sinistra
-      } else {
-        // Se lo swipe non è abbastanza, ritorna all'inizio
-        reverseAnimation();
-      }
+    gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
+      createTimeline("0%");
     });
-
-    // Attivare l'animazione in loop per viewport < 992px
-    if (window.innerWidth < 992) {
-      const loopTimeline = gsap.timeline({ repeat: -1, paused: true });
-
-      loopTimeline.to(gradientDiv, {
-        backgroundImage: `linear-gradient(to right, ${color2}, ${color1})`,
-        duration: 1.6,
-        ease: "linear",
-      }).to(gradientDiv, {
-        backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
-        duration: 1.6,
-        ease: "linear",
-      }, 1.5);
-
-      loopTimeline.play();
-
-      box.addEventListener("mouseenter", () => loopTimeline.pause());
-      box.addEventListener("mouseleave", () => loopTimeline.play());
-    }
 
     ScrollTrigger.create({
       trigger: box,
       start: "top 95%",
       end: "bottom 5%",
       toggleActions: "play none none reverse",
-      onEnter: () => gsap.to(box, { x: 0, duration: 0.5, ease: "power2.out" }),
+      onEnter: () => gsap.to(box, { x: 0, duration: 0.6, ease: "power2.out" }),
+    });
+
+    // Attivare l'animazione in loop per viewport < 992px
+    gsap.matchMedia().add("(max-width: 992px)", () => {
+      const loopTimeline = gsap.timeline({ repeat: -1, paused: true });
+
+      loopTimeline.to(
+        gradientDiv,
+        {
+          backgroundImage: `linear-gradient(to right, ${color2}, ${color1})`,
+          duration: 1.6,
+          ease: "linear",
+        },
+        0
+      );
+      loopTimeline.to(
+        gradientDiv,
+        {
+          backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
+          duration: 1.6,
+          ease: "linear",
+        },
+        1.5
+      );
+
+      loopTimeline.play();
+
+      // Gestisci gli eventi touch per interrompere e riavviare l'animazione in loop
+      const stopLoop = () => loopTimeline.pause();
+      const resumeLoop = () => loopTimeline.play();
+
+      box.addEventListener("touchstart", stopLoop);
+      box.addEventListener("touchend", resumeLoop);
+      box.addEventListener("mouseenter", stopLoop);
+      box.addEventListener("mouseleave", resumeLoop);
     });
   });
 }
