@@ -337,7 +337,22 @@ function animateBurger() {
   });
 }
 //
-
+function changeLogoColor(
+  navLogoColor = "",
+  shapeColor = "",
+  brandArrowColor = "",
+  brandCall = ""
+) {
+  gsap.to(":root", {
+    "--navlogo-c": navLogoColor,
+    "--shape-color": shapeColor,
+    "--brand-arrow": brandArrowColor,
+    "--brand-call": brandCall,
+    duration: 0.5,
+    ease: "linear",
+  });
+}
+//
 function initializeScrollControlButtons() {
   const blockScrollButtons = document.querySelectorAll("[data-block-scroll]");
   const unblockScrollButtons = document.querySelectorAll(
