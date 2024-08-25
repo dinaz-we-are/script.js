@@ -58,6 +58,7 @@ function initializeMainFunctions() {
   burgerAnimation();
   changeLogoColor();  
   initializeScrollControlButtons();
+  animateBurger()
 
   requestIdleCallback(() => {
   initializeHoverAnimations();
@@ -283,6 +284,57 @@ function burgerAnimation(isHomePage = false) {
     });
   }
 }
+//burger hover touch
+// Funzione per gestire l'animazione del burger
+function animateBurger() {
+  const burgerClose = document.querySelector('.burger-close');
+  const burger = document.querySelector('.burger');
+  
+  // Definizione delle animazioni con GSAP
+  function createBurgerTimeline(burgerElement) {
+    const tl = gsap.timeline({ paused: true });
+
+    tl.to(burgerElement.querySelector('.line-middle'), {
+      width: '24px',
+      duration: 0.3,
+      ease: 'power2.out'
+    })
+    .to(burgerElement.querySelector('.line-top'), {
+      width: '40px',
+      duration: 0.3,
+      ease: 'power2.out'
+    }, 0)
+    .to(burgerElement.querySelector('.line-bottom'), {
+      width: '40px',
+      duration: 0.3,
+      ease: 'power2.out'
+    }, 0);
+
+    return tl;
+  }
+
+  // Creazione delle timeline per .burger-close e .burger (per dispositivi inferiori a 767px)
+  const burgerCloseTimeline = createBurgerTimeline(burgerClose);
+  const burgerTimeline = createBurgerTimeline(burger);
+
+  // Eventi per il burgerClose (desktop)
+  if (burgerClose) {
+    burgerClose.addEventListener('mouseenter', () => burgerCloseTimeline.play());
+    burgerClose.addEventListener('mouseleave', () => burgerCloseTimeline.reverse());
+    burgerClose.addEventListener('touchstart', () => burgerCloseTimeline.play());
+    burgerClose.addEventListener('touchend', () => burgerCloseTimeline.reverse());
+  }
+
+  // Eventi per il burger (mobile)
+  if (burger) {
+    burger.addEventListener('mouseenter', () => burgerTimeline.play());
+    burger.addEventListener('mouseleave', () => burgerTimeline.reverse());
+    burger.addEventListener('touchstart', () => burgerTimeline.play());
+    burger.addEventListener('touchend', () => burgerTimeline.reverse());
+  }
+}
+
+//
 
 //
 function changeLogoColor(
