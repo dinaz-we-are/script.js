@@ -287,39 +287,36 @@ function burgerAnimation(isHomePage = false) {
 //burger hover touch
 // Funzione per gestire l'animazione del burger
 function animateBurger() {
-  const burgerElement = document.getElementById('burger');
+  const burger = document.getElementById('burger'); // Use ID instead of class
 
-  if (!burgerElement) return; // Verifica che burger esista
+  if (!burger) {
+    console.error("Burger element not found");
+    return;
+  }
 
-  // Definizione dell'animazione con GSAP
-  const burgerTimeline = gsap.timeline({ paused: true });
+  // Create the timeline for hover animation
+  const timeline = gsap.timeline({ paused: true });
 
-  const lineMiddle = burgerElement.getElementsByClassName('line-middle')[0];
-  const lineTop = burgerElement.getElementsByClassName('line-top')[0];
-  const lineBottom = burgerElement.getElementsByClassName('line-bottom')[0];
-
-  burgerTimeline.to(lineMiddle, {
+  timeline.to(burger.querySelector('.line-middle'), {
     width: '24px',
-    duration: 0.2,
+    duration: 0.3,
     ease: 'power2.out'
   })
-  .to(lineTop, {
+  .to(burger.querySelector('.line-top'), {
     width: '40px',
-    duration: 0.2,
+    duration: 0.3,
     ease: 'power2.out'
   }, 0)
-  .to(lineBottom, {
+  .to(burger.querySelector('.line-bottom'), {
     width: '40px',
-    duration: 0.2,
+    duration: 0.3,
     ease: 'power2.out'
   }, 0);
 
-  // Eventi per il burger (solo desktop)
-  burgerElement.addEventListener('mouseenter', () => burgerTimeline.play());
-  burgerElement.addEventListener('mouseleave', () => burgerTimeline.reverse());
+  // Hover events
+  burger.addEventListener('mouseenter', () => timeline.play());
+  burger.addEventListener('mouseleave', () => timeline.reverse());
 }
-
-
 
 //
 
@@ -1036,8 +1033,7 @@ function ctaAnimations() {
     });
   });
 }
-
-
+//
 //videoPause
 function videoPause() {
   const videoContainers = document.querySelectorAll("div.w-background-video[data-pause-on-scroll]");
