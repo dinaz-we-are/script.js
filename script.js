@@ -54,9 +54,10 @@ function initializeMainFunctions() {
     "resize",
     debounce(() => ScrollTrigger.refresh(), 200)
   );
+  videoPause();
   burgerAnimation();
   changeLogoColor();  
-initializeScrollControlButtons();
+  initializeScrollControlButtons();
 
   requestIdleCallback(() => {
   initializeHoverAnimations();
@@ -1049,36 +1050,60 @@ function ctaAnimations() {
 }
 
 //videoPause
-
 function videoPause() {
-  // Trova tutti i contenitori di video di sfondo
-  const videoContainers = document.querySelectorAll(
-    "div.w-background-video[data-pause-on-scroll]"
-  );
-  console.log("Found video containers:", videoContainers);
+  const videoContainers = document.querySelectorAll("div.w-background-video[data-pause-on-scroll]");
 
-  videoContainers.forEach((container) => {
-    const video = container.querySelector("video");
-    if (video) {
-      ScrollTrigger.create({
-        trigger: container,
-        start: "top bottom",
-        end: "bottom top",
-        onEnter: () => {
-          video.play();
-        },
-        onLeave: () => {
-          video.pause();
-        },
-        onEnterBack: () => {
-          video.play();
-        },
-        onLeaveBack: () => {
-          video.pause();
-        },
+  if ('IntersectionObserver' in window) {
+    const lazyVideoObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const video = entry.target.querySelector("video");
+          
+          if (video) {
+            // Carica il video se ha l'attributo data-lazy
+            if (video.hasAttribute("data-lazy")) {
+              video.setAttribute("src", video.dataset.src);
+              video.load();
+              video.removeAttribute("data-lazy"); // Rimuove l'attributo per non caricarlo più volte
+            }
+            
+            video.play(); // Riproduci il video quando è nel viewport
+
+            ScrollTrigger.create({
+              trigger: entry.target,
+              start: "top bottom",
+              end: "bottom top",
+              onLeave: () => video.pause(),
+              onEnterBack: () => video.play(),
+              onLeaveBack: () => video.pause(),
+            });
+
+            observer.unobserve(entry.target); // Smette di osservare una volta che il video è stato caricato
+          }
+        }
       });
-    }
-  });
+    });
+
+    videoContainers.forEach(container => {
+      lazyVideoObserver.observe(container);
+    });
+  } else {
+    // Fallback per browser che non supportano IntersectionObserver
+    videoContainers.forEach(container => {
+      const video = container.querySelector("video");
+      if (video) {
+        ScrollTrigger.create({
+          trigger: container,
+          start: "top bottom",
+          end: "bottom top",
+          onEnter: () => video.play(),
+          onLeave: () => video.pause(),
+          onEnterBack: () => video.play(),
+          onLeaveBack: () => video.pause(),
+        });
+      }
+    });
+  }
 }
 //
 //faq
