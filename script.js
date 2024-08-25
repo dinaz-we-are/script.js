@@ -964,7 +964,6 @@ function info() {
 function ctaAnimations() {
   const boxes = document.querySelectorAll(".btn-cta");
 
-  // Ridurre il numero di listener gestendo tutti i dispositivi nella stessa funzione
   boxes.forEach((box) => {
     const gradientDiv = box.querySelector(".button-bg-gradient");
 
@@ -1003,6 +1002,19 @@ function ctaAnimations() {
 
     box.addEventListener("mouseenter", playAnimation);
     box.addEventListener("mouseleave", reverseAnimation);
+
+    // Implementazione del touch e dello swipe
+    let startX;
+    box.addEventListener("touchstart", (event) => {
+      startX = event.touches[0].clientX;
+    });
+
+    box.addEventListener("touchmove", (event) => {
+      const diffX = event.touches[0].clientX - startX;
+      if (Math.abs(diffX) > 50) { // Soglia per considerare uno swipe
+        diffX > 0 ? playAnimation() : reverseAnimation(); // Swipe destra o sinistra
+      }
+    });
 
     // Attivare l'animazione in loop per viewport < 992px
     if (window.innerWidth < 992) {
