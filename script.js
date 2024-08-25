@@ -287,53 +287,53 @@ function burgerAnimation(isHomePage = false) {
 //burger hover touch
 // Funzione per gestire l'animazione del burger
 function animateBurger() {
-  const burger = document.getElementById('burger'); // Use ID instead of class
+  const burger = document.getElementById('burger'); // Usa ID invece di class
 
   if (!burger) {
     console.error("Burger element not found");
     return;
   }
 
-  // Create the timeline for hover animation
+  // Verifica che le linee esistano
+  const lineMiddle = burger.querySelector('.line-middle');
+  const lineTop = burger.querySelector('.line-top');
+  const lineBottom = burger.querySelector('.line-bottom');
+
+  if (!lineMiddle || !lineTop || !lineBottom) {
+    console.error("One or more lines not found");
+    return;
+  }
+
+  console.log('Burger element and lines found, initializing animation');
+
+  // Crea la timeline per l'animazione hover
   const timeline = gsap.timeline({ paused: true });
 
-  timeline.to(burger.querySelector('.line-middle'), {
+  timeline.to(lineMiddle, {
     width: '24px',
     duration: 0.3,
     ease: 'power2.out'
   })
-  .to(burger.querySelector('.line-top'), {
+  .to(lineTop, {
     width: '40px',
     duration: 0.3,
     ease: 'power2.out'
   }, 0)
-  .to(burger.querySelector('.line-bottom'), {
+  .to(lineBottom, {
     width: '40px',
     duration: 0.3,
     ease: 'power2.out'
   }, 0);
 
-  // Hover events
-  burger.addEventListener('mouseenter', () => timeline.play());
-  burger.addEventListener('mouseleave', () => timeline.reverse());
-}
+  // Eventi hover
+  burger.addEventListener('mouseenter', () => {
+    console.log('Hover in');
+    timeline.play();
+  });
 
-//
-
-//
-function changeLogoColor(
-  navLogoColor = "",
-  shapeColor = "",
-  brandArrowColor = "",
-  brandCall = ""
-) {
-  gsap.to(":root", {
-    "--navlogo-c": navLogoColor,
-    "--shape-color": shapeColor,
-    "--brand-arrow": brandArrowColor,
-    "--brand-call": brandCall,
-    duration: 0.5,
-    ease: "linear",
+  burger.addEventListener('mouseleave', () => {
+    console.log('Hover out');
+    timeline.reverse();
   });
 }
 //
