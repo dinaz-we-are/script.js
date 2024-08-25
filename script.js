@@ -58,9 +58,9 @@ function initializeMainFunctions() {
   burgerAnimation();
   changeLogoColor();  
   initializeScrollControlButtons();  
-  animateBurger()
-
+  
   requestIdleCallback(() => {
+  animateBurger()  
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
   dataColor();
