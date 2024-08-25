@@ -293,46 +293,35 @@ function animateBurger() {
     console.error("Burger element not found");
     return;
   }
-
   // Verifica che le linee esistano
   const lineMiddle = burger.querySelector('.line-middle');
   const lineTop = burger.querySelector('.line-top');
   const lineBottom = burger.querySelector('.line-bottom');
 
-  if (!lineMiddle || !lineTop || !lineBottom) {
-    console.error("One or more lines not found");
-    return;
-  }
-
-  console.log('Burger element and lines found, initializing animation');
-
-  // Crea la timeline per l'animazione hover
   const timeline = gsap.timeline({ paused: true });
 
   timeline.to(lineMiddle, {
     width: '24px',
-    duration: 0.3,
+    duration: 0.2,
     ease: 'power2.out'
   })
   .to(lineTop, {
     width: '40px',
-    duration: 0.3,
+    duration: 0.2,
     ease: 'power2.out'
   }, 0)
   .to(lineBottom, {
     width: '40px',
-    duration: 0.3,
+    duration: 0.2,
     ease: 'power2.out'
   }, 0);
 
   // Eventi hover
-  burger.addEventListener('mouseenter', () => {
-    console.log('Hover in');
+  burger.addEventListener('mouseenter', () => {    
     timeline.play();
   });
 
-  burger.addEventListener('mouseleave', () => {
-    console.log('Hover out');
+  burger.addEventListener('mouseleave', () => {   
     timeline.reverse();
   });
 }
@@ -1018,7 +1007,7 @@ function ctaAnimations() {
     box.addEventListener("mouseenter", playAnimation);
     box.addEventListener("mouseleave", reverseAnimation);
 
-    // Implementazione del touch e dello swipe
+    // Swipe detection
     let startX;
     box.addEventListener("touchstart", (event) => {
       startX = event.touches[0].clientX;
