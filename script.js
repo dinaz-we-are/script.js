@@ -60,7 +60,9 @@ function initializeMainFunctions() {
   initializeScrollControlButtons();  
   
   requestIdleCallback(() => {
-  animateBurger()  
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      animateBurger();
+    }  
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
   dataColor();
