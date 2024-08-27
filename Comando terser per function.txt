@@ -1,0 +1,5 @@
+Comando terser per function
+dalla cartella script.js cancellare il file min poi rieseguire il Comando
+ terser function.js --compress --mangle reserved="['gsap','ScrollTrigger','Flip','ScrollToPlugin','Observer','burgerAnimation','videoPause','changeLogoColor','initializeScrollControlButtons','animateBurger','initializeHoverAnimations','initializeSimpleHoverTouchAnimations','dataColor','ctaAnimations','info','navbarRepo','swiperHome','transitionHome','createScrollTriggerHero','initializeGSAPAnimations','animaArrow','initializeScrollFlipAnimations','portfolioFunctions','toggleFaq','transitionPage','cecoStretegy','logoAnima','swiperUI','changePrice','toggleServiceSection','toggleButtonAnimation','contactSelection']" -o function.min.js
+
+ aggiungere funzioni se si aggiungono alla lista
