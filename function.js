@@ -348,7 +348,7 @@ function burgerAnimation(isHomePage = false) {
     if (isHomePage) {
         ScrollTrigger.create({
             trigger: ".hero-spacer",
-            start: "top 20%",
+            start: "top -10%",
             end: "top top",
             onEnter: () => {
                 gsap.to("#hero", { zIndex: 1 });
