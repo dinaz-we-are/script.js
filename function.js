@@ -345,6 +345,17 @@ function burgerAnimation(isHomePage = false) {
   //Fine data Color
   // SecondSection
   function secondSection(isHomePage = false) {
+    if (isHomePage) {
+      // Animazione zIndex Hero specifica per la home page
+      ScrollTrigger.create({
+        trigger: ".hero-spacer",
+        start: "top 20%",
+        end: "top top",
+        onEnter: () => {
+          gsap.to("#hero", { zIndex: 1 });
+        },
+      });
+    }
   
     const mm = gsap.matchMedia();
 
@@ -417,7 +428,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top 20%",
+                        start: "top 10%",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
