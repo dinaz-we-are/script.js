@@ -346,278 +346,285 @@ function burgerAnimation(isHomePage = false) {
   // SecondSection
   function secondSection(isHomePage = false) {
     if (isHomePage) {
-      // Animazione zIndex Hero specifica per la home page
-      ScrollTrigger.create({
-        trigger: ".hero-spacer",
-        start: "top 20%",
-        end: "top top",
-        onEnter: () => {
-          gsap.to("#hero", { zIndex: 1 });
-        },
-      });
+        ScrollTrigger.create({
+            trigger: ".hero-spacer",
+            start: "top 20%",
+            end: "top top",
+            onEnter: () => {
+                gsap.to("#hero", { zIndex: 1 });
+            },
+        });
     }
-  
-    // Animazione con ScrollTrigger per .focus-wrapper
-  
-    // Match Media per diverse risoluzioni
+
     const mm = gsap.matchMedia();
-  
+
     mm.add("(min-width: 320px) and (max-width: 767px)", () => {
-      console.log("Mobile breakpoint active");
-      gsap.fromTo(
-        ".focus",
-        { opacity: 1, transformOrigin: "top left" },
-        {
-          x: "10vw",
-          scale: 0.8,
-          opacity: 0.5,
-          y: "33%",
-          rotate: 90,
-          transformOrigin: "top left",
-          ease: "power1",
-          scrollTrigger: {
-            trigger: ".path-section",
-            start: "top 90%",
-            end: "top top",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+        console.log("Mobile breakpoint active");
+
+        document.querySelectorAll(".focus").forEach((focusElem) => {
+            gsap.fromTo(
+                focusElem,
+                { opacity: 1, transformOrigin: "top left" },
+                {
+                    x: "10vw",
+                    scale: 0.8,
+                    opacity: 0.5,
+                    y: "33%",
+                    rotate: 90,
+                    transformOrigin: "top left",
+                    ease: "power1",
+                    scrollTrigger: {
+                        trigger: focusElem,
+                        start: "top 90%",
+                        end: "top top",
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
+        });
     });
-  
+
     mm.add("(min-width: 768px) and (max-width: 991px)", () => {
-      console.log("Tablet breakpoint active");
-      gsap.fromTo(
-        ".focus",
-        { opacity: 1, transformOrigin: "top left" },
-        {
-          x: "12vw",
-          opacity: 0.5,
-          rotate: 90,
-          y: "50%",
-          transform: "translateY(-50%)",
-          transformOrigin: "top left",
-          ease: "power1",
-          scrollTrigger: {
-            trigger: ".path-section",
-            start: "top 80%",
-            end: "top top",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+        console.log("Tablet breakpoint active");
+
+        document.querySelectorAll(".focus").forEach((focusElem) => {
+            gsap.fromTo(
+                focusElem,
+                { opacity: 1, transformOrigin: "top left" },
+                {
+                    x: "12vw",
+                    opacity: 0.5,
+                    rotate: 90,
+                    y: "50%",
+                    transform: "translateY(-50%)",
+                    transformOrigin: "top left",
+                    ease: "power1",
+                    scrollTrigger: {
+                        trigger: focusElem,
+                        start: "top 80%",
+                        end: "top top",
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
+        });
     });
-  
+
     mm.add("(min-width: 992px)", () => {
-      console.log("Desktop breakpoint active");
-      gsap.fromTo(
-        ".focus",
-        { opacity: 1, transformOrigin: "top left" },
-        {
-          x: "10vw",
-          opacity: 0.5,
-          rotate: 90,
-          y: "50%",
-          transform: "translateY(-50%)",
-          transformOrigin: "top left",
-          ease: "power1",
-          scrollTrigger: {
-            trigger: ".path-section",
-            start: "top 80%",
-            end: "top top",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+        console.log("Desktop breakpoint active");
+
+        document.querySelectorAll(".focus").forEach((focusElem) => {
+            gsap.fromTo(
+                focusElem,
+                { opacity: 1, transformOrigin: "top left" },
+                {
+                    x: "10vw",
+                    opacity: 0.5,
+                    rotate: 90,
+                    y: "50%",
+                    transform: "translateY(-50%)",
+                    transformOrigin: "top left",
+                    ease: "power1",
+                    scrollTrigger: {
+                        trigger: focusElem,
+                        start: "top 80%",
+                        end: "top top",
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
+        });
     });
-  
+
     const containers = document.querySelectorAll(".path-container");
     const images = document.querySelectorAll(".img-target");
-  
+
     gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
-      // Regole per schermi mobile
-      containers.forEach((container) => {
-        const imgId = container.getAttribute("data-img-id");
-        const image = document.getElementById(imgId);
-        const customPathVectors = container.querySelectorAll(".path-vector");
-  
-        customPathVectors.forEach((customPathVector) => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: container,
-              start: "top 70%",
-              end: "top top",
-              toggleActions: "play none none reverse",
-            },
-          });
-  
-          tl.from(customPathVector, {
-            opacity: 0,
-            scale: 0,
-            duration: 0.5,
-            x: -200,
-            ease: "power1.out",
-          });
-  
-          if (isHomePage) {
-            tl.to(customPathVector, {
-              rotation: 90,
-              x: "-0.6rem",
-              y: "0.6rem",
-              duration: 0.2,
-              ease: "power1.in",
+        containers.forEach((container) => {
+            const imgId = container.getAttribute("data-img-id");
+            const image = document.getElementById(imgId);
+            const customPathVectors = container.querySelectorAll(".path-vector");
+
+            customPathVectors.forEach((customPathVector) => {
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top 70%",
+                        end: "top top",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+
+                tl.from(customPathVector, {
+                    opacity: 0,
+                    scale: 0,
+                    duration: 0.5,
+                    x: -200,
+                    ease: "power1.out",
+                });
+
+                if (isHomePage) {
+                    tl.to(customPathVector, {
+                        rotation: 90,
+                        x: "-0.6rem",
+                        y: "0.6rem",
+                        duration: 0.2,
+                        ease: "power1.in",
+                    });
+                }
             });
-          }
-        });
-  
-        if (image) {
-          gsap.fromTo(
-            container,
-            { opacity: 0 },
-            {
-              opacity: 1,
-              duration: 0.5,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: container,
-                start: "top 90%",
-                end: "top 10%",
-                toggleActions: "play none none reverse",
-                onEnter: () => {
-                  gsap.to(images, {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                  gsap.to(image, {
-                    opacity: 0.7,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                },
-                onLeave: () => {
-                  gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
-                },
-                onEnterBack: () => {
-                  gsap.to(images, {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                  gsap.to(image, {
-                    opacity: 0.7,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                },
-                onLeaveBack: () => {
-                  gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
-                },
-              },
+
+            if (image) {
+                gsap.fromTo(
+                    container,
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: "power1.out",
+                        scrollTrigger: {
+                            trigger: container,
+                            start: "top 90%",
+                            end: "top 10%",
+                            toggleActions: "play none none reverse",
+                            onEnter: () => {
+                                gsap.to(images, {
+                                    opacity: 0,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                                gsap.to(image, {
+                                    opacity: 0.7,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                            },
+                            onLeave: () => {
+                                gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
+                            },
+                            onEnterBack: () => {
+                                gsap.to(images, {
+                                    opacity: 0,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                                gsap.to(image, {
+                                    opacity: 0.7,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                            },
+                            onLeaveBack: () => {
+                                gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
+                            },
+                        },
+                    }
+                );
             }
-          );
-        }
-      });
+        });
     });
-  
+
     gsap.matchMedia().add("(min-width: 992px)", () => {
-      // Regole per schermi desktop
-      containers.forEach((container) => {
-        const imgId = container.getAttribute("data-img-id");
-        const image = document.getElementById(imgId);
-        const customPathVectors = container.querySelectorAll(".path-vector");
-  
-        customPathVectors.forEach((customPathVector) => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: container,
-              start: "top 70%",
-              end: "top top",
-              toggleActions: "play none none reverse",
-            },
-          });
-  
-          tl.from(customPathVector, {
-            opacity: 0,
-            scale: 0,
-            duration: 0.5,
-            x: -200,
-            ease: "power1.out",
-          });
-  
-          if (isHomePage) {
-            tl.to(customPathVector, {
-              rotation: 90,
-              x: "-1rem",
-              y: "1rem",
-              duration: 0.2,
-              ease: "power1.in",
+        containers.forEach((container) => {
+            const imgId = container.getAttribute("data-img-id");
+            const image = document.getElementById(imgId);
+            const customPathVectors = container.querySelectorAll(".path-vector");
+
+            customPathVectors.forEach((customPathVector) => {
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top 70%",
+                        end: "top top",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+
+                tl.from(customPathVector, {
+                    opacity: 0,
+                    scale: 0,
+                    duration: 0.5,
+                    x: -200,
+                    ease: "power1.out",
+                });
+
+                if (isHomePage) {
+                    tl.to(customPathVector, {
+                        rotation: 90,
+                        x: "-1rem",
+                        y: "1rem",
+                        duration: 0.2,
+                        ease: "power1.in",
+                    });
+                }
             });
-          }
-        });
-  
-        if (image) {
-          gsap.fromTo(
-            container,
-            { opacity: 0 },
-            {
-              opacity: 1,
-              duration: 0.5,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: container,
-                start: "top 80%",
-                end: "top 20%",
-                toggleActions: "play none none reverse",
-                onEnter: () => {
-                  gsap.to(images, {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                  gsap.to(image, {
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                },
-                onLeave: () => {
-                  gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
-                },
-                onEnterBack: () => {
-                  gsap.to(images, {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                  gsap.to(image, {
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power1.out",
-                  });
-                },
-                onLeaveBack: () => {
-                  gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
-                },
-              },
+
+            if (image) {
+                gsap.fromTo(
+                    container,
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: "power1.out",
+                        scrollTrigger: {
+                            trigger: container,
+                            start: "top 80%",
+                            end: "top 20%",
+                            toggleActions: "play none none reverse",
+                            onEnter: () => {
+                                gsap.to(images, {
+                                    opacity: 0,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                                gsap.to(image, {
+                                    opacity: 1,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                            },
+                            onLeave: () => {
+                                gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
+                            },
+                            onEnterBack: () => {
+                                gsap.to(images, {
+                                    opacity: 0,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                                gsap.to(image, {
+                                    opacity: 1,
+                                    duration: 1,
+                                    ease: "power1.out",
+                                });
+                            },
+                            onLeaveBack: () => {
+                                gsap.to(image, { opacity: 0, duration: 1, ease: "power1.out" });
+                            },
+                        },
+                    }
+                );
             }
-          );
-        }
-      });
+        });
     });
-    gsap.from(".img-tg-cont", {
-      y: "200",
-      opacity: 0,
-      duration: 1.5,
-      ease: "linear",
-      scrollTrigger: {
-        trigger: ".focus-wrapper",
-        start: "top 20%",
-        end: "top top",
-        toggleActions: "play none none reverse",
-      },
+
+    // Applicazione dell'animazione individuale a ciascun elemento .img-tg-cont
+    document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
+        gsap.from(imgTgContElem, {
+            y: "200",
+            opacity: 0,
+            duration: 1.5,
+            ease: "linear",
+            scrollTrigger: {
+                trigger: imgTgContElem,
+                start: "top 20%",
+                end: "top top",
+                toggleActions: "play none none reverse",
+            },
+        });
     });
-  }
+}
   
   //
   
