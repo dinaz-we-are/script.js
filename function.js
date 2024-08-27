@@ -1669,17 +1669,12 @@ function burgerAnimation(isHomePage = false) {
             duration: 0.3,
             ease: "back.out(1.7)"
         }, "<")       
-        .from(".heading-container, #big-call", {
+        .from("#big-call, #arrow", {
             x: "50vw",
             opacity: 0,
             duration: 0.5,
             ease: "power2"
         }, "<")       
-        .from("#arrow", {
-            opacity: 0,
-            duration: 0.5,
-            ease: "bounce"
-        }, "<")
          .to(":root", {
             duration: 1,
             "--linear-grad1": "#f06",
@@ -1799,13 +1794,7 @@ function createScrollTriggerHero() {
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
-                })
-                .to(".heading-container", {
-                    x: "50vw",
-                    opacity: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
+                })               
                 .to(".brand_header", {
                     y: "-10rem",
                     opacity: 0,
@@ -1821,13 +1810,7 @@ function createScrollTriggerHero() {
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
-                })
-                .to(".heading-container", {
-                    opacity: 1,
-                    x: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
+                })             
                 .to(".brand_header", {
                     y: 0,
                     opacity: 1,
