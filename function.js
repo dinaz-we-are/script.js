@@ -348,10 +348,10 @@ function burgerAnimation(isHomePage = false) {
     if (isHomePage) {
         ScrollTrigger.create({
             trigger: ".hero-spacer",
-            start: "top -10%",
+            start: "top -20%",
             end: "top top",
             onEnter: () => {
-                gsap.to("#hero", { zIndex: 1 });
+                gsap.to(".focus-wrapper", { backgroundColor: "#0d0d0d" });
             },
         });
     }
@@ -375,7 +375,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top center",
+                        start: "top 20%",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
@@ -401,7 +401,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top center",
+                        start: "top 20%",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
@@ -427,7 +427,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top center",
+                        start: "top 20%",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
