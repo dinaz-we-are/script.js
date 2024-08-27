@@ -375,7 +375,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top 90%",
+                        start: "top center",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
@@ -401,7 +401,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top 80%",
+                        start: "top center",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
@@ -427,7 +427,7 @@ function burgerAnimation(isHomePage = false) {
                     ease: "power1",
                     scrollTrigger: {
                         trigger: focusElem,
-                        start: "top 80%",
+                        start: "top center",
                         end: "top top",
                         toggleActions: "play none none none",
                     },
