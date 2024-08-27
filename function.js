@@ -303,15 +303,15 @@ function burgerAnimation(isHomePage = false) {
     }
   
     blockScrollButtons.forEach((button) => {
-      button.addEventListener("click", handleBlockScroll);
+      button.addEventListener("click", handleBlockScroll, { passive: true });
     });
   
     unblockScrollButtons.forEach((button) => {
-      button.addEventListener("click", handleUnblockScroll);
+      button.addEventListener("click", handleUnblockScroll, { passive: true });
     });
   
     toggleScrollButtons.forEach((button) => {
-      button.addEventListener("click", handleToggleScroll);
+      button.addEventListener("click", handleToggleScroll, { passive: true });
     });
   }
   //
@@ -719,8 +719,8 @@ function burgerAnimation(isHomePage = false) {
       box.addEventListener("mouseleave", () => hoverTimeline.reverse());
   
       // Gestisci gli eventi touch
-      box.addEventListener("touchstart", () => touchTimeline.play());
-      box.addEventListener("touchend", () => touchTimeline.reverse());
+      box.addEventListener("touchstart", () => touchTimeline.play(), { passive: true });
+      box.addEventListener("touchend", () => touchTimeline.reverse(), { passive: true });
     });
   }
   
@@ -761,8 +761,8 @@ function burgerAnimation(isHomePage = false) {
       link.addEventListener("mouseleave", () => hoverTimeline.reverse());
   
       // Gestisci gli eventi touch
-      link.addEventListener("touchstart", () => touchTimeline.play());
-      link.addEventListener("touchend", () => touchTimeline.reverse());
+      link.addEventListener("touchstart", () => touchTimeline.play(), { passive: true });
+      link.addEventListener("touchend", () => touchTimeline.reverse(), { passive: true });
     });
   }
   //
@@ -1056,7 +1056,7 @@ function burgerAnimation(isHomePage = false) {
             onLeave: () => video.pause(),
             onEnterBack: () => video.play(),
             onLeaveBack: () => video.pause(),
-          });
+          }, { passive: true });
         }
       });
     }
@@ -1253,7 +1253,7 @@ function burgerAnimation(isHomePage = false) {
           navbarScrollTrigger = createNavbarScrollTrigger();
         }
         checkAndUpdateNavbar();
-      }, 200)
+      }, 200), { passive: true }
     );
   
     checkAndUpdateNavbar();
