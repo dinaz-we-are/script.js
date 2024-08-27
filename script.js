@@ -61,8 +61,7 @@ function initializeMainFunctions() {
   
   requestIdleCallback(() => {
     if (window.matchMedia("(min-width: 768px)").matches) {
-      animateBurger();
-    }  
+      animateBurger();}  
   initializeHoverAnimations();
   initializeSimpleHoverTouchAnimations();
   dataColor();
