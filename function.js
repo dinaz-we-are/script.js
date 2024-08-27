@@ -365,7 +365,7 @@ function burgerAnimation(isHomePage = false) {
     mm.add("(min-width: 320px) and (max-width: 767px)", () => {
       console.log("Mobile breakpoint active");
       gsap.fromTo(
-        "#focus",
+        ".focus",
         { opacity: 1, transformOrigin: "top left" },
         {
           x: "10vw",
@@ -388,7 +388,7 @@ function burgerAnimation(isHomePage = false) {
     mm.add("(min-width: 768px) and (max-width: 991px)", () => {
       console.log("Tablet breakpoint active");
       gsap.fromTo(
-        "#focus",
+        ".focus",
         { opacity: 1, transformOrigin: "top left" },
         {
           x: "12vw",
@@ -411,7 +411,7 @@ function burgerAnimation(isHomePage = false) {
     mm.add("(min-width: 992px)", () => {
       console.log("Desktop breakpoint active");
       gsap.fromTo(
-        "#focus",
+        ".focus",
         { opacity: 1, transformOrigin: "top left" },
         {
           x: "10vw",
