@@ -345,17 +345,7 @@ function burgerAnimation(isHomePage = false) {
   //Fine data Color
   // SecondSection
   function secondSection(isHomePage = false) {
-    if (isHomePage) {
-        ScrollTrigger.create({
-            trigger: ".hero-spacer",
-            start: "top -50%",
-            end: "top top",
-            onEnter: () => {
-                gsap.to(".focus-wrapper", { backgroundColor: "#0d0d0d", zIndex: 2 });
-            },
-        });
-    }
-
+  
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 320px) and (max-width: 767px)", () => {
