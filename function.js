@@ -363,9 +363,8 @@ function burgerAnimation(isHomePage = false) {
         console.log("Mobile breakpoint active");
 
         document.querySelectorAll(".focus").forEach((focusElem) => {
-            gsap.fromTo(
-                focusElem,
-                { opacity: 1, transformOrigin: "top left" },
+            gsap.to(
+                focusElem,                
                 {
                     x: "10vw",
                     scale: 0.8,
@@ -389,9 +388,8 @@ function burgerAnimation(isHomePage = false) {
         console.log("Tablet breakpoint active");
 
         document.querySelectorAll(".focus").forEach((focusElem) => {
-            gsap.fromTo(
-                focusElem,
-                { opacity: 1, transformOrigin: "top left" },
+            gsap.to(
+                focusElem,                
                 {
                     x: "12vw",
                     opacity: 0.5,
@@ -415,9 +413,8 @@ function burgerAnimation(isHomePage = false) {
         console.log("Desktop breakpoint active");
 
         document.querySelectorAll(".focus").forEach((focusElem) => {
-            gsap.fromTo(
-                focusElem,
-                { opacity: 1, transformOrigin: "top left" },
+            gsap.to(
+                focusElem,                
                 {
                     x: "10vw",
                     opacity: 0.5,
@@ -439,13 +436,13 @@ function burgerAnimation(isHomePage = false) {
 
     const containers = document.querySelectorAll(".path-container");
     const images = document.querySelectorAll(".img-target");
-
+    
     gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
         containers.forEach((container) => {
             const imgId = container.getAttribute("data-img-id");
-            const image = document.getElementById(imgId);
+            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target:first-child");
             const customPathVectors = container.querySelectorAll(".path-vector");
-
+    
             customPathVectors.forEach((customPathVector) => {
                 const tl = gsap.timeline({
                     scrollTrigger: {
@@ -455,7 +452,7 @@ function burgerAnimation(isHomePage = false) {
                         toggleActions: "play none none reverse",
                     },
                 });
-
+    
                 tl.from(customPathVector, {
                     opacity: 0,
                     scale: 0,
@@ -463,7 +460,7 @@ function burgerAnimation(isHomePage = false) {
                     x: -200,
                     ease: "power1.out",
                 });
-
+    
                 if (isHomePage) {
                     tl.to(customPathVector, {
                         rotation: 90,
@@ -471,13 +468,13 @@ function burgerAnimation(isHomePage = false) {
                         y: "0.6rem",
                         duration: 0.2,
                         ease: "power1.in",
-                    });
+                    }, 0);
                 }
             });
-
+    
             if (image) {
                 gsap.fromTo(
-                    container,
+                    image,
                     { opacity: 0 },
                     {
                         opacity: 1,
@@ -524,13 +521,13 @@ function burgerAnimation(isHomePage = false) {
             }
         });
     });
-
+    
     gsap.matchMedia().add("(min-width: 992px)", () => {
         containers.forEach((container) => {
             const imgId = container.getAttribute("data-img-id");
-            const image = document.getElementById(imgId);
+            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target:first-child");
             const customPathVectors = container.querySelectorAll(".path-vector");
-
+    
             customPathVectors.forEach((customPathVector) => {
                 const tl = gsap.timeline({
                     scrollTrigger: {
@@ -540,7 +537,7 @@ function burgerAnimation(isHomePage = false) {
                         toggleActions: "play none none reverse",
                     },
                 });
-
+    
                 tl.from(customPathVector, {
                     opacity: 0,
                     scale: 0,
@@ -548,7 +545,7 @@ function burgerAnimation(isHomePage = false) {
                     x: -200,
                     ease: "power1.out",
                 });
-
+    
                 if (isHomePage) {
                     tl.to(customPathVector, {
                         rotation: 90,
@@ -559,10 +556,10 @@ function burgerAnimation(isHomePage = false) {
                     });
                 }
             });
-
+    
             if (image) {
                 gsap.fromTo(
-                    container,
+                    image,
                     { opacity: 0 },
                     {
                         opacity: 1,
@@ -609,6 +606,7 @@ function burgerAnimation(isHomePage = false) {
             }
         });
     });
+    
 
     // Applicazione dell'animazione individuale a ciascun elemento .img-tg-cont
     document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
@@ -1904,7 +1902,7 @@ const cecoStretegy = {
 
     // Crea il ScrollTrigger e collega l'animazione
     ScrollTrigger.create({
-      trigger: ".connessioni-section",
+      trigger: "#ceco",
       start: "top 30%",
       end: "bottom bottom",
       toggleActions: "play none none resume",

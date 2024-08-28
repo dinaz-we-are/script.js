@@ -15,7 +15,7 @@ async function loadGSAP() {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js",
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Observer.min.js",
-    "https://cdn.jsdelivr.net/gh/dinaz-we-are/script.js@5ec5a1d39d0baba7cc05f0a96fd1c5aee945d6df/function.min.js",
+    "https://cdn.jsdelivr.net/gh/dinaz-we-are/script.js@d3d4b6f4f67ec5e59b5d9a3843f8843671a5587a/function.min.js",
   ];
 
   await Promise.all(gsapScripts.map((src) => loadScript(src)));
