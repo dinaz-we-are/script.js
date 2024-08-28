@@ -621,7 +621,7 @@ function burgerAnimation(isHomePage = false) {
                 toggleActions: "play none none reverse",
             },
         });
-    });
+    });}
     
   
   //
