@@ -440,7 +440,7 @@ function burgerAnimation(isHomePage = false) {
     gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
         containers.forEach((container) => {
             const imgId = container.getAttribute("data-img-id");
-            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target:first-child");
+            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target");
             const customPathVectors = container.querySelectorAll(".path-vector");
     
             customPathVectors.forEach((customPathVector) => {
@@ -525,7 +525,7 @@ function burgerAnimation(isHomePage = false) {
     gsap.matchMedia().add("(min-width: 992px)", () => {
         containers.forEach((container) => {
             const imgId = container.getAttribute("data-img-id");
-            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target:first-child");
+            const image = imgId ? document.getElementById(imgId) : container.querySelector(".img-target");
             const customPathVectors = container.querySelectorAll(".path-vector");
     
             customPathVectors.forEach((customPathVector) => {
@@ -607,7 +607,6 @@ function burgerAnimation(isHomePage = false) {
         });
     });
     
-
     // Applicazione dell'animazione individuale a ciascun elemento .img-tg-cont
     document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
         gsap.from(imgTgContElem, {
@@ -623,7 +622,7 @@ function burgerAnimation(isHomePage = false) {
             },
         });
     });
-}
+    
   
   //
   
