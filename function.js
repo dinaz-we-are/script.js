@@ -1648,8 +1648,8 @@ function burgerAnimation(isHomePage = false) {
             ease: "back.out(1.7)",
             stagger: 0.05
         })
-        .to(".h1-usp .word", {
-            opacity:1,         
+        .from(".h1-usp .word", {
+            opacity: 0.5,         
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
