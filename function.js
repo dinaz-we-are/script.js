@@ -1648,9 +1648,9 @@ function burgerAnimation(isHomePage = false) {
             ease: "back.out(1.7)",
             stagger: 0.05
         })
-        .from(".h1-usp .word", {
-            opacity: 0,
-            y: 50,
+        .to(".h1-usp .word", {
+            color: "#f4f4f4",
+            strokeWidth: 0,
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
@@ -1667,8 +1667,8 @@ function burgerAnimation(isHomePage = false) {
             duration: 0.3,
             ease: "back.out(1.7)"
         }, "<")       
-        .from("#big-call, #arrow", {
-            x: "50vw",
+        .from("#big-call, #arrow, .text-block", {
+            y: "50vh",
             opacity: 0,
             duration: 0.5,
             ease: "power2"
@@ -1686,6 +1686,7 @@ function burgerAnimation(isHomePage = false) {
     // Animazione freccia
     function animaArrow() {
     let arrowAnimation = gsap.to("#arrow", {
+        y:50,
         scale: 0.5,
         ease: "power1",
         duration: 2,
@@ -1786,9 +1787,9 @@ function createScrollTriggerHero() {
         end: "top 85%",
         onEnter: () => {
             gsap.timeline()
-                .to(".usp .word, .h1-usp .word", {
+                .to(".usp .word, .h1-usp .word, .text-block", {
                     opacity: 0,
-                    x: "-100vw",
+                    x: "100vw",
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
@@ -1802,7 +1803,7 @@ function createScrollTriggerHero() {
         },
         onLeaveBack: () => {
             gsap.timeline()
-                .to(".usp .word, .h1-usp .word", {
+                .to(".usp .word, .h1-usp .word, .text-block", {
                     opacity: 1,
                     x: 0,
                     duration: 1,
