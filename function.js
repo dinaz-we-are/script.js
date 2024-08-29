@@ -1649,19 +1649,18 @@ function burgerAnimation(isHomePage = false) {
             stagger: 0.05
         })
         .to(".h1-usp .word", {
-            color: "#f4f4f4",
-            webkitTextStrokeWidth: 0,            
+            opacity:1,         
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
-        })
+        },"<")
         .from(".usp .word", {
             rotationX: 90,
             transformOrigin: "bottom center",
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: { amount: 0.3 }
-        }, "<")
+        })
         .from("#nav", {
             y: "-5rem",
             duration: 0.3,
