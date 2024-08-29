@@ -1650,7 +1650,7 @@ function burgerAnimation(isHomePage = false) {
         })
         .to(".h1-usp .word", {
             color: "#f4f4f4",
-            strokeWidth: 0,
+            webkitTextStrokeWidth: 0,            
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
