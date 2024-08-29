@@ -1647,20 +1647,20 @@ function burgerAnimation(isHomePage = false) {
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.05
-        })
+        },"<")
         .from(".h1-usp .word", {
-            opacity: 0.5,         
+            opacity: 0.2,         
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
-        },"<")
+        })
         .from(".usp .word", {
             rotationX: 90,
             transformOrigin: "bottom center",
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: { amount: 0.3 }
-        })
+        },"<")
         .from("#nav", {
             y: "-5rem",
             duration: 0.3,
