@@ -1685,8 +1685,7 @@ function burgerAnimation(isHomePage = false) {
     });}
     // Animazione freccia
     function animaArrow() {
-    let arrowAnimation = gsap.to("#arrow", {
-        y:50,
+    let arrowAnimation = gsap.to("#arrow", {        
         scale: 0.5,
         ease: "power1",
         duration: 2,
