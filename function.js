@@ -1666,7 +1666,7 @@ function burgerAnimation(isHomePage = false) {
             duration: 0.3,
             ease: "back.out(1.7)"
         }, "<")       
-        .from("#big-call, #arrow, .text-block", {
+        .from("#arrow, .text-block", {
             y: "50vh",
             opacity: 0,
             duration: 0.5,
