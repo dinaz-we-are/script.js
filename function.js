@@ -607,21 +607,7 @@ function burgerAnimation(isHomePage = false) {
         });
     });
     
-    // Applicazione dell'animazione individuale a ciascun elemento .img-tg-cont
-    document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
-        gsap.from(imgTgContElem, {
-            y: "200",
-            opacity: 0,
-            duration: 1.5,
-            ease: "linear",
-            scrollTrigger: {
-                trigger: imgTgContElem,
-                start: "top 20%",
-                end: "top top",
-                toggleActions: "play none none reverse",
-            },
-        });
-    });}
+}
     
   
   //
