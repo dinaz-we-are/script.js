@@ -1726,7 +1726,7 @@ function burgerAnimation(isHomePage = false) {
              opacity: 0,
              duration: 0.5,
              ease: "linear",
-         }, "<");
+         }, "<");});
 
     gsap.timeline().call(function () {
         console.log("Animazione completata");
