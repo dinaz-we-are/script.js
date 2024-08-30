@@ -464,7 +464,7 @@ function burgerAnimation(isHomePage = false) {
                 if (isHomePage) {
                     tl.to(customPathVector, {
                         rotation: 90,
-                        x: "-1rem",
+                        x: "-0.6rem",
                         y: "0.6rem",
                         duration: 0.2,
                         ease: "power1.in",
