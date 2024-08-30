@@ -1851,11 +1851,7 @@ function createScrollTriggerHero() {
                     opacity: 0,
                     ease: "back.out(1.7)",
                     duration: 1,
-                }, "<")
-                .to("#arrow", {
-                  color: "#f06",                  
-                  ease: "none",                  
-              }, "<");
+                }, "<");
         },
         onLeaveBack: () => {
             gsap.timeline()
@@ -1874,11 +1870,7 @@ function createScrollTriggerHero() {
                     opacity: 1,
                     ease: "back.out(1.7)",
                     duration: 1,
-                }, "<")
-                .to("#arrow", {
-                  color: "",                  
-                  ease: "none",                  
-              }, "<");
+                }, "<");
         },
     });
 
