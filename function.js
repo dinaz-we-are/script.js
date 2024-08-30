@@ -1711,6 +1711,7 @@ function burgerAnimation(isHomePage = false) {
              ease: "back.out(1.7)"
          })
          .from("#arrow, .text-block", {
+            y:"-30vh",
              opacity:0,
              duration: 0.5,
              ease: "power2",
