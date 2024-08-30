@@ -377,7 +377,7 @@ function burgerAnimation(isHomePage = false) {
                         trigger: focusElem,
                         start: "top 20%",
                         end: "top top",
-                        toggleActions: "play none none none",
+                        toggleActions: "play none none reverse",
                     },
                 }
             );
@@ -402,7 +402,7 @@ function burgerAnimation(isHomePage = false) {
                         trigger: focusElem,
                         start: "top 20%",
                         end: "top top",
-                        toggleActions: "play none none none",
+                        toggleActions: "play none none reverse",
                     },
                 }
             );
@@ -427,7 +427,7 @@ function burgerAnimation(isHomePage = false) {
                         trigger: focusElem,
                         start: "top 10%",
                         end: "top top",
-                        toggleActions: "play none none none",
+                        toggleActions: "play none none reverse",
                     },
                 }
             );
@@ -606,6 +606,21 @@ function burgerAnimation(isHomePage = false) {
             }
         });
     });
+    if (!isHomePage) {
+      document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
+          gsap.from(imgTgContElem, {
+              y: 200, // Numeric value, without quotes
+              opacity: 0,
+              duration: 1.5,
+              ease: "linear",
+              scrollTrigger: {
+                  trigger: imgTgContElem,
+                  start: "top 20%",
+                  end: "top top",
+                  toggleActions: "play none none reverse",
+              },
+          });
+      });}
     
 }
     
