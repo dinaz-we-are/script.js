@@ -1704,11 +1704,11 @@ function burgerAnimation(isHomePage = false) {
           y: "-10rem",
        duration: 0.5,
        ease: "back.out(1.7)",
-       stagger: 0.1
+       stagger: 0.05
         },"<")      
          .from("#nav", {
              y: "-5rem",
-             duration: 0.3,
+             duration: 0.5,
              ease: "back.out(1.7)"
          })
          .from("#arrow, .text-block", {
@@ -1719,7 +1719,7 @@ function burgerAnimation(isHomePage = false) {
              stagger: 0.3
          }, "<")
          .to(":root", {
-             duration: 1,
+             duration: 0.5,
              "--linear-grad1": "#f06",
              "--linear-grad2": "#e0ff0d",
              ease: "linear",
