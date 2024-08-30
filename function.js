@@ -464,11 +464,11 @@ function burgerAnimation(isHomePage = false) {
                 if (isHomePage) {
                     tl.to(customPathVector, {
                         rotation: 90,
-                        x: "-0.6rem",
+                        x: "-1rem",
                         y: "0.6rem",
                         duration: 0.2,
                         ease: "power1.in",
-                    }, 0);
+                    });
                 }
             });
     
