@@ -1649,7 +1649,7 @@ function burgerAnimation(isHomePage = false) {
             stagger: 0.05
         },"<")
         .from(".h1-usp .word", {
-            opacity: 0.2,         
+            opacity: 0,         
             duration: 0.5,
             ease: "back.out(1.7)",
             stagger: 0.0325
@@ -1667,17 +1667,23 @@ function burgerAnimation(isHomePage = false) {
             ease: "back.out(1.7)"
         }, "<")       
         .from("#arrow, .text-block", {
-            y: "50vh",
-            opacity: 0,
+            y: "120vh",
+            //opacity: 0,
             duration: 0.5,
-            ease: "power2"
+            ease: "power2",
+            stagger:0.2
         }, "<")       
          .to(":root", {
             duration: 1,
             "--linear-grad1": "#f06",
             "--linear-grad2": "#e0ff0d",
             ease: "linear",
-        }, "<");
+        }, "<")
+        .from(".gradient", {
+          opacity:0,
+          duration: 0.5,
+          ease: "linear",
+      }, "<");
 
     tl.call(function () {
       console.log("Animazione completata");
@@ -1791,7 +1797,10 @@ function createScrollTriggerHero() {
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
-                })               
+                })
+                .to(".gradient", {
+                  opacity:0
+                },"<")               
                 .to(".brand_header", {
                     y: "-10rem",
                     opacity: 0,
@@ -1808,6 +1817,9 @@ function createScrollTriggerHero() {
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
                 })             
+                .to(".gradient", {
+                  opacity:0.5
+                },"<")    
                 .to(".brand_header", {
                     y: 0,
                     opacity: 1,
