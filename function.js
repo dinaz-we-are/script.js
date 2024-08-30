@@ -1626,68 +1626,115 @@ function burgerAnimation(isHomePage = false) {
   }
   //
   function initializeGSAPAnimations() {
+    const mediaQuery = window.matchMedia("(min-width: 992px)");
+
     const tl = gsap.timeline({
         onComplete: () => document.getElementById('cover-div').remove()
     });
-    let h1Split = new SplitType(".h1-usp", {
-        types: "words",
-        tagName: "span",
-    });
-    let callSplit = new SplitType(".brand-nav-hero", {
-        types: "chars",
-        tagName: "span",
-    });
-    let uspSplit = new SplitType(".usp", {
-        types: "words",
-        tagName: "span",
-    });  
-    tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-    		.from(".brand-nav-hero .char", {
-            y: "-10rem",
-            duration: 0.5,
-            ease: "back.out(1.7)",
-            stagger: 0.05
-        },"<")
-        .from(".h1-usp .word", {
-            opacity: 0,         
-            duration: 0.5,
-            ease: "back.out(1.7)",
-            stagger: 0.0325
-        })
-        .from(".usp .word", {
-            rotationX: 90,
-            transformOrigin: "bottom center",
-            duration: 0.5,
-            ease: "back.out(1.7)",
-            stagger: { amount: 0.3 }
-        },"<")
-        .from("#nav", {
-            y: "-5rem",
-            duration: 0.3,
-            ease: "back.out(1.7)"
-        }, "<")       
-        .from("#arrow, .text-block", {
-            y: "120vh",
-            //opacity: 0,
-            duration: 0.5,
-            ease: "power2",
-            stagger:0.2
-        }, "<")       
-         .to(":root", {
-            duration: 1,
-            "--linear-grad1": "#f06",
-            "--linear-grad2": "#e0ff0d",
-            ease: "linear",
-        }, "<")
-        .from(".gradient", {
-          opacity:0,
-          duration: 0.5,
-          ease: "linear",
-      }, "<");
 
-    tl.call(function () {
-      console.log("Animazione completata");
-    });}
+    if (mediaQuery.matches) {
+        // Animazioni per schermi di 992px e oltre
+        let h1Split = new SplitType(".h1-usp", {
+            types: "words",
+            tagName: "span",
+        });
+        let callSplit = new SplitType(".brand-nav-hero", {
+            types: "chars",
+            tagName: "span",
+        });
+        let uspSplit = new SplitType(".usp", {
+            types: "words",
+            tagName: "span",
+        });  
+        tl.to("#cover-div", { opacity: 0, duration: 0.1 })
+            .from(".brand-nav-hero .char", {
+                y: "-10rem",
+                duration: 0.5,
+                ease: "back.out(1.7)",
+                stagger: 0.05
+            }, "<")
+            .from(".h1-usp .word", {
+                opacity: 0,         
+                duration: 0.5,
+                ease: "back.out(1.7)",
+                stagger: 0.0325
+            })
+            .from(".usp .word", {
+                rotationX: 90,
+                transformOrigin: "bottom center",
+                duration: 0.5,
+                ease: "back.out(1.7)",
+                stagger: { amount: 0.3 }
+            }, "<")
+            .from("#nav", {
+                y: "-5rem",
+                duration: 0.3,
+                ease: "back.out(1.7)"
+            }, "<")       
+            .from("#arrow, .text-block", {
+                y: "120vh",
+                duration: 0.5,
+                ease: "power2",
+                stagger: 0.2
+            }, "<")       
+             .to(":root", {
+                duration: 1,
+                "--linear-grad1": "#f06",
+                "--linear-grad2": "#e0ff0d",
+                ease: "linear",
+            }, "<")
+            .from(".gradient", {
+                opacity: 0,
+                duration: 0.5,
+                ease: "linear",
+            }, "<");
+
+    } else {
+        // Animazioni per schermi sotto i 992px
+        tl.to("#cover-div", { opacity: 0, duration: 0.1 })
+            .from(".brand-nav-hero", {
+                y: "-5rem",
+                duration: 0.5,
+                ease: "back.out(1.7)",
+                stagger: 0.05
+            })
+            .from("#nav", {
+                y: "-5rem",
+                duration: 0.3,
+                ease: "back.out(1.7)"
+            }, "<")       
+            .from("#arrow, .text-block", {
+                y: "120vh",
+                duration: 0.5,
+                ease: "power2",
+                stagger: 0.2
+            }, "<")       
+             .to(":root", {
+                duration: 1,
+                "--linear-grad1": "#f06",
+                "--linear-grad2": "#e0ff0d",
+                ease: "linear",
+            }, "<")
+            .from(".gradient", {
+                opacity: 0,
+                duration: 0.5,
+                ease: "linear",
+            }, "<");
+    }
+
+    // Listener per i cambiamenti della larghezza dello schermo
+    mediaQuery.addEventListener('change', (e) => {
+        if (e.matches) {
+            // Ricarica le animazioni per schermi di 992px e oltre
+            tl.clear(); // Cancella la timeline corrente
+            initializeGSAPAnimations(); // Ricarica la funzione per riprendere le animazioni
+        } else {
+            // Ricarica le animazioni per schermi sotto i 992px
+            tl.clear(); // Cancella la timeline corrente
+            initializeGSAPAnimations(); // Ricarica la funzione per riprendere le animazioni
+        }
+    });
+}
     // Animazione freccia
     function animaArrow() {
     let arrowAnimation = gsap.to("#arrow", {        
@@ -1806,7 +1853,11 @@ function createScrollTriggerHero() {
                     opacity: 0,
                     ease: "back.out(1.7)",
                     duration: 1,
-                }, "<");
+                }, "<")
+                .to("#arrow", {
+                  color: "#f06",                  
+                  ease: "none",                  
+              }, "<");
         },
         onLeaveBack: () => {
             gsap.timeline()
@@ -1825,7 +1876,11 @@ function createScrollTriggerHero() {
                     opacity: 1,
                     ease: "back.out(1.7)",
                     duration: 1,
-                }, "<");
+                }, "<")
+                .to("#arrow", {
+                  color: "",                  
+                  ease: "none",                  
+              }, "<");
         },
     });
 
