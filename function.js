@@ -1626,9 +1626,11 @@ function burgerAnimation(isHomePage = false) {
   }
   //
   function initializeGSAPAnimations() {
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 992px)", () => {
     const tl = gsap.timeline({
         onComplete: () => document.getElementById('cover-div').remove()
-    });
+    });    
     let h1Split = new SplitType(".h1-usp", {
         types: "words",
         tagName: "span",
@@ -1667,8 +1669,8 @@ function burgerAnimation(isHomePage = false) {
             ease: "back.out(1.7)"
         }, "<")       
         .from("#arrow, .text-block", {
-            y: "120vh",
-            //opacity: 0,
+            y: "-50vh",
+            opacity: 0,
             duration: 0.5,
             ease: "power2",
             stagger:0.2
@@ -1683,7 +1685,43 @@ function burgerAnimation(isHomePage = false) {
           opacity:0,
           duration: 0.5,
           ease: "linear",
-      }, "<");
+      }, "<");});
+      mm.add("(max-width: 991px)", () => {
+        // Animazioni per schermi sotto i 992px
+        const tl = gsap.timeline({
+            onComplete: () => document.getElementById('cover-div').remove()
+        });
+
+        tl.to("#cover-div", { opacity: 0, duration: 0.1 })
+        .from(".brand-nav-hero .char", {
+          y: "-10rem",
+          duration: 0.5,
+          ease: "back.out(1.7)",
+          stagger: 0.1
+      },"<")      
+            .from("#nav", {
+                y: "-5rem",
+                duration: 0.3,
+                ease: "back.out(1.7)"
+            })
+            .from("#arrow, .text-block", {
+                opacity:0,
+                duration: 0.5,
+                ease: "power2",
+                stagger: 0.3
+            }, "<")
+            .to(":root", {
+                duration: 1,
+                "--linear-grad1": "#f06",
+                "--linear-grad2": "#e0ff0d",
+                ease: "linear",
+            }, "<")
+            .from(".gradient", {
+                opacity: 0,
+                duration: 0.5,
+                ease: "linear",
+            }, "<");
+    });
 
     tl.call(function () {
       console.log("Animazione completata");
@@ -1810,11 +1848,7 @@ function createScrollTriggerHero() {
                 .to("#arrow", {
                   color: "#f06",                  
                   ease: "none",                  
-              }, "<")
-              .to("#arrow", {
-                color: "#f06",                  
-                ease: "none",                  
-            }, "<");
+              }, "<");
         },
         onLeaveBack: () => {
             gsap.timeline()
