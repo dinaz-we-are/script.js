@@ -200,8 +200,8 @@ function burgerAnimation(isHomePage = false) {
       });
     }
   }
-  //burger hover touch
-  // Funzione per gestire l'animazione del burger
+  
+  
   function animateBurger() {
     const burger = document.getElementById('burger'); // Usa ID invece di class
   
@@ -609,9 +609,9 @@ function burgerAnimation(isHomePage = false) {
     if (!isHomePage) {
       document.querySelectorAll(".img-tg-cont").forEach((imgTgContElem) => {
           gsap.from(imgTgContElem, {
-              y: 200, // Numeric value, without quotes
+              y: 200, 
               opacity: 0,
-              duration: 1.5,
+              duration: 1,
               ease: "linear",
               scrollTrigger: {
                   trigger: imgTgContElem,
@@ -1281,6 +1281,26 @@ function burgerAnimation(isHomePage = false) {
   //
   //Oggetto Portfolio
   const portfolioFunctions = {
+
+    portfolioTrigger: function () {
+      gsap.set(".color-cover-portfolio", { width: "100%" });
+      document.querySelectorAll(".portfolio-wrapper").forEach(container => {
+        ScrollTrigger.create({
+          trigger: container,
+          start: "top 20%",
+          end: "bottom bottom",
+          scrub: true,
+          toggleActions: "play none none none",
+          onEnter: () => {
+            gsap.to(container.querySelector(".color-cover-portfolio"), {
+              width: "auto",
+              duration: 1,
+              ease: "back.out(1.7)",
+            });
+          }
+        });
+      });
+    },
     togglePortfolio: function () {
       document.querySelectorAll(".case-wrapper").forEach((cases) => {
         const caseContainer = cases.querySelector(".c-toggle");
@@ -1447,7 +1467,8 @@ function burgerAnimation(isHomePage = false) {
     },
     init: function () {
       this.togglePortfolio(); 
-      this.portfolioInfo(); 
+      this.portfolioInfo();
+      this.portfolioTrigger(); 
     },
   };
   //
@@ -1673,19 +1694,26 @@ function burgerAnimation(isHomePage = false) {
                 duration: 0.3,
                 ease: "back.out(1.7)"
             }, "<")       
-            .from("#arrow, .text-block", {
+            .from("#arrow", {
                 y: "-50vh",
                 opacity: 0,
                 duration: 0.5,
                 ease: "power2",
                 stagger: 0.2
-            }, "<")       
+            }, "<")
+            .from(".text-block", {
+              y: "50vh",
+              opacity: 0,
+              duration: 0.5,
+              ease: "power2",
+              stagger: 0.2
+          }, "<")       
             .to(":root", {
                 duration: 1,
                 "--linear-grad1": "#f06",
                 "--linear-grad2": "#e0ff0d",
                 ease: "linear",
-            }, "<")
+            }, "-=0.5")
             .from(".gradient", {
                 opacity: 0,
                 duration: 0.5,
@@ -1711,24 +1739,31 @@ function burgerAnimation(isHomePage = false) {
              duration: 0.5,
              ease: "back.out(1.7)"
          })
-         .from("#arrow, .text-block", {
-            y:"-30vh",
-             opacity:0,
-             duration: 0.5,
-             ease: "power2",
-             stagger: 0.3
-         }, "<")
-         .to(":root", {
-             duration: 0.5,
-             "--linear-grad1": "#f06",
-             "--linear-grad2": "#e0ff0d",
-             ease: "linear",
-         }, "<")
-         .from(".gradient", {
-             opacity: 0,
-             duration: 0.5,
-             ease: "linear",
-         }, "<");});
+         .from("#arrow", {
+          y: "-50vh",
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2",
+          stagger: 0.2
+      }, "<")
+      .from(".text-block", {
+        y: "50vh",
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2",
+        stagger: 0.2
+    }, "<")       
+      .to(":root", {
+          duration: 1,
+          "--linear-grad1": "#f06",
+          "--linear-grad2": "#e0ff0d",
+          ease: "linear",
+      }, "-=0.5")
+      .from(".gradient", {
+          opacity: 0,
+          duration: 0.5,
+          ease: "linear",
+      }, "<");});
 
     gsap.timeline().call(function () {
         console.log("Animazione completata");
@@ -2641,6 +2676,100 @@ function logoAnima() {
     });
   }
 
+  function serviceWrapper() {
+    gsap.set(".color-cover", { width: "100%" });
+      // Seleziona tutte le sezioni che devono essere animate
+      document.querySelectorAll(".service-wrapper-container").forEach(container => {
+    
+        // Inizializza SplitType per i paragrafi all'interno del container corrente
+        let paraSplit = new SplitType(container.querySelector(".paragraph-service"), {
+          types: "words",
+          tagName: "span",
+        });
+    
+        // Crea il trigger per l'animazione generale
+        ScrollTrigger.create({
+          trigger: container,
+          start: "top 60%",
+          end: "bottom bottom",
+          scrub: true,
+          toggleActions: "play none none none",
+          onEnter: () => {
+            let tl = gsap.timeline();
+            // Animazione delle parole
+            tl.to(container.querySelector(".color-cover"), {
+              width: "auto",
+              duration: 1,
+              ease: "back.out(1.7)",
+            })
+            .from(container.querySelectorAll(".paragraph-service .word"), {
+              delay:0.2,
+              opacity: 0.2,
+              stagger: 0.05,
+              ease: "back.out(1.7)",
+            },"<");
+    
+            if (window.innerWidth > 992) {         
+              tl.from(container.querySelectorAll(".list"), {
+                opacity: 0,
+                y: -200,
+                duration: 1,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                onComplete: () => {
+                  container.querySelectorAll(".list").forEach(el => el.style = "");
+                }
+              }, "<");
+            } else {        
+              tl.from(container.querySelectorAll(".list"), {
+                delay:0.2,
+                opacity: 0,
+                x: -100,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "power2.out",
+                onComplete: () => {
+                  container.querySelectorAll(".list").forEach(el => el.style = "");
+                }
+              }, "<");
+            }
+          },
+        });
+      });
+    
+      // Aggiorna ScrollTrigger per riflettere i nuovi elementi
+      ScrollTrigger.refresh();
+    }  
+
+    function servicePageWrapper() {
+      gsap.set(".color-cover", { width: "100%" });      
+    
+      // Seleziona tutte le sezioni che devono essere animate
+      document.querySelectorAll(".service-wrapper-container").forEach(container => {     
+   
+        
+        // Crea il trigger per l'animazione generale
+        ScrollTrigger.create({
+          trigger: container,
+          start: "top 60%",
+          end: "bottom bottom",
+          scrub: true,
+          toggleActions: "play none none none",
+          onEnter: () => {           
+            // Animazione della cover
+            gsap.to(container.querySelector(".color-cover"), {
+              width: "auto",
+              duration: 1,
+              ease: "back.out(1.7)",
+            })
+          },
+        });
+      });
+    
+      // Aggiorna ScrollTrigger per riflettere i nuovi elementi
+      ScrollTrigger.refresh();
+    }
+    
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
