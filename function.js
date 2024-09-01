@@ -1281,25 +1281,6 @@ function burgerAnimation(isHomePage = false) {
   //
   //Oggetto Portfolio
   const portfolioFunctions = {
-
-    portfolioTrigger: function () {
-      document.querySelectorAll(".portfolio-wrapper").forEach(container => {
-        ScrollTrigger.create({
-          trigger: container,
-          start: "top 20%",
-          end: "bottom bottom",
-          scrub: true,
-          toggleActions: "play none none none",
-          onEnter: () => {
-            gsap.to(container.querySelector(".portfolio-img-video"), {
-              width: "auto",
-              duration: 1,
-              ease: "back.out(1.7)",
-            });
-          }
-        });
-      });
-    },
     togglePortfolio: function () {
       document.querySelectorAll(".case-wrapper").forEach((cases) => {
         const caseContainer = cases.querySelector(".c-toggle");
@@ -1466,8 +1447,7 @@ function burgerAnimation(isHomePage = false) {
     },
     init: function () {
       this.togglePortfolio(); 
-      this.portfolioInfo();
-      this.portfolioTrigger(); 
+      this.portfolioInfo();      
     },
   };
   //
