@@ -1283,7 +1283,6 @@ function burgerAnimation(isHomePage = false) {
   const portfolioFunctions = {
 
     portfolioTrigger: function () {
-      gsap.set(".color-cover-portfolio", { width: "100%" });
       document.querySelectorAll(".portfolio-wrapper").forEach(container => {
         ScrollTrigger.create({
           trigger: container,
@@ -1292,7 +1291,7 @@ function burgerAnimation(isHomePage = false) {
           scrub: true,
           toggleActions: "play none none none",
           onEnter: () => {
-            gsap.to(container.querySelector(".color-cover-portfolio"), {
+            gsap.to(container.querySelector(".portfolio-img-video"), {
               width: "auto",
               duration: 1,
               ease: "back.out(1.7)",
