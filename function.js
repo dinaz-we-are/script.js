@@ -43,7 +43,7 @@ function burgerAnimation(isHomePage = false) {
           { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" },
           ">"
         )
-        .call(() => changeLogoColor(), null, 0)
+        .to(":root", {"--brand-call": "", duration:0.3, ease:"linear"}, "0")
         .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
         .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
         .to(
@@ -166,7 +166,7 @@ function burgerAnimation(isHomePage = false) {
             { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" },
             ">"
           )
-          .call(() => changeLogoColor("", "", "", "#0d0d0d"), null, "-=0.6")
+          .to(":root", {"--brand-call": "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
           .to(
             ".menu-container",
             {
@@ -239,22 +239,6 @@ function burgerAnimation(isHomePage = false) {
   
     burger.addEventListener('mouseleave', () => {   
       timeline.reverse();
-    });
-  }
-  //
-  function changeLogoColor(
-    navLogoColor = "",
-    shapeColor = "",
-    brandArrowColor = "",
-    brandCall = ""
-  ) {
-    gsap.to(":root", {
-      "--navlogo-c": navLogoColor,
-      "--shape-color": shapeColor,
-      "--brand-arrow": brandArrowColor,
-      "--brand-call": brandCall,
-      duration: 0.5,
-      ease: "linear",
     });
   }
   //
