@@ -43,7 +43,7 @@ function burgerAnimation(isHomePage = false) {
           { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" },
           ">"
         )
-        .to(":root", {"--brand-call": "", duration:0.3, ease:"linear"}, "0")
+        .to(".line-top, .line-bottom", {backgroundColor: "", duration:0.3, ease:"linear"}, "0")
         .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
         .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
         .to(
@@ -166,7 +166,7 @@ function burgerAnimation(isHomePage = false) {
             { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" },
             ">"
           )
-          .to(":root", {"--brand-call": "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
+          .to(".line-top, .line-bottom", {backgroundColor: "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
           .to(
             ".menu-container",
             {
