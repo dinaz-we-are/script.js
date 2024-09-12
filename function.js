@@ -1096,30 +1096,32 @@ function burgerAnimation(isHomePage = false) {
   //TransitionPage
   function transitionPage() {
     let tl1 = gsap.timeline();
-    tl1
-      .to(".page-wrapper", {
-        autoAlpha: 1,  // Imposta opacity: 1 e visibility: visible
-        x: "0rem",
-        ease: "power2.out",
-        onStart: () => {
-          // Controlla se esistono elementi con la classe .blended-element prima di applicare lo stile
-          const blendedElements = document.querySelectorAll(".blended-element");
-          if (blendedElements.length > 0) {
-            blendedElements.forEach(el => {
-              el.style.mixBlendMode = "lighten"; // Aggiungi mix-blend-mode solo se l'elemento esiste
-            });
-          }
-        }
-      })      
-      .to("#nav", {
-        y: "0rem",
+    
+    // Animazione per .page-heading-wrapper (esiste sempre)
+    tl1.to(".page-heading-wrapper", {
+      opacity: 1,
+      x: "0rem",
+      ease: "power2.out",
+    });
+  
+    // Controlla se esiste .cover-page prima di animarla
+    if (document.querySelector(".cover-page")) {
+      tl1.to(".cover-page", {
+        opacity: 1,
         ease: "power2.out"
       });
+    }
+  
+    // Animazione per #nav
+    tl1.to("#nav", {
+      y: "0rem",
+      ease: "power2.out"
+    });
   
     // link click
     $("a:not(.excluded-class)").on("click", function (e) {
       let currentUrl = $(this).attr("href");
-      const isMobile = window.innerWidth <= 767; // Condizione per verificare se è mobile
+      const isMobile = window.innerWidth <= 767;
       const delay = isMobile ? parseInt($(this).attr("data-delay"), 10) : 0;
   
       if (
@@ -1130,7 +1132,6 @@ function burgerAnimation(isHomePage = false) {
         e.preventDefault();
   
         if (delay) {
-          // Se c'è un delay, esegui la transizione dopo il delay
           setTimeout(() => {
             let tl = gsap.timeline({
               onComplete: () => (window.location.href = currentUrl),
@@ -1139,11 +1140,10 @@ function burgerAnimation(isHomePage = false) {
             tl.fromTo(
               ".page-wrapper, #nav, .menu-wrapper",
               { xPercent: 0 },
-              { xPercent: 100, autoAlpha: 0 }  // Usa autoAlpha per impostare opacity e visibility insieme
+              { xPercent: 100, opacity: 0 }
             );
           }, delay);
         } else {
-          // Se non c'è delay, esegui immediatamente la transizione
           let tl = gsap.timeline({
             onComplete: () => (window.location.href = currentUrl),
           });
@@ -1151,7 +1151,7 @@ function burgerAnimation(isHomePage = false) {
           tl.fromTo(
             ".page-wrapper, #nav, .menu-wrapper",
             { xPercent: 0 },
-            { xPercent: 100, autoAlpha: 0 }  // Usa autoAlpha per impostare opacity e visibility insieme
+            { xPercent: 100, opacity: 0 }
           );
         }
       }
