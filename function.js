@@ -1097,12 +1097,11 @@ function burgerAnimation(isHomePage = false) {
   function transitionPage() {
     let tl1 = gsap.timeline();
     tl1
-      .to(".h1-page, .text-block-hero", {
+      .to(".page-wrapper", {
         opacity: 1,
         x: "0rem",
         ease: "power2.out",
-      })
-      .to(".cover-page", { x: "0rem", opacity: 1, ease: "power2.out" }, "<")
+      })      
       .to("#nav", {
         y: "0rem",
         ease: "power2.out",
