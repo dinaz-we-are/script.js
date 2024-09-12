@@ -1095,14 +1095,7 @@ function burgerAnimation(isHomePage = false) {
   }
   //TransitionPage
   function transitionPage() {
-    let tl1 = gsap.timeline();
-    
-    // Animazione per .page-heading-wrapper (esiste sempre)
-    tl1.to(".page-heading-wrapper", {
-      opacity: 1,
-      x: "0rem",
-      ease: "power2.out",
-    });
+    let tl1 = gsap.timeline();  
   
     // Controlla se esiste .cover-page prima di animarla
     if (document.querySelector(".cover-page")) {
@@ -1111,8 +1104,13 @@ function burgerAnimation(isHomePage = false) {
         ease: "power2.out"
       });
     }
+
+    tl1.to(".page-heading-wrapper", {
+      opacity: 1,
+      x: "0rem",
+      ease: "power2.out",
+    });
   
-    // Animazione per #nav
     tl1.to("#nav", {
       y: "0rem",
       ease: "power2.out"
