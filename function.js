@@ -1628,8 +1628,10 @@ function burgerAnimation(isHomePage = false) {
 
     mm.add("(min-width: 992px)", () => {
         const tl = gsap.timeline({
-            onComplete: () => document.getElementById('cover-div').remove()
-        });  
+          onComplete: () => {
+            document.getElementById('cover-div').style.display = 'none';
+          }
+        });
 
         tl.to("#cover-div", { opacity: 0, duration: 0.1 })
             .from(".brand-nav-hero .char", {
