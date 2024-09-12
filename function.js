@@ -1098,13 +1098,22 @@ function burgerAnimation(isHomePage = false) {
     let tl1 = gsap.timeline();
     tl1
       .to(".page-wrapper", {
-        opacity: 1,
+        autoAlpha: 1,  // Imposta opacity: 1 e visibility: visible
         x: "0rem",
         ease: "power2.out",
+        onStart: () => {
+          // Controlla se esistono elementi con la classe .blended-element prima di applicare lo stile
+          const blendedElements = document.querySelectorAll(".blended-element");
+          if (blendedElements.length > 0) {
+            blendedElements.forEach(el => {
+              el.style.mixBlendMode = "lighten"; // Aggiungi mix-blend-mode solo se l'elemento esiste
+            });
+          }
+        }
       })      
       .to("#nav", {
         y: "0rem",
-        ease: "power2.out",
+        ease: "power2.out"
       });
   
     // link click
@@ -1130,7 +1139,7 @@ function burgerAnimation(isHomePage = false) {
             tl.fromTo(
               ".page-wrapper, #nav, .menu-wrapper",
               { xPercent: 0 },
-              { xPercent: 100, opacity: 0 }
+              { xPercent: 100, autoAlpha: 0 }  // Usa autoAlpha per impostare opacity e visibility insieme
             );
           }, delay);
         } else {
@@ -1142,7 +1151,7 @@ function burgerAnimation(isHomePage = false) {
           tl.fromTo(
             ".page-wrapper, #nav, .menu-wrapper",
             { xPercent: 0 },
-            { xPercent: 100, opacity: 0 }
+            { xPercent: 100, autoAlpha: 0 }  // Usa autoAlpha per impostare opacity e visibility insieme
           );
         }
       }
@@ -1153,6 +1162,7 @@ function burgerAnimation(isHomePage = false) {
       if (event.persisted) window.location.reload();
     };
   }
+  
   //
   
   function navbarRepo(isHomePage = false) {
