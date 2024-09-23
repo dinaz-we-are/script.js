@@ -3077,11 +3077,8 @@ function logoAnima() {
       });
     },
     thumbnailImageAnimation: function () {
-      if (window.matchMedia("(min-width: 768px)").matches) {
-        // Codice dell'animazione
-        console.log("Animazione burger avviata");
-      const thumbnails = document.querySelectorAll(
-        ".thumbnail-image"
+            const thumbnails = document.querySelectorAll(
+        ".related-post-category .thumbnail-image"
       );
   
       thumbnails.forEach((thumbnail) => {
@@ -3100,7 +3097,7 @@ function logoAnima() {
         // Aggiungiamo gli eventi hover
         thumbnail.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
         thumbnail.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
-      });}
+      });
     },
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
@@ -3145,7 +3142,8 @@ function logoAnima() {
       this.btnReadAnimation();
       this.NewsLetterAnimation();
       this.btnCategoryAnimation();
-      this.thumbnailImageAnimation();      
+      if (window.matchMedia("(min-width: 768px)").matches) {
+      this.thumbnailImageAnimation(); }     
       this.postEntry();
     },
   }; 
