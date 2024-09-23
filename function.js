@@ -600,12 +600,6 @@ function burgerAnimation(isHomePage = false) {
           ease: "power1.out",
         }
       )
-    .to("#arrow-proposito-link", {
-        color: "#f4f4f4",
-        scale: 1.15,
-        duration: 0.2,
-        ease: "back.out(3)",
-      },"-=0.1")
       .to(
         ".span-link-magazine",
         {
@@ -614,7 +608,13 @@ function burgerAnimation(isHomePage = false) {
           duration: 0.2,
           ease: "power1.out",
         },"<"
-      );
+      )
+    .to("#arrow-proposito-link", {
+        color: "#f4f4f4",
+        scale: 1.15,
+        duration: 0.2,
+        ease: "back.out(3)",
+      },"-=0.1");
   
     // Eventi hover e touch
     linkItem.addEventListener("mouseenter", () => linkHoverTimeline.play());
