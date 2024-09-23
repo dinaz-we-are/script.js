@@ -2834,36 +2834,41 @@ function logoAnima() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
-      document.addEventListener("DOMContentLoaded", function () {
-        // Verifica la presenza del contenitore dello slider
-        const swiperContainer = document.querySelector(".related-articles-wrapper");
-        const nextButton = document.querySelector(".swiper-button-next");
-        const prevButton = document.querySelector(".swiper-button-prev");
-    
-        // Controlla se il contenitore e i pulsanti di navigazione esistono
-        if (swiperContainer && nextButton && prevButton) {
-          try {
-            const swiperPost = new Swiper(".related-articles-wrapper", {
-              slidesPerView: "auto",
-              spaceBetween: 32,
-              centeredSlides: false,
-              navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              },
-              speed: 600, // Velocità della transizione in millisecondi
-              effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
-            });
-    
-            console.log("Swiper inizializzato correttamente:", swiperPost);
-          } catch (error) {
-            console.error("Errore durante l'inizializzazione di Swiper:", error);
-          }
+         const swiperContainer = document.querySelector(".related-articles-wrapper");
+      
+        if (swiperContainer) {
+          // Verifica ripetutamente la presenza dei pulsanti di navigazione
+          const checkButtonsInterval = setInterval(() => {
+            const nextButton = document.querySelector(".swiper-button-next");
+            const prevButton = document.querySelector(".swiper-button-prev");
+      
+            if (nextButton && prevButton) {
+              try {
+                const swiperPost = new Swiper(".related-articles-wrapper", {
+                  slidesPerView: "auto",
+                  spaceBetween: 32,
+                  centeredSlides: false,
+                  navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  },
+                  speed: 600, // Velocità della transizione in millisecondi
+                  effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+                });
+      
+                console.log("Swiper inizializzato correttamente:", swiperPost);
+                clearInterval(checkButtonsInterval); // Ferma il controllo continuo
+              } catch (error) {
+                console.error("Errore durante l'inizializzazione di Swiper:", error);
+                clearInterval(checkButtonsInterval); // Ferma il controllo in caso di errore
+              }
+            }
+          }, 100); // Controlla ogni 100ms fino a trovare i pulsanti
         } else {
-          console.warn("Swiper non è stato inizializzato perché il contenitore o i pulsanti di navigazione non sono presenti.");
+          console.warn("Nessun elemento trovato per lo slider: .related-articles-wrapper");
         }
-      });
-    },    
+      },
+         
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
   
