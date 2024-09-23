@@ -3081,7 +3081,7 @@ function logoAnima() {
         // Codice dell'animazione
         console.log("Animazione burger avviata");
       const thumbnails = document.querySelectorAll(
-        ".related-post-category .thumbnail-image"
+        ".thumbnail-image"
       );
   
       thumbnails.forEach((thumbnail) => {
