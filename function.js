@@ -589,29 +589,27 @@ function burgerAnimation(isHomePage = false) {
           backgroundColor: "#f06",
           duration: 0.1,        
         },    
-      )
-       
+      )       
       .to(
         [".h-magazine", ".sublink-first-menu"], 
         {
           color: "#f4f4f4",
-          duration: 0.2,
+          duration: 0.3,
           ease: "power1.out",
-        },
-        "<"
+        }
       )
     .to("#arrow-proposito-link", {
         color: "#f4f4f4",
         scale: 1.15,
-        duration: 0.5,
+        duration: 0.2,
         ease: "back.out(3)",
-      })
+      },"<")
       .to(
         ".span-link-magazine",
         {
           color: "#0d0d0d",
           rotationZ: 10, // Corretto da "ratationZ" a "rotationZ"
-          duration: 0.5,
+          duration: 0.2,
           ease: "power1.out",
         },"<"
       );
