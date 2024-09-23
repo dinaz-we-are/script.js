@@ -200,48 +200,7 @@ function burgerAnimation(isHomePage = false) {
       });
     }
   }
-  
-  
-  function animateBurger() {
-    const burger = document.getElementById('burger'); // Usa ID invece di class
-  
-    if (!burger) {
-      console.error("Burger element not found");
-      return;
-    }
-    // Verifica che le linee esistano
-    const lineMiddle = burger.querySelector('.line-middle');
-    const lineTop = burger.querySelector('.line-top');
-    const lineBottom = burger.querySelector('.line-bottom');
-  
-    const timeline = gsap.timeline({ paused: true });
-  
-    timeline.to(lineMiddle, {
-      width: '24px',
-      duration: 0.2,
-      ease: 'power2.out'
-    })
-    .to(lineTop, {
-      width: '40px',
-      duration: 0.2,
-      ease: 'power2.out'
-    }, 0)
-    .to(lineBottom, {
-      width: '40px',
-      duration: 0.2,
-      ease: 'power2.out'
-    }, 0);
-  
-    // Eventi hover
-    burger.addEventListener('mouseenter', () => {    
-      timeline.play();
-    });
-  
-    burger.addEventListener('mouseleave', () => {   
-      timeline.reverse();
-    });
-  }
-  //
+   //
   function initializeScrollControlButtons() {
     const blockScrollButtons = document.querySelectorAll("[data-block-scroll]");
     const unblockScrollButtons = document.querySelectorAll(
@@ -299,6 +258,386 @@ function burgerAnimation(isHomePage = false) {
     });
   }
   //
+  function navbarRepo(isHomePage = false) {
+    const stickyElement = document.querySelector("#nav");
+    const pathWrapper = isHomePage
+      ? document.querySelector("#navbar-repo")
+      : null;
+    const menuWrapper = document.querySelector(".menu-wrapper");
+    let navbarScrollTrigger = null;
+    let isPathWrapperInView = false;
+    let lastViewportHeight = window.innerHeight;
+  
+    const showAnim = gsap
+      .from(stickyElement, {
+        yPercent: -100,
+        paused: true,
+        duration: 0.2,
+        ease: "ease.out",
+      })
+      .progress(1);
+  
+    function isMenuVisible() {
+      return getComputedStyle(menuWrapper).display === "flex";
+    }
+  
+    function createNavbarScrollTrigger() {
+      return ScrollTrigger.create({
+        start: "top top",
+        end: "max",
+        onUpdate: (self) => {
+          const currentViewportHeight = window.innerHeight;
+  
+          // Check if the menu is visible
+          if (isMenuVisible()) {
+            return; // Skip the animation if menu is visible
+          }
+  
+          // Check if the viewport height changed significantly
+          if (Math.abs(currentViewportHeight - lastViewportHeight) > 50) {
+            lastViewportHeight = currentViewportHeight;
+            if (currentViewportHeight > lastViewportHeight) {
+              showAnim.play(); // Show navbar when address bar appears
+            } else {
+              showAnim.reverse(); // Hide navbar when address bar disappears
+            }
+            return;
+          }
+  
+          // Normal scroll behavior
+          self.direction === -1 ? showAnim.play() : showAnim.reverse();
+        },
+      });
+    }
+  
+    function checkAndUpdateNavbar() {
+      if (isHomePage && pathWrapper) {
+        ScrollTrigger.create({
+          trigger: pathWrapper,
+          start: "top 20%",
+          end: "bottom center",
+          onEnter: () => {
+            isPathWrapperInView = true;
+            if (!navbarScrollTrigger) {
+              navbarScrollTrigger = createNavbarScrollTrigger();
+            }
+          },
+          onLeaveBack: () => {
+            isPathWrapperInView = false;
+            if (navbarScrollTrigger) {
+              navbarScrollTrigger.kill();
+              navbarScrollTrigger = null;
+              gsap.set(stickyElement, { y: 0 });
+            }
+          },
+        });
+      } else {
+        navbarScrollTrigger = createNavbarScrollTrigger();
+      }
+    }
+  
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        lastViewportHeight = window.innerHeight;
+        if (navbarScrollTrigger) {
+          navbarScrollTrigger.kill();
+          navbarScrollTrigger = createNavbarScrollTrigger();
+        }
+        checkAndUpdateNavbar();
+      }, 200), { passive: true }
+    );
+  
+    checkAndUpdateNavbar();
+  
+    // Observer per monitorare le modifiche a .menu-wrapper
+    const observer = new MutationObserver(() => {
+      if (navbarScrollTrigger) {
+        navbarScrollTrigger.kill();
+        navbarScrollTrigger = createNavbarScrollTrigger();
+      }
+    });
+  
+    observer.observe(menuWrapper, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+  }
+  //
+  const menuNavigation = {
+    animateBurger: function () {
+      const burger = document.getElementById("burger"); // Usa ID invece di class
+  
+      if (!burger) {
+        console.error("Burger element not found");
+        return;
+      }
+  
+      // Verifica che le linee esistano
+      const lineMiddle = burger.querySelector(".line-middle");
+      const lineTop = burger.querySelector(".line-top");
+      const lineBottom = burger.querySelector(".line-bottom");
+  
+      if (!lineMiddle || !lineTop || !lineBottom) {
+        console.error("One or more line elements not found");
+        return;
+      }
+  
+      // Crea la timeline di GSAP
+      const timeline = gsap.timeline({ paused: true });
+  
+      timeline
+        .to(lineMiddle, {
+          width: "24px",
+          duration: 0.2,
+          ease: "power2.out",
+        })
+        .to(
+          lineTop,
+          {
+            width: "40px",
+            duration: 0.2,
+            ease: "power2.out",
+          },
+          0
+        )
+        .to(
+          lineBottom,
+          {
+            width: "40px",
+            duration: 0.2,
+            ease: "power2.out",
+          },
+          0
+        );
+  
+      // Eventi hover
+      burger.addEventListener("mouseenter", () => {
+        timeline.play();
+      });
+  
+      burger.addEventListener("mouseleave", () => {
+        timeline.reverse();
+      });
+    },
+    initializeHoverAnimations: function () {
+      const boxes = document.querySelectorAll(".link-wrapper-menu");
+  
+      boxes.forEach((box) => {
+        // Crea una timeline per hover
+        const hoverTimeline = gsap.timeline({ paused: true });
+  
+        hoverTimeline.fromTo(
+          box.querySelector(".icon-menu-link"),
+          {
+            x: "-15rem",
+            scale: 0.5,
+            opacity: 0,
+          },
+          {
+            x: "-0.5rem",
+            scale: 1,
+            opacity: 1,
+            duration: 0.4,
+            ease: "back.out(3)",
+          },
+          0
+        );
+        hoverTimeline.to(
+          box.querySelector(".sublink"),
+          {
+            scale: 0.8,
+            y: 5,
+            duration: 0.5,
+            color: "#f06",
+            transformOrigin: "top left",
+            ease: "power1.out",
+          },
+          0
+        );
+        hoverTimeline.to(
+          box.querySelector(".link-heading"),
+          {
+            rotationZ: 3,
+            x: "1rem",
+            y: 5,
+            scale: 1.2,
+            duration: 0.3,
+            ease: "power1.out",
+            transformOrigin: "bottom left",
+          },
+          0.1
+        );
+  
+        // Crea una timeline per touch
+        const touchTimeline = gsap.timeline({ paused: true });
+        touchTimeline.fromTo(
+          box.querySelector(".icon-menu-link"),
+          {
+            x: "-15rem",
+            scale: 0.5,
+            opacity: 0,
+          },
+          {
+            x: "-0.5rem",
+            scale: 1,
+            opacity: 1,
+            duration: 0.4,
+            ease: "back.out(3)",
+          },
+          0
+        );
+        touchTimeline.to(
+          box.querySelector(".sublink"),
+          {
+            scale: 0.8,
+            y: 5,
+            duration: 0.5,
+            color: "#f06",
+            transformOrigin: "top left",
+            ease: "power1.out",
+          },
+          0
+        );
+        touchTimeline.to(
+          box.querySelector(".link-heading"),
+          {
+            rotationZ: 3,
+            x: "1rem",
+            y: 5,
+            scale: 1.2,
+            duration: 0.3,
+            ease: "power1.out",
+            transformOrigin: "bottom left",
+          },
+          0
+        );
+  
+        // Gestisci gli eventi hover
+        box.addEventListener("mouseenter", () => hoverTimeline.play());
+        box.addEventListener("mouseleave", () => hoverTimeline.reverse());
+  
+        // Gestisci gli eventi touch
+        box.addEventListener("touchstart", () => touchTimeline.play(), {
+          passive: true,
+        });
+        box.addEventListener("touchend", () => touchTimeline.reverse(), {
+          passive: true,
+        });
+      });
+    },
+    initializeSimpleHoverTouchAnimations: function () {
+      const links = document.querySelectorAll(".link-text-menu");
+  
+      links.forEach((link) => {
+        // Crea una timeline per hover
+        const hoverTimeline = gsap.timeline({ paused: true });
+  
+        hoverTimeline.to(
+          link,
+          {
+            rotationZ: 10, // leggera rotazione
+            color: "#f06", // cambio colore del testo
+            duration: 0.3,
+            ease: "back.out(3)",
+          },
+          0
+        );
+  
+        // Crea una timeline per touch
+        const touchTimeline = gsap.timeline({ paused: true });
+  
+        touchTimeline.to(
+          link,
+          {
+            rotationZ: 10, // leggera rotazione
+            color: "#f06", // cambio colore del testo
+            duration: 0.3,
+            ease: "back.out(3)",
+          },
+          0
+        );
+  
+        // Gestisci gli eventi hover
+        link.addEventListener("mouseenter", () => hoverTimeline.play());
+        link.addEventListener("mouseleave", () => hoverTimeline.reverse());
+  
+        // Gestisci gli eventi touch
+        link.addEventListener("touchstart", () => touchTimeline.play(), {
+          passive: true,
+        });
+        link.addEventListener("touchend", () => touchTimeline.reverse(), {
+          passive: true,
+        });
+      });
+    },
+    animateLinkItemMagazine: function () {
+      const linkItem = document.getElementById("link-magazine"); // Usa getElementById per l'ID
+  
+    if (!linkItem) {
+      console.error("Elemento #link-item-Magazine non trovato");
+      return;
+    }
+    const linkHoverTimeline = gsap.timeline({ paused: true });
+  
+    // Aggiungi le animazioni
+    linkHoverTimeline
+      .to(
+        linkItem,
+        {
+          backgroundColor: "#f06",
+          duration: 0.1,        
+        },    
+      )
+       
+      .to(
+        [".h-magazine", ".sublink-first-menu"], 
+        {
+          color: "#f4f4f4",
+          duration: 0.2,
+          ease: "power1.out",
+        },
+        "<"
+      )
+    .to("#arrow-proposito-link", {
+        color: "#f4f4f4",
+        scale: 1.15,
+        duration: 0.5,
+        ease: "back.out(3)",
+      })
+      .to(
+        ".span-link-magazine",
+        {
+          color: "#0d0d0d",
+          rotationZ: 10, // Corretto da "ratationZ" a "rotationZ"
+          duration: 0.5,
+          ease: "power1.out",
+        },"<"
+      );
+  
+    // Eventi hover e touch
+    linkItem.addEventListener("mouseenter", () => linkHoverTimeline.play());
+    linkItem.addEventListener("mouseleave", () => linkHoverTimeline.reverse());
+  
+    // Gestisci gli eventi touch
+    linkItem.addEventListener("touchstart", () => linkHoverTimeline.play(), {
+      passive: true,
+    });
+    linkItem.addEventListener("touchend", () => linkHoverTimeline.reverse(), {
+      passive: true,
+    });
+  },
+  
+    init: function () {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        this.animateBurger();
+      }
+      this.initializeHoverAnimations();
+      this.initializeSimpleHoverTouchAnimations();
+      this.animateLinkItemMagazine();
+    },
+  };
   
   //DATACOLOR
   function dataColor() {
@@ -607,155 +946,8 @@ function burgerAnimation(isHomePage = false) {
       });}
     
 }
-    
-  
-  //
-  
-  function initializeHoverAnimations() {
-    const boxes = document.querySelectorAll(".link-wrapper-menu");
-  
-    boxes.forEach((box) => {
-      // Crea una timeline per hover
-      const hoverTimeline = gsap.timeline({ paused: true });
-  
-      hoverTimeline.fromTo(
-        box.querySelector(".icon-menu-link"),
-        {
-          x: "-15rem",
-          scale: 0.5,
-          opacity: 0,
-        },
-        {
-          x: "-0.5rem",
-          scale: 1,
-          opacity: 1,
-          duration: 0.4,
-          ease: "back.out(3)",
-        },
-        0
-      );
-      hoverTimeline.to(
-        box.querySelector(".sublink"),
-        {
-          scale: 0.8,
-          y: 5,
-          duration: 0.5,
-          color: "#f06",
-          transformOrigin: "top left",
-          ease: "power1.out",
-        },
-        0
-      );
-      hoverTimeline.to(
-        box.querySelector(".link-heading"),
-        {
-          rotationZ: 3,
-          x: "1rem",
-          y: 5,
-          scale: 1.2,
-          duration: 0.3,
-          ease: "power1.out",
-          transformOrigin: "bottom left",
-        },
-        0.1
-      );
-  
-      // Crea una timeline per touch
-      const touchTimeline = gsap.timeline({ paused: true });
-      touchTimeline.fromTo(
-        box.querySelector(".icon-menu-link"),
-        {
-          x: "-15rem",
-          scale: 0.5,
-          opacity: 0,
-        },
-        {
-          x: "-0.5rem",
-          scale: 1,
-          opacity: 1,
-          duration: 0.4,
-          ease: "back.out(3)",
-        },
-        0
-      );
-      touchTimeline.to(
-        box.querySelector(".sublink"),
-        {
-          scale: 0.8,
-          y: 5,
-          duration: 0.5,
-          color: "#f06",
-          transformOrigin: "top left",
-          ease: "power1.out",
-        },
-        0
-      );
-      touchTimeline.to(
-        box.querySelector(".link-heading"),
-        {
-          rotationZ: 3,
-          x: "1rem",
-          y: 5,
-          scale: 1.2,
-          duration: 0.3,
-          ease: "power1.out",
-          transformOrigin: "bottom left",
-        },
-        0
-      );
-  
-      // Gestisci gli eventi hover
-      box.addEventListener("mouseenter", () => hoverTimeline.play());
-      box.addEventListener("mouseleave", () => hoverTimeline.reverse());
-  
-      // Gestisci gli eventi touch
-      box.addEventListener("touchstart", () => touchTimeline.play(), { passive: true });
-      box.addEventListener("touchend", () => touchTimeline.reverse(), { passive: true });
-    });
-  }
-  
-  function initializeSimpleHoverTouchAnimations() {
-    const links = document.querySelectorAll(".link-text-menu");
-  
-    links.forEach((link) => {
-      // Crea una timeline per hover
-      const hoverTimeline = gsap.timeline({ paused: true });
-  
-      hoverTimeline.to(
-        link,
-        {
-          rotationZ: 10, // leggera rotazione
-          color: "#f06", // cambio colore del testo
-          duration: 0.3,
-          ease: "back.out(3)",
-        },
-        0
-      );
-  
-      // Crea una timeline per touch
-      const touchTimeline = gsap.timeline({ paused: true });
-  
-      touchTimeline.to(
-        link,
-        {
-          rotationZ: 10, // leggera rotazione
-          color: "#f06", // cambio colore del testo
-          duration: 0.3,
-          ease: "back.out(3)",
-        },
-        0
-      );
-  
-      // Gestisci gli eventi hover
-      link.addEventListener("mouseenter", () => hoverTimeline.play());
-      link.addEventListener("mouseleave", () => hoverTimeline.reverse());
-  
-      // Gestisci gli eventi touch
-      link.addEventListener("touchstart", () => touchTimeline.play(), { passive: true });
-      link.addEventListener("touchend", () => touchTimeline.reverse(), { passive: true });
-    });
-  }
-  //
+      
+  //FUNZIONI PER LA CTA
   //info
   function info() {
     document.querySelectorAll(".cm-talk-content").forEach((talk) => {
@@ -1093,183 +1285,9 @@ function burgerAnimation(isHomePage = false) {
       });
     });
   }
-  //TransitionPage
-  function transitionPage() {
-    let tl1 = gsap.timeline();  
+   //
   
-    // Controlla se esiste .cover-page prima di animarla
-    if (document.querySelector(".cover-page")) {
-      tl1.to(".cover-page", {
-        opacity: 1,
-        ease: "power2.out"
-      });
-    }
 
-    tl1.to(".page-heading-wrapper", {
-      opacity: 1,
-      x: "0rem",
-      ease: "power2.out",
-    });
-  
-    tl1.to("#nav", {
-      y: "0rem",
-      ease: "power2.out"
-    });
-  
-    // link click
-    $("a:not(.excluded-class)").on("click", function (e) {
-      let currentUrl = $(this).attr("href");
-      const isMobile = window.innerWidth <= 767;
-      const delay = isMobile ? parseInt($(this).attr("data-delay"), 10) : 0;
-  
-      if (
-        $(this).prop("hostname") === window.location.host &&
-        !currentUrl.includes("#") &&
-        $(this).attr("target") !== "_blank"
-      ) {
-        e.preventDefault();
-  
-        if (delay) {
-          setTimeout(() => {
-            let tl = gsap.timeline({
-              onComplete: () => (window.location.href = currentUrl),
-            });
-  
-            tl.fromTo(
-              ".page-wrapper, #nav, .menu-wrapper",
-              { xPercent: 0 },
-              { xPercent: 100, opacity: 0 }
-            );
-          }, delay);
-        } else {
-          let tl = gsap.timeline({
-            onComplete: () => (window.location.href = currentUrl),
-          });
-  
-          tl.fromTo(
-            ".page-wrapper, #nav, .menu-wrapper",
-            { xPercent: 0 },
-            { xPercent: 100, opacity: 0 }
-          );
-        }
-      }
-    });
-  
-    // On Back Button Tap
-    window.onpageshow = function (event) {
-      if (event.persisted) window.location.reload();
-    };
-  }
-  
-  //
-  
-  function navbarRepo(isHomePage = false) {
-    const stickyElement = document.querySelector("#nav");
-    const pathWrapper = isHomePage
-      ? document.querySelector("#navbar-repo")
-      : null;
-    const menuWrapper = document.querySelector(".menu-wrapper");
-    let navbarScrollTrigger = null;
-    let isPathWrapperInView = false;
-    let lastViewportHeight = window.innerHeight;
-  
-    const showAnim = gsap
-      .from(stickyElement, {
-        yPercent: -100,
-        paused: true,
-        duration: 0.2,
-        ease: "ease.out",
-      })
-      .progress(1);
-  
-    function isMenuVisible() {
-      return getComputedStyle(menuWrapper).display === "flex";
-    }
-  
-    function createNavbarScrollTrigger() {
-      return ScrollTrigger.create({
-        start: "top top",
-        end: "max",
-        onUpdate: (self) => {
-          const currentViewportHeight = window.innerHeight;
-  
-          // Check if the menu is visible
-          if (isMenuVisible()) {
-            return; // Skip the animation if menu is visible
-          }
-  
-          // Check if the viewport height changed significantly
-          if (Math.abs(currentViewportHeight - lastViewportHeight) > 50) {
-            lastViewportHeight = currentViewportHeight;
-            if (currentViewportHeight > lastViewportHeight) {
-              showAnim.play(); // Show navbar when address bar appears
-            } else {
-              showAnim.reverse(); // Hide navbar when address bar disappears
-            }
-            return;
-          }
-  
-          // Normal scroll behavior
-          self.direction === -1 ? showAnim.play() : showAnim.reverse();
-        },
-      });
-    }
-  
-    function checkAndUpdateNavbar() {
-      if (isHomePage && pathWrapper) {
-        ScrollTrigger.create({
-          trigger: pathWrapper,
-          start: "top 20%",
-          end: "bottom center",
-          onEnter: () => {
-            isPathWrapperInView = true;
-            if (!navbarScrollTrigger) {
-              navbarScrollTrigger = createNavbarScrollTrigger();
-            }
-          },
-          onLeaveBack: () => {
-            isPathWrapperInView = false;
-            if (navbarScrollTrigger) {
-              navbarScrollTrigger.kill();
-              navbarScrollTrigger = null;
-              gsap.set(stickyElement, { y: 0 });
-            }
-          },
-        });
-      } else {
-        navbarScrollTrigger = createNavbarScrollTrigger();
-      }
-    }
-  
-    window.addEventListener(
-      "resize",
-      debounce(() => {
-        lastViewportHeight = window.innerHeight;
-        if (navbarScrollTrigger) {
-          navbarScrollTrigger.kill();
-          navbarScrollTrigger = createNavbarScrollTrigger();
-        }
-        checkAndUpdateNavbar();
-      }, 200), { passive: true }
-    );
-  
-    checkAndUpdateNavbar();
-  
-    // Observer per monitorare le modifiche a .menu-wrapper
-    const observer = new MutationObserver(() => {
-      if (navbarScrollTrigger) {
-        navbarScrollTrigger.kill();
-        navbarScrollTrigger = createNavbarScrollTrigger();
-      }
-    });
-  
-    observer.observe(menuWrapper, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-    });
-  }
-  //
   //Oggetto Portfolio
   const portfolioFunctions = {
     togglePortfolio: function () {
@@ -1442,180 +1460,7 @@ function burgerAnimation(isHomePage = false) {
     },
   };
   //
-  //calendar
-  function calendar() {
-    var inputFields = document.querySelectorAll(".form-text-field-2");
-    var calendarModal = document.getElementById("calendar-modal");
-    var timeSelectionModal = document.getElementById("time-selection-modal");
-    var timeSelectionEl = document.getElementById("time-selection");
-    var calendarEl = document.getElementById("calendar");
-    var currentInputField;
-  
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      firstDay: 1, // Set the first day of the week to Monday
-      selectable: true,
-      headerToolbar: {
-        left: "prev",
-        center: "title",
-        right: "next",
-      },
-      locale: "it",
-      buttonText: {
-        today: "oggi",
-      },
-      dayHeaderFormat: { weekday: "short" },
-      selectAllow: function (selectInfo) {
-        // Disallow selection on weekends (Saturday is 5, Sunday is 6)
-        var day = selectInfo.start.getUTCDay();
-        console.log("Checking if day is selectable:", day); // Log for debugging
-        return day !== 5 && day !== 6;
-      },
-      events: function (fetchInfo, successCallback, failureCallback) {
-        console.log(
-          "Fetching events for range: ",
-          fetchInfo.startStr,
-          " to ",
-          fetchInfo.endStr
-        );
-        fetch(
-          "https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              timeMin: fetchInfo.startStr,
-              timeMax: fetchInfo.endStr,
-            }),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              console.error("Network response was not ok ", response.statusText);
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.json();
-          })
-          .then((events) => {
-            console.log("Events fetched from backend: ", events);
-            // Nascondere gli eventi nel calendario impostando il display su 'none'
-            events.forEach((event) => {
-              event.className = "hidden-event";
-            });
-            successCallback(events);
-          })
-          .catch((err) => {
-            console.error("Error fetching events: ", err);
-            failureCallback(err);
-          });
-      },
-      select: function (info) {
-        var day = info.start.getUTCDay();
-        if (day === 5 || day === 6) {
-          console.log("Selected day is a weekend, not allowed."); // Log for debugging
-          return; // Ensure weekends are not selectable
-        }
-        console.log("Date selected: ", info.start);
-        openTimeSelection(info.start);
-      },
-      dateClick: function (info) {
-        var day = info.date.getUTCDay();
-        if (day === 5 || day === 6) {
-          console.log("Clicked day is a weekend, not allowed."); // Log for debugging
-          return; // Ensure weekends are not clickable
-        }
-        console.log("Date clicked: ", info.date);
-        openTimeSelection(info.date);
-      },
-      eventOverlap: false,
-      selectOverlap: function (event) {
-        return !event; // disable selection if there is an event
-      },
-      eventBackgroundColor: "red", // color for occupied events
-    });
-  
-    calendar.render();
-  
-    inputFields.forEach(function (inputField) {
-      inputField.addEventListener("click", function () {
-        console.log("Input field clicked: ", inputField);
-        calendarModal.style.display = "block";
-        calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
-        currentInputField = inputField;
-      });
-    });
-  
-    function openTimeSelection(date) {
-      var day = date.getUTCDay();
-      if (day === 5 || day === 6) {
-        console.log("Day is a weekend, not allowed for time selection."); // Log for debugging
-        return; // Ensure weekends are not selectable
-      }
-  
-      console.log("Opening time selection for date: ", date);
-      timeSelectionEl.innerHTML = "";
-      timeSelectionModal.style.display = "block";
-  
-      var times = [];
-      for (var hour = 10; hour <= 19; hour++) {
-        times.push({ hour: hour, minute: 0 });
-        times.push({ hour: hour, minute: 30 });
-      }
-      times.push({ hour: 20, minute: 0 });
-  
-      times.forEach(function (time) {
-        var dateTime = new Date(date);
-        dateTime.setHours(time.hour, time.minute, 0, 0);
-        if (!isTimeSlotOccupied(dateTime)) {
-          var button = document.createElement("button");
-          button.innerText =
-            ("0" + time.hour).slice(-2) + ":" + ("0" + time.minute).slice(-2);
-          button.addEventListener("click", function () {
-            var formattedDate =
-              ("0" + date.getDate()).slice(-2) +
-              "/" +
-              ("0" + (date.getMonth() + 1)).slice(-2) +
-              "/" +
-              date.getFullYear() +
-              " " +
-              button.innerText;
-            console.log("Selected Date: ", formattedDate);
-            currentInputField.value = formattedDate;
-            timeSelectionModal.style.display = "none";
-            calendarModal.style.display = "none";
-          });
-          timeSelectionEl.appendChild(button);
-        }
-      });
-    }
-    function isTimeSlotOccupied(dateTime) {
-      var events = calendar.getEvents();
-      for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = new Date(event.start);
-        var end = new Date(event.end);
-        if (dateTime >= start && dateTime < end) {
-          return true;
-        }
-      }
-      return false;
-    }
-  
-    document.addEventListener("click", function (event) {
-      if (
-        !calendarModal.contains(event.target) &&
-        !timeSelectionModal.contains(event.target) &&
-        !event.target.classList.contains("form-text-field-2")
-      ) {
-        calendarModal.style.display = "none";
-        timeSelectionModal.style.display = "none";
-      }
-    });
-  }
+ 
   //
   function initializeGSAPAnimations() {
     // Inizializza SplitType una volta sola, fuori dalle condizioni di media query
@@ -2290,38 +2135,6 @@ function swiperHome() {
     observer.observe(document.querySelector(".swiper-container-home"));
   }  
   
-function transitionHome() {
-  document.querySelectorAll("a:not(.excluded-class)").forEach(anchor => {
-    anchor.addEventListener("click", function(e) {
-      let currentUrl = anchor.getAttribute("href");
-      const isMobile = window.innerWidth <= 767;
-      const delay = isMobile ? parseInt(anchor.getAttribute("data-delay"), 10) : 0;
-
-      if (anchor.hostname === window.location.hostname && !currentUrl.includes("#") && anchor.getAttribute("target") !== "_blank") {
-        e.preventDefault();
-
-        const navigate = () => {
-          let tl = gsap.timeline({ onComplete: () => (window.location.href = currentUrl) });
-          tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100, opacity: 0 });
-        };
-
-        if (delay) {
-          setTimeout(navigate, delay);
-        } else {
-          navigate();
-        }
-      }
-    });
-  });
-
-window.onpageshow = function(event) {
-  if (event.persisted) {
-    window.location.reload();
-  } else {
-    ScrollTrigger.refresh();
-  }
-};
-}
 
 function logoAnima() {
     // Seleziona tutti gli elementi con la classe .logo-cont-wrapper
@@ -2555,7 +2368,181 @@ function logoAnima() {
     toggleBtn.addEventListener("click", toggle);
     toggleBtn.addEventListener("touchstart", toggle);
   }
+  //PAGINA CONTATTI
+   //calendar
+   function calendar() {
+    var inputFields = document.querySelectorAll(".form-text-field-2");
+    var calendarModal = document.getElementById("calendar-modal");
+    var timeSelectionModal = document.getElementById("time-selection-modal");
+    var timeSelectionEl = document.getElementById("time-selection");
+    var calendarEl = document.getElementById("calendar");
+    var currentInputField;
   
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: "dayGridMonth",
+      firstDay: 1, // Set the first day of the week to Monday
+      selectable: true,
+      headerToolbar: {
+        left: "prev",
+        center: "title",
+        right: "next",
+      },
+      locale: "it",
+      buttonText: {
+        today: "oggi",
+      },
+      dayHeaderFormat: { weekday: "short" },
+      selectAllow: function (selectInfo) {
+        // Disallow selection on weekends (Saturday is 5, Sunday is 6)
+        var day = selectInfo.start.getUTCDay();
+        console.log("Checking if day is selectable:", day); // Log for debugging
+        return day !== 5 && day !== 6;
+      },
+      events: function (fetchInfo, successCallback, failureCallback) {
+        console.log(
+          "Fetching events for range: ",
+          fetchInfo.startStr,
+          " to ",
+          fetchInfo.endStr
+        );
+        fetch(
+          "https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              timeMin: fetchInfo.startStr,
+              timeMax: fetchInfo.endStr,
+            }),
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              console.error("Network response was not ok ", response.statusText);
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((events) => {
+            console.log("Events fetched from backend: ", events);
+            // Nascondere gli eventi nel calendario impostando il display su 'none'
+            events.forEach((event) => {
+              event.className = "hidden-event";
+            });
+            successCallback(events);
+          })
+          .catch((err) => {
+            console.error("Error fetching events: ", err);
+            failureCallback(err);
+          });
+      },
+      select: function (info) {
+        var day = info.start.getUTCDay();
+        if (day === 5 || day === 6) {
+          console.log("Selected day is a weekend, not allowed."); // Log for debugging
+          return; // Ensure weekends are not selectable
+        }
+        console.log("Date selected: ", info.start);
+        openTimeSelection(info.start);
+      },
+      dateClick: function (info) {
+        var day = info.date.getUTCDay();
+        if (day === 5 || day === 6) {
+          console.log("Clicked day is a weekend, not allowed."); // Log for debugging
+          return; // Ensure weekends are not clickable
+        }
+        console.log("Date clicked: ", info.date);
+        openTimeSelection(info.date);
+      },
+      eventOverlap: false,
+      selectOverlap: function (event) {
+        return !event; // disable selection if there is an event
+      },
+      eventBackgroundColor: "red", // color for occupied events
+    });
+  
+    calendar.render();
+  
+    inputFields.forEach(function (inputField) {
+      inputField.addEventListener("click", function () {
+        console.log("Input field clicked: ", inputField);
+        calendarModal.style.display = "block";
+        calendar.updateSize(); // Aggiorna la dimensione del calendario alla prima apertura
+        currentInputField = inputField;
+      });
+    });
+  
+    function openTimeSelection(date) {
+      var day = date.getUTCDay();
+      if (day === 5 || day === 6) {
+        console.log("Day is a weekend, not allowed for time selection."); // Log for debugging
+        return; // Ensure weekends are not selectable
+      }
+  
+      console.log("Opening time selection for date: ", date);
+      timeSelectionEl.innerHTML = "";
+      timeSelectionModal.style.display = "block";
+  
+      var times = [];
+      for (var hour = 10; hour <= 19; hour++) {
+        times.push({ hour: hour, minute: 0 });
+        times.push({ hour: hour, minute: 30 });
+      }
+      times.push({ hour: 20, minute: 0 });
+  
+      times.forEach(function (time) {
+        var dateTime = new Date(date);
+        dateTime.setHours(time.hour, time.minute, 0, 0);
+        if (!isTimeSlotOccupied(dateTime)) {
+          var button = document.createElement("button");
+          button.innerText =
+            ("0" + time.hour).slice(-2) + ":" + ("0" + time.minute).slice(-2);
+          button.addEventListener("click", function () {
+            var formattedDate =
+              ("0" + date.getDate()).slice(-2) +
+              "/" +
+              ("0" + (date.getMonth() + 1)).slice(-2) +
+              "/" +
+              date.getFullYear() +
+              " " +
+              button.innerText;
+            console.log("Selected Date: ", formattedDate);
+            currentInputField.value = formattedDate;
+            timeSelectionModal.style.display = "none";
+            calendarModal.style.display = "none";
+          });
+          timeSelectionEl.appendChild(button);
+        }
+      });
+    }
+    function isTimeSlotOccupied(dateTime) {
+      var events = calendar.getEvents();
+      for (var i = 0; i < events.length; i++) {
+        var event = events[i];
+        var start = new Date(event.start);
+        var end = new Date(event.end);
+        if (dateTime >= start && dateTime < end) {
+          return true;
+        }
+      }
+      return false;
+    }
+  
+    document.addEventListener("click", function (event) {
+      if (
+        !calendarModal.contains(event.target) &&
+        !timeSelectionModal.contains(event.target) &&
+        !event.target.classList.contains("form-text-field-2")
+      ) {
+        calendarModal.style.display = "none";
+        timeSelectionModal.style.display = "none";
+      }
+    });
+  }
   function contactSelection() {
     var buttons = document.querySelectorAll("[data-contact-target]");
     var forms = document.querySelectorAll(".form-component");
@@ -2647,7 +2634,7 @@ function logoAnima() {
       });
     });
   }
-
+//funzione per l'animazione ingresso Servizio in HOME e ABOUT
   function serviceWrapper() {
     gsap.set(".color-cover", { width: "100%" });
       // Seleziona tutte le sezioni che devono essere animate
@@ -2712,7 +2699,7 @@ function logoAnima() {
       // Aggiorna ScrollTrigger per riflettere i nuovi elementi
       ScrollTrigger.refresh();
     }  
-
+//funzione per l'animazione ingresso Servizio in pagina
     function servicePageWrapper() {
       gsap.set(".color-cover", { width: "100%" });      
     
@@ -2742,6 +2729,401 @@ function logoAnima() {
       ScrollTrigger.refresh();
     }
     
+    function transitionHome() {
+      document.querySelectorAll("a:not(.excluded-class)").forEach(anchor => {
+        anchor.addEventListener("click", function(e) {
+          let currentUrl = anchor.getAttribute("href");
+          const isMobile = window.innerWidth <= 767;
+          const delay = isMobile ? parseInt(anchor.getAttribute("data-delay"), 10) : 0;
+    
+          if (anchor.hostname === window.location.hostname && !currentUrl.includes("#") && anchor.getAttribute("target") !== "_blank") {
+            e.preventDefault();
+    
+            const navigate = () => {
+              let tl = gsap.timeline({ onComplete: () => (window.location.href = currentUrl) });
+              tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100, opacity: 0 });
+            };
+    
+            if (delay) {
+              setTimeout(navigate, delay);
+            } else {
+              navigate();
+            }
+          }
+        });
+      });
+    
+    window.onpageshow = function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      } else {
+        ScrollTrigger.refresh();
+      }
+    };
+    }
+    function transitionPage() {
+      let tl1 = gsap.timeline();  
+    
+      // Controlla se esiste .cover-page prima di animarla
+      if (document.querySelector(".cover-page")) {
+        tl1.to(".cover-page", {
+          opacity: 1,
+          ease: "power2.out"
+        });
+      }
+  
+      tl1.to(".page-heading-wrapper", {
+        opacity: 1,
+        x: "0rem",
+        ease: "power2.out",
+      });
+    
+      tl1.to("#nav", {
+        y: "0rem",
+        ease: "power2.out"
+      });
+    
+      // link click
+      $("a:not(.excluded-class)").on("click", function (e) {
+        let currentUrl = $(this).attr("href");
+        const isMobile = window.innerWidth <= 767;
+        const delay = isMobile ? parseInt($(this).attr("data-delay"), 10) : 0;
+    
+        if (
+          $(this).prop("hostname") === window.location.host &&
+          !currentUrl.includes("#") &&
+          $(this).attr("target") !== "_blank"
+        ) {
+          e.preventDefault();
+    
+          if (delay) {
+            setTimeout(() => {
+              let tl = gsap.timeline({
+                onComplete: () => (window.location.href = currentUrl),
+              });
+    
+              tl.fromTo(
+                ".page-wrapper, #nav, .menu-wrapper",
+                { xPercent: 0 },
+                { xPercent: 100, opacity: 0 }
+              );
+            }, delay);
+          } else {
+            let tl = gsap.timeline({
+              onComplete: () => (window.location.href = currentUrl),
+            });
+    
+            tl.fromTo(
+              ".page-wrapper, #nav, .menu-wrapper",
+              { xPercent: 0 },
+              { xPercent: 100, opacity: 0 }
+            );
+          }
+        }
+      });
+    
+      // On Back Button Tap
+      window.onpageshow = function (event) {
+        if (event.persisted) window.location.reload();
+      };
+    }
+
   window.onbeforeunload = function () {
     window.scrollTo(0, 0);
   };
+
+  const propositoAnimation = {
+    initializeSwiper: function () {
+      const swiperPost = new Swiper(".related-articles-wrapper", {
+        slidesPerView: "auto",
+        spaceBetween: 32,
+        centeredSlides: false,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+  
+        speed: 600, // Velocità della transizione in millisecondi
+        effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+      });
+  
+      console.log(swiperPost); // Verifica che Swiper sia inizializzato correttamente
+    },
+    categoryLabel: function () {
+      const categoryLabels = document.querySelectorAll(".category-label");
+  
+      categoryLabels.forEach((label) => {
+        // Creiamo un context per ottimizzare la gestione delle animazioni
+        let context = gsap.context(() => {
+          // Funzione di animazione comune per hover/touch
+          function animateCategoryLabel(state) {
+            gsap.to(label, {
+              duration: 0.3,
+              paddingBottom: state ? "2rem" : "0rem",
+              borderTopRightRadius: state ? "1rem" : "0rem",
+              borderTopLeftRadius: state ? "1rem" : "0rem",
+              ease: "power1.out",
+            });
+          }
+  
+          // Eventi hover
+          label.addEventListener("mouseenter", () => animateCategoryLabel(true));
+          label.addEventListener("mouseleave", () => animateCategoryLabel(false));
+  
+          // Eventi touch
+          label.addEventListener("touchstart", () => animateCategoryLabel(true));
+          label.addEventListener("touchend", () => animateCategoryLabel(false));
+        });
+      });
+    },
+    shareBtnAnimation: function () {
+      const shareBtns = document.querySelectorAll(".share-btn");
+  
+      shareBtns.forEach((btn) => {
+        // Selezioniamo il div interno con la classe .svg-cont
+        const svgCont = btn.querySelector(".svg-cont");
+  
+        // Creiamo un context per ottimizzare la gestione delle animazioni
+        let context = gsap.context(() => {
+          // Funzione di animazione per hover e touch
+          function animateSvgCont(show) {
+            gsap.to(svgCont, {
+              duration: 0.3,
+              opacity: show ? 1 : 0,
+              right: show ? 0 : "auto",
+              ease: "power1.out",
+            });
+          }
+  
+          // Eventi hover
+          btn.addEventListener("mouseenter", () => animateSvgCont(true));
+          btn.addEventListener("mouseleave", () => animateSvgCont(false));
+  
+          // Eventi touch (per dispositivi mobili)
+          btn.addEventListener("touchstart", () => animateSvgCont(true));
+          btn.addEventListener("touchend", () => animateSvgCont(false));
+        }, btn); // Applichiamo il context al singolo button container
+      });
+    },
+    tagLinkAnimation: function () {
+      const tagLinks = document.querySelectorAll(".tag-link");
+  
+      tagLinks.forEach((tag) => {
+        // Creiamo un context per ottimizzare la gestione delle animazioni
+        let context = gsap.context(() => {
+          // Funzione per l'animazione hover e touch
+          function animateTagLink(isHover) {
+            gsap.to(tag, {
+              duration: 0.15,
+              rotateZ: isHover ? 10 : 0, // Rotazione sull'asse Z
+              borderColor: isHover ? "#f06" : "", // Cambio del colore del bordo
+              ease: "back.out(3)",
+            });
+          }
+  
+          // Eventi hover
+          tag.addEventListener("mouseenter", () => animateTagLink(true));
+          tag.addEventListener("mouseleave", () => animateTagLink(false));
+  
+          // Eventi touch (per dispositivi mobili)
+          tag.addEventListener("touchstart", () => animateTagLink(true));
+          tag.addEventListener("touchend", () => animateTagLink(false));
+        }, tag); // Applichiamo il context a ciascun tag-link
+      });
+    },
+    btnReadAnimation: function () {
+      const btnReads = document.querySelectorAll(".btn-read");
+  
+      btnReads.forEach((btn) => {
+        // Selezioniamo gli elementi interni da animare
+        const arrow = btn.querySelector(".read-btn-arrow");
+        const text = btn.querySelector(".read-text-btn");
+  
+        // Creiamo una timeline che sarà ripetuta su hover e touch
+        let tl = gsap.timeline({ paused: true });
+  
+        // Aggiungiamo l'animazione del margine destro di .read-btn-arrow
+        tl.to(arrow, {
+          duration: 0.2,
+          marginRight: "2px", // Cambia il margine destro a 0
+          ease: "back.out",
+        });
+  
+        // Aggiungiamo la rotazione della .read-text-btn subito dopo
+        tl.to(
+          text,
+          {
+            duration: 0.3,
+            rotate: 8, // Ruota di 8 gradi
+            ease: "back.out",
+          },
+          "-=0.2"
+        ); // Sovrapponiamo leggermente le animazioni per farle avvenire quasi contemporaneamente
+  
+        // Funzione di animazione per hover e touch
+        function animateBtnRead(isHover) {
+          if (isHover) {
+            tl.play(); // Avvia l'animazione
+          } else {
+            tl.reverse(); // Inverte l'animazione quando si lascia l'elemento
+          }
+        }
+  
+        btn.addEventListener("mouseenter", () => animateBtnRead(true));
+        btn.addEventListener("mouseleave", () => animateBtnRead(false));
+        btn.addEventListener("touchstart", () => animateBtnRead(true));
+        btn.addEventListener("touchend", () => animateBtnRead(false));
+      });
+    },
+    NewsLetterAnimation: function () {
+      ScrollTrigger.create({
+        trigger: ".newsletter-section",
+        start: "center center",
+        toggleActions: "play none none reverse",
+        onEnter: () => {
+          gsap.fromTo(
+            ".arrow-proposito-newsletter",
+            { x: "0%" },
+            {
+              x: "-10%",
+              repeat: 3,
+              duration: 0.5,
+              ease: "power1.inOut",
+              yoyo: true,
+            }
+          );
+        },
+      });
+    },
+    btnCategoryAnimation: function () {
+      const btnCategory = document.querySelectorAll(".btn-category");
+  
+      btnCategory.forEach((btn) => {
+        // Selezioniamo gli elementi interni da animare
+        const arrow = btn.querySelector(".read-btn-arrow");
+        const text = btn.querySelector(".read-text-btn");
+        const gradient = btn.querySelector(".category-color");
+  
+        // Otteniamo il primo colore di background dalla variabile CSS
+        const color2 = getComputedStyle(gradient)
+          .getPropertyValue("--background-first")
+          .trim();
+  
+        const color1 = "transparent"; // Il secondo colore è trasparente
+  
+        // Creiamo una timeline che sarà ripetuta su hover e touch
+        let tl = gsap.timeline({ paused: true });
+  
+        // Aggiungiamo l'animazione del margine destro di .read-btn-arrow
+        tl.to(arrow, {
+          duration: 0.2,
+          marginRight: "2px", // Cambia il margine destro
+          ease: "back.out",
+        }).to(
+          gradient,
+          {
+            backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`, // Gradiente dal colore1 al trasparente
+            duration: 0.2,
+            ease: "linear",
+          },
+          "<"
+        );
+  
+        tl.to(
+          text,
+          {
+            duration: 0.3,
+            rotate: 8, // Ruota di 8 gradi
+            ease: "back.out",
+          },
+          "-=0.2"
+        );
+  
+        // Funzione di animazione per hover e touch
+        function animateBtnCategory(isHover) {
+          if (isHover) {
+            tl.play(); // Avvia l'animazione
+          } else {
+            tl.reverse(); // Inverte l'animazione quando si lascia l'elemento
+          }
+        }
+  
+        // Eventi per hover e touch
+        btn.addEventListener("mouseenter", () => animateBtnCategory(true));
+        btn.addEventListener("mouseleave", () => animateBtnCategory(false));
+        btn.addEventListener("touchstart", () => animateBtnCategory(true));
+        btn.addEventListener("touchend", () => animateBtnCategory(false));
+      });
+    },
+    thumbnailImageAnimation: function () {
+      const thumbnails = document.querySelectorAll(
+        ".related-post-category .thumbnail-image"
+      );
+  
+      thumbnails.forEach((thumbnail) => {
+        // Creiamo la timeline dell'animazione GSAP
+        let tl = gsap.timeline({ paused: true });
+  
+        // Definiamo l'animazione hover
+        tl.to(thumbnail, {
+          borderRadius: "2rem",
+          scale: 1.1, // Scala l'immagine
+          duration: 0.5, // Durata dell'animazione
+          ease: "power2.out", // Tipo di easing per una transizione più fluida
+          transformOrigin: "center center", // Imposta l'origine di trasformazione a destra
+        });
+  
+        // Aggiungiamo gli eventi hover
+        thumbnail.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
+        thumbnail.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
+      });
+    },
+    postEntry: function () {
+      const relatedPosts = document.querySelectorAll(".related-post-category");
+      gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
+      gsap.set(".cta-leggi", { opacity: 0, x: "-20rem" });
+  
+      relatedPosts.forEach((post) => {
+        // Creiamo un'animazione per ciascun .related-post-category individualmente
+        ScrollTrigger.create({
+          trigger: post, // Ogni singolo post è il trigger
+          start: "top 80%", // L'animazione parte quando il post è al 80% della viewport
+          toggleActions: "play none none none", // Anima quando entra, reverte quando esce
+          onEnter: () => {
+            // Animazione per il singolo post
+            gsap.to(post, {
+              y: "0%",
+              opacity: 1,
+              duration: 0.5,
+              ease: "power1.inOut",
+            });
+  
+            // Animazione per .cta-leggi all'interno di ogni post
+            gsap.to(
+              post.querySelector(".cta-leggi"),
+              {
+                x: "0rem",
+                opacity: 1,
+                duration: 0.3,
+                ease: "power1.inOut",
+              },
+              "-=0.2"
+            ); // Sovrapposizione delle animazioni
+          },
+        });
+      });
+    },
+    init: function () {
+      this.initializeSwiper();
+      this.categoryLabel();
+      this.shareBtnAnimation();
+      this.tagLinkAnimation();
+      this.btnReadAnimation();
+      this.NewsLetterAnimation();
+      this.btnCategoryAnimation();
+      if (window.matchMedia("(min-width: 992px)").matches) {
+        this.thumbnailImageAnimation();
+      }
+      this.postEntry();
+    },
+  }; 
