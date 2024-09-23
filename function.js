@@ -611,8 +611,9 @@ function burgerAnimation(isHomePage = false) {
       )
     .to("#arrow-proposito-link", {
         color: "#f4f4f4",
-        scale: 1.15,
+        scale: 1.2,
         duration: 0.2,
+        x:"1rem",
         ease: "back.out(3)",
       },"-=0.1");
   
