@@ -2834,27 +2834,35 @@ function logoAnima() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
-      // Controlla se esiste almeno un elemento con la classe ".related-articles-wrapper"
-      const swiperContainer = document.querySelector(".related-articles-wrapper");
+      document.addEventListener("DOMContentLoaded", function () {
+        // Verifica la presenza del contenitore dello slider
+        const swiperContainer = document.querySelector(".related-articles-wrapper");
+        const nextButton = document.querySelector(".swiper-button-next");
+        const prevButton = document.querySelector(".swiper-button-prev");
     
-      if (swiperContainer) {
-        // Inizializza Swiper solo se l'elemento esiste
-        const swiperPost = new Swiper(".related-articles-wrapper", {
-          slidesPerView: "auto",
-          spaceBetween: 32,
-          centeredSlides: false,
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          speed: 600, // Velocità della transizione in millisecondi
-          effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
-        });
+        // Controlla se il contenitore e i pulsanti di navigazione esistono
+        if (swiperContainer && nextButton && prevButton) {
+          try {
+            const swiperPost = new Swiper(".related-articles-wrapper", {
+              slidesPerView: "auto",
+              spaceBetween: 32,
+              centeredSlides: false,
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              speed: 600, // Velocità della transizione in millisecondi
+              effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+            });
     
-        console.log(swiperPost); // Verifica che Swiper sia inizializzato correttamente
-      } else {
-        console.warn("Nessun elemento trovato per lo slider: .related-articles-wrapper");
-      }
+            console.log("Swiper inizializzato correttamente:", swiperPost);
+          } catch (error) {
+            console.error("Errore durante l'inizializzazione di Swiper:", error);
+          }
+        } else {
+          console.warn("Swiper non è stato inizializzato perché il contenitore o i pulsanti di navigazione non sono presenti.");
+        }
+      });
     },    
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
