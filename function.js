@@ -3077,6 +3077,9 @@ function logoAnima() {
       });
     },
     thumbnailImageAnimation: function () {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        // Codice dell'animazione
+        console.log("Animazione burger avviata");
       const thumbnails = document.querySelectorAll(
         ".related-post-category .thumbnail-image"
       );
@@ -3097,7 +3100,7 @@ function logoAnima() {
         // Aggiungiamo gli eventi hover
         thumbnail.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
         thumbnail.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
-      });
+      });}
     },
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
@@ -3142,9 +3145,7 @@ function logoAnima() {
       this.btnReadAnimation();
       this.NewsLetterAnimation();
       this.btnCategoryAnimation();
-      if (window.matchMedia("(min-width: 992px)").matches) {
-        this.thumbnailImageAnimation();
-      }
+      this.thumbnailImageAnimation();      
       this.postEntry();
     },
   }; 
