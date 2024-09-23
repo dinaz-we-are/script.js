@@ -589,7 +589,7 @@ function burgerAnimation(isHomePage = false) {
           backgroundColor: "#f06",
           duration: 0.2,
           ease:"ease.out",
-          paddingLeft:"+=10%"        
+          paddingLeft:"+=1rem"        
         },    
       )       
       .to(
