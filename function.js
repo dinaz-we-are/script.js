@@ -2834,21 +2834,28 @@ function logoAnima() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
-      const swiperPost = new Swiper(".related-articles-wrapper", {
-        slidesPerView: "auto",
-        spaceBetween: 32,
-        centeredSlides: false,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-  
-        speed: 600, // Velocità della transizione in millisecondi
-        effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
-      });
-  
-      console.log(swiperPost); // Verifica che Swiper sia inizializzato correttamente
-    },
+      // Controlla se esiste almeno un elemento con la classe ".related-articles-wrapper"
+      const swiperContainer = document.querySelector(".related-articles-wrapper");
+    
+      if (swiperContainer) {
+        // Inizializza Swiper solo se l'elemento esiste
+        const swiperPost = new Swiper(".related-articles-wrapper", {
+          slidesPerView: "auto",
+          spaceBetween: 32,
+          centeredSlides: false,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          speed: 600, // Velocità della transizione in millisecondi
+          effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+        });
+    
+        console.log(swiperPost); // Verifica che Swiper sia inizializzato correttamente
+      } else {
+        console.warn("Nessun elemento trovato per lo slider: .related-articles-wrapper");
+      }
+    },    
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
   
