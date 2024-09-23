@@ -587,7 +587,9 @@ function burgerAnimation(isHomePage = false) {
         linkItem,
         {
           backgroundColor: "#f06",
-          duration: 0.1,        
+          duration: 0.2,
+          ease:"ease.out",
+          paddingLeft:"+=10%"        
         },    
       )       
       .to(
@@ -603,7 +605,7 @@ function burgerAnimation(isHomePage = false) {
         scale: 1.15,
         duration: 0.2,
         ease: "back.out(3)",
-      },"<")
+      },"-=0.1")
       .to(
         ".span-link-magazine",
         {
