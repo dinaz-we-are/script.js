@@ -1531,12 +1531,7 @@ function burgerAnimation(isHomePage = false) {
                 "--linear-grad1": "#f06",
                 "--linear-grad2": "#e0ff0d",
                 ease: "linear",
-            }, "-=0.5")
-            .from(".gradient", {
-                opacity: 0,
-                duration: 0.5,
-                ease: "linear",
-            }, "<");
+            }, "-=0.5");
     });
 
     mm.add("(max-width: 991px)", () => {
@@ -1576,12 +1571,7 @@ function burgerAnimation(isHomePage = false) {
           "--linear-grad1": "#f06",
           "--linear-grad2": "#e0ff0d",
           ease: "linear",
-      }, "-=0.5")
-      .from(".gradient", {
-          opacity: 0,
-          duration: 0.5,
-          ease: "linear",
-      }, "<");});
+      }, "-=0.5") ;});
 
     gsap.timeline().call(function () {
         console.log("Animazione completata");
