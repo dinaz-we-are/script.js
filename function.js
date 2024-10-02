@@ -1463,13 +1463,9 @@ function burgerAnimation(isHomePage = false) {
   //
  
   //
-  function initializeGSAPAnimations() {
+  function initializeGSAPAnimation() {
     // Inizializza SplitType una volta sola, fuori dalle condizioni di media query
-    let h1Split = new SplitType(".h1-usp", {
-        types: "words",
-        tagName: "span",
-    });
-    let callSplit = new SplitType(".brand-nav-hero", {
+      let callSplit = new SplitType(".brand-nav-hero", {
         types: "chars",
         tagName: "span",
     });
@@ -1477,7 +1473,6 @@ function burgerAnimation(isHomePage = false) {
         types: "words",
         tagName: "span",
     });
-
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 992px)", () => {
@@ -1494,13 +1489,13 @@ function burgerAnimation(isHomePage = false) {
                 ease: "back.out(1.7)",
                 stagger: 0.05
             }, "<")
-            .from(".h1-usp .word", {
+            .from(".h1-usp, .gradient", {
                 opacity: 0,
                 duration: 0.5,
                 ease: "back.out(1.7)",
-                stagger: 0.0325
+                stagger: 0.2
             })
-            .from(".usp .word", {
+         .from(".usp .word", {
                 rotationX: 90,
                 transformOrigin: "bottom center",
                 duration: 0.5,
@@ -1513,18 +1508,16 @@ function burgerAnimation(isHomePage = false) {
                 ease: "back.out(1.7)"
             }, "<")       
             .from("#arrow", {
-                y: "-50vh",
+                y: "-50vh",                
                 opacity: 0,
                 duration: 0.5,
-                ease: "power2",
-                stagger: 0.2
+                ease: "power2",                
             }, "<")
             .from(".text-block", {
               y: "50vh",
               opacity: 0,
               duration: 0.5,
-              ease: "power2",
-              stagger: 0.2
+              ease: "power2",              
           }, "<")       
             .to(":root", {
                 duration: 1,
@@ -1556,15 +1549,13 @@ function burgerAnimation(isHomePage = false) {
           y: "-50vh",
           opacity: 0,
           duration: 0.5,
-          ease: "power2",
-          stagger: 0.2
+          ease: "power2",          
       }, "<")
       .from(".text-block", {
         y: "50vh",
         opacity: 0,
         duration: 0.5,
-        ease: "power2",
-        stagger: 0.2
+        ease: "power2",        
     }, "<")       
       .to(":root", {
           duration: 1,
@@ -1577,31 +1568,62 @@ function burgerAnimation(isHomePage = false) {
         console.log("Animazione completata");
     });
 }
+
     // Animazione freccia
     function animaArrow() {
-    let arrowAnimation = gsap.to("#arrow", {        
-        scale: 0.5,
-        ease: "power1",
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-    });
-    // Ferma l'animazione di rimbalzo quando .hero-trigger entra nella viewport
-    ScrollTrigger.create({
-        trigger: ".hero-spacer",
-        start: "top bottom",
-        end: "top 90%",
-        scrub: true,
-        onEnter: () => {
-            arrowAnimation.pause();
-        },
-        onLeaveBack: () => {
-            arrowAnimation.play();
-        },
-    });
-
-    arrowAnimation.play();
-}
+      // Animazione del gradiente con rotazione completa in 10 secondi
+      let tl = gsap.timeline({ repeat: -1, ease: "linear" });
+      
+      tl.to(".h1-usp", {
+          duration: 10,
+          onUpdate: function() {
+              // Ruotiamo l'angolo del gradiente partendo da 0 gradi e completando un giro
+              let progress = 0 + tl.progress() * 360;
+              gsap.set(".h1-usp", {
+                  backgroundImage: `linear-gradient(${progress}deg, #0d0d0d 0%, #ffffff 100%)`
+              });
+          }
+      });
+  
+      // Animazione del globo che ruota su se stesso
+      let globeAnimation = gsap.to(".globo", {
+          rotation: "+=360", // Rotazione completa
+          duration: 10, // Durata della rotazione
+          ease: "none", // Nessun easing per rotazione continua
+          repeat: -1 // Ripeti all'infinito
+      });
+  
+      // Animazione della freccia che rimbalza
+      let arrowAnimation = gsap.to("#arrow", {        
+          scale: 0.5,
+          ease: "power1",
+          duration: 2,
+          repeat: -1,
+          yoyo: true
+      });
+  
+      // Ferma entrambe le animazioni quando ".hero-spacer" entra nella viewport
+      ScrollTrigger.create({
+          trigger: ".hero-spacer",
+          start: "top bottom",
+          end: "top 90%",
+          scrub: true,
+          onEnter: () => {
+              arrowAnimation.pause();
+              globeAnimation.pause();
+              tl.pause();
+          },
+          onLeaveBack: () => {
+              arrowAnimation.play();
+              globeAnimation.play();
+              tl.play();
+          }
+      });
+  
+      // Avvia tutte le animazioni
+      arrowAnimation.play();
+      globeAnimation.play();    
+  }
  function initializeScrollFlipAnimations() {
   function attr(defaultVal, attrVal) {
     const defaultValType = typeof defaultVal;
@@ -1672,7 +1694,7 @@ function burgerAnimation(isHomePage = false) {
 }
   //fine flip
   //scrollTrigger
-function createScrollTriggerHero() {
+  function createScrollTriggerHero() {
     ScrollTrigger.create({
         scrub: true,
         trigger: ".hero-trigger",
@@ -1680,13 +1702,18 @@ function createScrollTriggerHero() {
         end: "top 85%",
         onEnter: () => {
             gsap.timeline()
-                .to(".usp .word, .h1-usp .word, .text-block", {
+                .to(".usp .word, .text-block", {
                     opacity: 0,
                     x: "100vw",
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
                 })
+                .to(".h1-usp", {
+                opacity:0,
+								duration:0.25,
+                ease:"linear"
+                },"<")
                 .to(".gradient", {
                   opacity:0
                 },"<")               
@@ -1699,15 +1726,20 @@ function createScrollTriggerHero() {
         },
         onLeaveBack: () => {
             gsap.timeline()
-                .to(".usp .word, .h1-usp .word, .text-block", {
+                .to(".usp .word, .text-block", {
                     opacity: 1,
                     x: 0,
                     duration: 1,
                     ease: "back.out(1.7)",
                     stagger: { amount: 0.3 },
-                })             
+                })  
+                 .to(".h1-usp", {
+                opacity:1,
+								duration:0.5,
+                ease:"linear"
+                },"<")
                 .to(".gradient", {
-                  opacity:0.5
+                  opacity:1
                 },"<")    
                 .to(".brand_header", {
                     y: 0,
@@ -1774,7 +1806,7 @@ function createScrollTriggerHero() {
         },
     });
     ScrollTrigger.refresh();
-}
+}   
   //
 //CECO
 const cecoStretegy = {
