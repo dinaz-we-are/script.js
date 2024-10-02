@@ -1463,7 +1463,7 @@ function burgerAnimation(isHomePage = false) {
   //
  
   //
-  function initializeGSAPAnimation() {
+  function initializeGSAPAnimations() {
     // Inizializza SplitType una volta sola, fuori dalle condizioni di media query
       let callSplit = new SplitType(".brand-nav-hero", {
         types: "chars",
