@@ -641,32 +641,42 @@ function burgerAnimation(isHomePage = false) {
   };
   
   //DATACOLOR
-  function dataColor() {
+  function dataColorAndScrollTop() {
+    // Gestione del cambio di colore con ScrollTrigger
     const elementsWithColor = document.querySelectorAll("[data-color]");
-  
+
     elementsWithColor.forEach((element) => {
-      const color = element.getAttribute("data-color");
-  
-      if (color) {
-        gsap.to(element, {
-          color: color,
-          duration: 1,
-          ease: "power1",
-          scrollTrigger: {
-            trigger: element,
-            start: "top 70%",
-            end: "top top",
-            toggleActions: "play none none reverse",
-          },
-        });
-      } else {
-        console.warn(
-          `Element ${element} does not have a valid data-color attribute.`
-        );
-      }
+        const color = element.getAttribute("data-color");
+
+        if (color) {
+            gsap.to(element, {
+                color: color,
+                duration: 1,
+                ease: "power1",
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 70%",
+                    end: "top top",
+                    toggleActions: "play none none reverse",
+                },
+            });
+        } else {
+            console.warn(`Element ${element} does not have a valid data-color attribute.`);
+        }
     });
-  }
-  //Fine data Color
+
+    // Gestione del click per scrollare in cima alla pagina
+    document.querySelectorAll('[data-scroll="top"]').forEach(button => {
+        button.addEventListener('click', () => {
+            gsap.to(window, {
+                duration: 1,
+                scrollTo: { y: 0, autoKill: true },
+                ease: "power2.inOut"
+            });
+        });
+    });
+}
+  //
   // SecondSection
   function secondSection(isHomePage = false) {
     if (isHomePage) {
