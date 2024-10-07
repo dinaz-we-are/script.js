@@ -629,6 +629,35 @@ function burgerAnimation(isHomePage = false) {
       passive: true,
     });
   },
+  shareBtnAnimation: function () {
+    const shareBtns = document.querySelectorAll(".share-btn");
+
+    shareBtns.forEach((btn) => {
+      // Selezioniamo il div interno con la classe .svg-cont
+      const svgCont = btn.querySelector(".svg-cont");
+
+      // Creiamo un context per ottimizzare la gestione delle animazioni
+      let context = gsap.context(() => {
+        // Funzione di animazione per hover e touch
+        function animateSvgCont(show) {
+          gsap.to(svgCont, {
+            duration: 0.3,
+            opacity: show ? 1 : 0,
+            right: show ? 0 : "auto",
+            ease: "power1.out",
+          });
+        }
+
+        // Eventi hover
+        btn.addEventListener("mouseenter", () => animateSvgCont(true));
+        btn.addEventListener("mouseleave", () => animateSvgCont(false));
+
+        // Eventi touch (per dispositivi mobili)
+        btn.addEventListener("touchstart", () => animateSvgCont(true));
+        btn.addEventListener("touchend", () => animateSvgCont(false));
+      }, btn); // Applichiamo il context al singolo button container
+    });
+  },
   
     init: function () {
       if (window.matchMedia("(min-width: 768px)").matches) {
@@ -637,6 +666,7 @@ function burgerAnimation(isHomePage = false) {
       this.initializeHoverAnimations();
       this.initializeSimpleHoverTouchAnimations();
       this.animateLinkItemMagazine();
+      this.shareBtnAnimation();
     },
   };
   
@@ -1475,114 +1505,58 @@ function burgerAnimation(isHomePage = false) {
   //
   function initializeGSAPAnimations() {
     // Inizializza SplitType una volta sola, fuori dalle condizioni di media query
-      let callSplit = new SplitType(".brand-nav-hero", {
-        types: "chars",
-        tagName: "span",
-    });
-    let uspSplit = new SplitType(".usp", {
+      let uspSplit = new SplitType(".usp", {
         types: "words",
         tagName: "span",
     });
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 992px)", () => {
-        const tl = gsap.timeline({
+   
+      const tl = gsap.timeline({
           onComplete: () => {
             document.getElementById('cover-div').style.display = 'none';
           }
         });
 
         tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-            .from(".brand-nav-hero .char", {
-                y: "-10rem",
-                duration: 0.5,
-                ease: "back.out(1.7)",
-                stagger: 0.05
-            }, "<")
-            .from(".h1-usp, .gradient", {
+                .from(".h1-usp, .gradient", {								
                 opacity: 0,
                 duration: 0.5,
-                ease: "back.out(1.7)",
-                stagger: 0.2
-            })
+                ease: "power2.inOut",
+                stagger: 0.3
+            },"<")
          .from(".usp .word", {
                 rotationX: 90,
                 transformOrigin: "bottom center",
                 duration: 0.5,
-                ease: "back.out(1.7)",
-                stagger: { amount: 0.3 }
-            }, "<")
+                ease: "power2.inOut",
+                stagger: { amount: 0.6 }
+            },"-=0.1")
             .from("#nav", {
                 y: "-5rem",
                 duration: 0.3,
                 ease: "back.out(1.7)"
-            }, "<")       
-            .from("#arrow", {
-                y: "-50vh",                
+            },"<")       
+            .from("#arrow, .scorri", {
+                y: "-50vh",
                 opacity: 0,
                 duration: 0.5,
-                ease: "power2",                
-            }, "<")
-            .from(".text-block", {
-              y: "50vh",
-              opacity: 0,
-              duration: 0.5,
-              ease: "power2",              
-          }, "<")       
+                ease: "power2",
+                stagger:0.3,
+            }, "<")    
             .to(":root", {
                 duration: 1,
-                "--linear-grad1": "#f06",
                 "--linear-grad2": "#e0ff0d",
-                ease: "linear",
+                ease: "power2.inOut",
             }, "-=0.5");
-    });
-
-    mm.add("(max-width: 991px)", () => {
-        // Animazioni per schermi sotto i 992px
-        const tl = gsap.timeline({
-            onComplete: () => document.getElementById('cover-div').remove()
-        });
-
-        tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-        .from(".brand-nav-hero .char", {
-          y: "-10rem",
-       duration: 0.5,
-       ease: "back.out(1.7)",
-       stagger: 0.05
-        },"<")      
-         .from("#nav", {
-             y: "-5rem",
-             duration: 0.5,
-             ease: "back.out(1.7)"
-         })
-         .from("#arrow", {
-          y: "-50vh",
-          opacity: 0,
-          duration: 0.5,
-          ease: "power2",          
-      }, "<")
-      .from(".text-block", {
-        y: "50vh",
-        opacity: 0,
-        duration: 0.5,
-        ease: "power2",        
-    }, "<")       
-      .to(":root", {
-          duration: 1,
-          "--linear-grad1": "#f06",
-          "--linear-grad2": "#e0ff0d",
-          ease: "linear",
-      }, "-=0.5") ;});
-
+    
     gsap.timeline().call(function () {
         console.log("Animazione completata");
     });
 }
 
     // Animazione freccia
-    function animaArrow() {
+  function animaArrow() {
       // Animazione del gradiente con rotazione completa in 10 secondi
-      let tl = gsap.timeline({ repeat: -1, ease: "linear" });
+      let tl = gsap.timeline({ repeat: -1 });
       
       tl.to(".h1-usp", {
           duration: 10,
@@ -1590,7 +1564,7 @@ function burgerAnimation(isHomePage = false) {
               // Ruotiamo l'angolo del gradiente partendo da 0 gradi e completando un giro
               let progress = 0 + tl.progress() * 360;
               gsap.set(".h1-usp", {
-                  backgroundImage: `linear-gradient(${progress}deg, #0d0d0d 0%, #ffffff 100%)`
+                  backgroundImage: `linear-gradient(${progress}deg, #272727 0%, #ffffff 90%)`
               });
           }
       });
@@ -1601,12 +1575,13 @@ function burgerAnimation(isHomePage = false) {
           duration: 10, // Durata della rotazione
           ease: "none", // Nessun easing per rotazione continua
           repeat: -1 // Ripeti all'infinito
+          
       });
   
       // Animazione della freccia che rimbalza
       let arrowAnimation = gsap.to("#arrow", {        
           scale: 0.5,
-          ease: "power1",
+          ease: "power2.inOut",
           duration: 2,
           repeat: -1,
           yoyo: true
@@ -1712,7 +1687,7 @@ function burgerAnimation(isHomePage = false) {
         end: "top 85%",
         onEnter: () => {
             gsap.timeline()
-                .to(".usp .word, .text-block", {
+                .to(".usp .word, .scorri", {
                     opacity: 0,
                     x: "100vw",
                     duration: 1,
@@ -1725,6 +1700,7 @@ function burgerAnimation(isHomePage = false) {
                 ease:"linear"
                 },"<")
                 .to(".gradient", {
+                  scale:0,
                   opacity:0
                 },"<")               
                 .to(".brand_header", {
@@ -1736,7 +1712,7 @@ function burgerAnimation(isHomePage = false) {
         },
         onLeaveBack: () => {
             gsap.timeline()
-                .to(".usp .word, .text-block", {
+                .to(".usp .word, .scorri", {
                     opacity: 1,
                     x: 0,
                     duration: 1,
@@ -1749,6 +1725,7 @@ function burgerAnimation(isHomePage = false) {
                 ease:"linear"
                 },"<")
                 .to(".gradient", {
+                  scale:1,
                   opacity:1
                 },"<")    
                 .to(".brand_header", {
@@ -1816,7 +1793,7 @@ function burgerAnimation(isHomePage = false) {
         },
     });
     ScrollTrigger.refresh();
-}   
+}  
   //
 //CECO
 const cecoStretegy = {
@@ -2929,35 +2906,7 @@ function logoAnima() {
         });
       });
     },
-    shareBtnAnimation: function () {
-      const shareBtns = document.querySelectorAll(".share-btn");
-  
-      shareBtns.forEach((btn) => {
-        // Selezioniamo il div interno con la classe .svg-cont
-        const svgCont = btn.querySelector(".svg-cont");
-  
-        // Creiamo un context per ottimizzare la gestione delle animazioni
-        let context = gsap.context(() => {
-          // Funzione di animazione per hover e touch
-          function animateSvgCont(show) {
-            gsap.to(svgCont, {
-              duration: 0.3,
-              opacity: show ? 1 : 0,
-              right: show ? 0 : "auto",
-              ease: "power1.out",
-            });
-          }
-  
-          // Eventi hover
-          btn.addEventListener("mouseenter", () => animateSvgCont(true));
-          btn.addEventListener("mouseleave", () => animateSvgCont(false));
-  
-          // Eventi touch (per dispositivi mobili)
-          btn.addEventListener("touchstart", () => animateSvgCont(true));
-          btn.addEventListener("touchend", () => animateSvgCont(false));
-        }, btn); // Applichiamo il context al singolo button container
-      });
-    },
+    
     tagLinkAnimation: function () {
       const tagLinks = document.querySelectorAll(".tag-link");
   
@@ -3168,8 +3117,7 @@ function logoAnima() {
     },
     init: function () {
       this.initializeSwiper();
-      this.categoryLabel();
-      this.shareBtnAnimation();
+      this.categoryLabel();      
       this.tagLinkAnimation();
       this.btnReadAnimation();
       this.NewsLetterAnimation();
