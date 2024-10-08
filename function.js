@@ -1517,12 +1517,11 @@ function burgerAnimation(isHomePage = false) {
         });
 
         tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-                .from(".h1-usp, .gradient", {								
+                .from(".gradient", {								
                 opacity: 0,
                 duration: 0.5,
                 ease: "power2.inOut",
-                stagger: 0.3
-            },"<")
+              },"<")
          .from(".usp .word", {
                 rotationX: 90,
                 transformOrigin: "bottom center",
