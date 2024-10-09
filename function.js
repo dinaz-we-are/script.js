@@ -2644,73 +2644,72 @@ function logoAnima() {
     });
   }
 //funzione per l'animazione ingresso Servizio in HOME e ABOUT
-  function serviceWrapper() {
-    gsap.set(".color-cover", { width: "100%" });
-      // Seleziona tutte le sezioni che devono essere animate
-      document.querySelectorAll(".service-wrapper-container").forEach(container => {
-    
-        // Inizializza SplitType per i paragrafi all'interno del container corrente
-        let paraSplit = new SplitType(container.querySelector(".paragraph-service"), {
-          types: "words",
-          tagName: "span",
-        });
-    
-        // Crea il trigger per l'animazione generale
-        ScrollTrigger.create({
-          trigger: container,
-          start: "top 60%",
-          end: "bottom bottom",
-          scrub: true,
-          toggleActions: "play none none none",
-          onEnter: () => {
-            let tl = gsap.timeline();
-            // Animazione delle parole
-            tl.to(container.querySelector(".color-cover"), {
-              width: "auto",
-              duration: 1,
-              ease: "back.out(1.7)",
-            })
-            .from(container.querySelectorAll(".paragraph-service .word"), {
-              delay:0.2,
-              opacity: 0.2,
-              stagger: 0.05,
-              ease: "back.out(1.7)",
-            },"<");
-    
-            if (window.innerWidth > 992) {         
-              tl.from(container.querySelectorAll(".list"), {
-                opacity: 0,
-                y: -200,
-                duration: 1,
-                stagger: 0.1,
-                ease: "back.out(1.7)",
-                onComplete: () => {
-                  container.querySelectorAll(".list").forEach(el => el.style = "");
-                }
-              }, "<");
-            } else {        
-              tl.from(container.querySelectorAll(".list"), {
-                delay:0.2,
-                opacity: 0,
-                x: -100,
-                duration: 0.8,
-                stagger: 0.15,
-                ease: "power2.out",
-                onComplete: () => {
-                  container.querySelectorAll(".list").forEach(el => el.style = "");
-                }
-              }, "<");
-            }
-          },
-        });
+function serviceWrapper() {
+  gsap.set(".color-cover", { width: "101%" });
+    // Seleziona tutte le sezioni che devono essere animate
+    document.querySelectorAll(".service-wrapper-container").forEach(container => {
+  
+      // Inizializza SplitType per i paragrafi all'interno del container corrente
+      let paraSplit = new SplitType(container.querySelector(".paragraph-service"), {
+        types: "words",
+        tagName: "span",
       });
-    
-      // Aggiorna ScrollTrigger per riflettere i nuovi elementi
-      ScrollTrigger.refresh();
-    }  
+  
+      // Crea il trigger per l'animazione generale
+      ScrollTrigger.create({
+        trigger: container,
+        start: "top 60%",
+        end: "bottom bottom",
+        scrub: true,
+        toggleActions: "play none none none",
+        onEnter: () => {
+          let tl = gsap.timeline();
+          // Animazione delle parole
+          tl.to(container.querySelector(".color-cover"), {
+            width: "auto",
+            duration: 0.6,
+            ease: "power2.inOut",
+          })
+          .from(container.querySelectorAll(".paragraph-service .word"), {              
+            opacity: 0.2,
+            stagger: { amount: 0.2},
+            ease: "back.out(1.7)",
+          },"-=0.4");
+  
+          if (window.innerWidth > 992) {         
+            tl.from(container.querySelectorAll(".list"), {
+              opacity: 0,
+              y: -200,
+              duration: 1,
+              stagger: 0.1,
+              ease: "back.out(1.7)",
+              onComplete: () => {
+                container.querySelectorAll(".list").forEach(el => el.style = "");
+              }
+            }, "<");
+          } else {        
+            tl.from(container.querySelectorAll(".list"), {
+              delay:0.2,
+              opacity: 0,
+              x: -100,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "back.out(1.7)",
+              onComplete: () => {
+                container.querySelectorAll(".list").forEach(el => el.style = "");
+              }
+            }, "<");
+          }
+        },
+      });
+    });
+  
+    // Aggiorna ScrollTrigger per riflettere i nuovi elementi
+    ScrollTrigger.refresh();
+  } 
 //funzione per l'animazione ingresso Servizio in pagina
     function servicePageWrapper() {
-      gsap.set(".color-cover", { width: "100%" });      
+      gsap.set(".color-cover", { width: "101%" });      
     
       // Seleziona tutte le sezioni che devono essere animate
       document.querySelectorAll(".service-wrapper-container").forEach(container => {     
@@ -2726,9 +2725,9 @@ function logoAnima() {
           onEnter: () => {           
             // Animazione della cover
             gsap.to(container.querySelector(".color-cover"), {
-              width: "auto",
-              duration: 1,
-              ease: "back.out(1.7)",
+            width: "auto",
+            duration: 0.6,
+            ease: "power2.inOut",
             })
           },
         });
