@@ -4,8 +4,11 @@ module.exports = {
   mode: 'production',  
   entry: './src/index.js',  // Punto di ingresso
   output: {
-    filename: 'bundle.js',  // Nome del file di output
+    filename: 'gsap-bundle.js',  // Nome del file di output
     path: path.resolve(__dirname, 'dist'),  // Directory di output
+    library: 'GSAPBundle', // Nome del bundle esportato
+    libraryTarget: 'umd', // Target UMD per compatibilità con Webflow
+    globalObject: 'this' // Assicura compatibilità con ambienti browser
   },
   module: {
     rules: [
@@ -25,4 +28,3 @@ module.exports = {
     minimize: true,  // Abilita la minificazione per la produzione
   },
 };
-
