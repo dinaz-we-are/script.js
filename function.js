@@ -1528,7 +1528,7 @@ function burgerAnimation(isHomePage = false) {
       onComplete: () => {
         console.log("Tutte le animazioni sono completate");
         // Aggiungi qui il callback, per esempio, l'avvio di una nuova animazione
-        animaArrow2();
+        animaArrow();
       },
     });
   
