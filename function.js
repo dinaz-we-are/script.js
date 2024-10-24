@@ -709,16 +709,7 @@ function burgerAnimation(isHomePage = false) {
   //
   // SecondSection
   function secondSection(isHomePage = false) {
-    if (isHomePage) {
-      // Animazione zIndex Hero specifica per la home page
-      ScrollTrigger.create({
-        trigger: ".hero-spacer",
-        start: "top 20%",
-        end: "top top",
-        onEnter: () => {
-          gsap.to("#hero", { zIndex: 1 });
-        },
-      });
+    if (isHomePage) {    
     }
   
     const mm = gsap.matchMedia();
@@ -1123,45 +1114,56 @@ function burgerAnimation(isHomePage = false) {
         .trim();
   
       // Crea una timeline per hover e touch
-      const createTimeline = (width) => {
+      const createTimeline = () => {
         const animationTimeline = gsap.timeline({ paused: true });
   
-        animationTimeline.to(
-          gradientDiv,
-          {
-            backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
-            duration: 0.8,
-            ease: "linear",
-          },
-          0
-        );
-        animationTimeline.to(
-          box.querySelector(".button-spacer"),
-          {
-            width: width,
-            duration: 0.6,
-            ease: "back.out(1.7)",
-          },
-          0
-        );
-        animationTimeline.to(
-          ":root",
-          {
-            "--padding-button": "20",
-            duration: 0.6,
-            ease: "power2.out",
-          },
-          0
-        );
-        animationTimeline.to(
-          box.querySelector(".text-cta"),
-          {
-            scale: 1.1,
-            duration: 0.6,
-            ease: "power1.out",
-          },
-          0
-        );
+        animationTimeline
+          .to(
+            gradientDiv,
+            {
+              backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
+              duration: 0.8,
+              ease: "linear",
+            },
+            0
+          )
+          .to(
+            box.querySelector(".button-spacer"),
+            {
+              width: "5%",
+              duration: 0.6,
+              ease: "power2.out",
+            },
+            "<"
+          )
+          .to(
+            box.querySelector(".button-bg-gradient-cover"),
+            {
+              x: "-100%",
+              duration: 0.6,
+              ease: "expo.out",
+            },
+            "<"
+          )
+          .to(
+            box.querySelector(".text-cta"),
+            {
+              marginRight: "0.75rem",
+              color: "black",
+              duration: 0.5,
+              ease: "power2.out",
+            },
+            "<"
+          )
+          .to(
+            box.querySelector(".freccia-cta"),
+            {
+              "--freccia-cta": "#0d0d0d",
+              duration: 0.5,
+              ease: "power2.out",
+            },
+            "<"
+          );
   
         // Gestisci gli eventi hover e touch
         const playAnimation = () => animationTimeline.play();
@@ -1176,19 +1178,11 @@ function burgerAnimation(isHomePage = false) {
       };
   
       gsap.matchMedia().add("(min-width: 992px)", () => {
-        createTimeline("10%");
+        createTimeline(); // Ora usa la larghezza fissa di 5%
       });
   
       gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
-        createTimeline("0%");
-      });
-  
-      ScrollTrigger.create({
-        trigger: box,
-        start: "top 95%",
-        end: "bottom 5%",
-        toggleActions: "play none none reverse",
-        onEnter: () => gsap.to(box, { x: 0, duration: 0.6, ease: "power2.out" }),
+        createTimeline(); // Usa la stessa larghezza anche su schermi piccoli
       });
   
       // Attivare l'animazione in loop per viewport < 992px
@@ -1225,6 +1219,17 @@ function burgerAnimation(isHomePage = false) {
         box.addEventListener("mouseenter", stopLoop);
         box.addEventListener("mouseleave", resumeLoop);
       });
+  
+      if (!box.classList.contains("herotop")) {
+        ScrollTrigger.create({
+          trigger: box,
+          start: "top 95%",
+          end: "bottom 5%",
+          toggleActions: "play none none reverse",
+          onEnter: () =>
+            gsap.to(box, { x: 0, duration: 0.6, ease: "power2.out" }),
+        });
+      }
     });
   }
   //
@@ -1504,110 +1509,500 @@ function burgerAnimation(isHomePage = false) {
  
   //
   function initializeGSAPAnimations() {
-    // Inizializza SplitType una volta sola, fuori dalle condizioni di media query
-      let uspSplit = new SplitType(".usp", {
-        types: "words",
-        tagName: "span",
+    const tl1 = gsap.timeline({
+      onComplete: () => {
+        document.getElementById("cover-div").style.display = "none";
+      },
     });
-   
-      const tl = gsap.timeline({
-          onComplete: () => {
-            document.getElementById('cover-div').style.display = 'none';
-          }
-        });
-
-        tl.to("#cover-div", { opacity: 0, duration: 0.1 })
-                .from(".gradient", {								
-                opacity: 0,
-                duration: 0.5,
-                ease: "power2.inOut",
-              },"<")
-         .from(".usp .word", {
-                rotationX: 90,
-                transformOrigin: "bottom center",
-                duration: 0.5,
-                ease: "power2.inOut",
-                stagger: { amount: 0.6 }
-            },"-=0.1")
-            .from("#nav", {
-                y: "-5rem",
-                duration: 0.3,
-                ease: "back.out(1.7)"
-            },"<")       
-            .from("#arrow, .scorri", {
-                y: "-50vh",
-                opacity: 0,
-                duration: 0.5,
-                ease: "power2",
-                stagger:0.3,
-            }, "<")    
-            .to(":root", {
-                duration: 1,
-                "--linear-grad2": "#e0ff0d",
-                ease: "power2.inOut",
-            }, "-=0.5");
-    
+    let rotationAnimation;
+    const tlLogo = gsap.timeline();
+    const tld = gsap.timeline();
+    const tle = gsap.timeline();
+    const tls = gsap.timeline();
+    const tli = gsap.timeline();
+    const tlg = gsap.timeline();
+    const tln = gsap.timeline();
+    const tlPlus = gsap.timeline();
+    const tlSviluppo = gsap.timeline();
+    const masterTimeline = gsap.timeline({
+      onComplete: () => {
+        console.log("Tutte le animazioni sono completate");
+        // Aggiungi qui il callback, per esempio, l'avvio di una nuova animazione
+        animaArrow2();
+      },
+    });
+  
+    masterTimeline
+      .add(tlSviluppo, 0.1)
+      .add(tlLogo, 0.9)
+      .add(tld, 0.5)
+      .add(tle, 1.4)
+      .add(tlg, 2.1)
+      .add(tls, 2)
+      .add(tli, 3)
+      .add(tln, 3.4)
+      .add(tlPlus, 2.6);
+  
+    tl1.to("#cover-div", { opacity: 0, duration: 0.1 });
     gsap.timeline().call(function () {
-        console.log("Animazione completata");
+      console.log("Animazione completata");
     });
-}
+  
+    tld.from(".letter.d", {
+      rotationY: 90,
+      ease: "power2.out",
+      duration: 1,
+    });
+    tlLogo
+      .from("#Vect-1", {
+        x: "-120%",
+        duration: 1,
+        ease: "expo.out",
+      })
+      .from(
+        "#Vect-2",
+        {
+          x: "120%",
+          duration: 0.5,
+          ease: "expo.out",
+        },
+        "<"
+      )
+      .to(
+        "#Mask-brand",
+        {
+          rotate: -360,
+          transformOrigin: "center",
+          duration: 0.8,
+          ease: "linear",
+        },
+        "-=0.1"
+      );
+    tle
+      .from(".svg-letter-ee", {
+        y: "-150%",
+        ease: "elastic.out",
+        duration: 1,
+      })
+      .to(".svg-letter-ee", {
+        rotationY: 90,
+        ease: "linear",
+        transformOrigin: "right",
+        duration: 0.5,
+      })
+      .from(
+        ".letter.ee",
+        {
+          rotationY: -90,
+          transformOrigin: "left",
+          ease: "linear",
+          duration: 0.5,
+        },
+        "-=0.3"
+      );
+  
+    tls.from(".letter.s", {
+      y: "150%",
+      duration: 0.5,
+      ease: "power2.inOut", // Movimento fluido
+    });
+  
+    tlg
+      .from(".letter.g", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      })
+      .from(
+        ".letter.g",
+        {
+          rotation: -720,
+          duration: 1,
+          ease: "expo.out",
+        },
+        "<"
+      )
+      .to(".letter.g", {
+        rotationZ: 0,
+        duration: 0.8,
+        ease: "power2.inOut",
+      })
+      .to(
+        ".svg-letter-e",
+        {
+          rotationY: -90,
+          transformOrigin: "right",
+          duration: 0.5,
+          ease: "linear",
+        },
+        "-=1"
+      )
+      .to(
+        ".letter.e",
+        {
+          rotationY: 0,
+          transformOrigin: "left",
+          duration: 0.5,
+          ease: "linear",
+        },
+        "-=0.5"
+      );
+  
+    tli
+      .from(".letter.i", {
+        y: "-100%",
+        duration: 1,
+        ease: "power2.inOut",
+      })
+      .from(
+        ".letter.agency",
+        {
+          x: "200%",
+          duration: 0.5,
+          ease: "expo.out",
+        },
+        "-=0.4"
+      );
+  
+    tln
+      .from(".letter.n", {
+        x: "-100%",
+        duration: 1,
+        ease: "power2.inOut",
+      })
+      .to(".letter.d", {
+        y: "-50%",
+        ease: "bouce.out",
+        duration: 0.5,
+        yoyo: true,
+        repeat: 1,
+      })
+      .from(
+        ".letter.web",
+        {
+          y: -200,
+          duration: 0.5,
+          ease: "expo.out",
+        },
+        "-=0.3"
+      )
+      .from(
+        "#asterix-mask",
+        {
+          rotate: -180,
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "power2",
+        },
+        "<"
+      )
+      .to(
+        "#web1",
+        {
+          x: 0,
+          duration: 0.5,
+          ease: "power2",
+        },
+        "<"
+      );
+  
+    tlSviluppo
+      .from(".span-parentesi1, .span-parentesi2", {
+        rotationY: -810, // Ruotate fuori dallo schermo
+        duration: 2.5,
+        ease: "power2.inOut",
+      })
+      .to(".span-parentesi2", {
+        x: "0%",
+        duration: 0.6, // Durata dell'espansione
+        ease: "power2.out",
+      })
+      .to(".btn-cta.herotop", { x: 0, duration: 0.5, ease: "power2.out" }, "<")
+      .from(
+        ".letter.hidden, .letter.p1, .letter.p2, .svg-letter-o",
+        {
+          rotationY: -90,
+          duration: 0.3, // Durata dell'espansione
+          ease: "power2.out",
+          stagger: 0.1,
+        },
+        "-=0.6"
+      )
+      .to(".letter.p2", {
+        rotationY: "0",
+        duration: 1,
+        ease: "back.out(1.7)",
+      })
+      .to(
+        ".letter.hidden",
+        {
+          y: "100%",
+          duration: 1,
+          ease: "back.out(1.7)",
+          stagger: 0.2,
+        },
+        "-=0.6"
+      )
+      .to(
+        ".letter.sviluppo",
+        {
+          y: 0,
+          duration: 1,
+          ease: "back.out(1.7)",
+          stagger: 0.2,
+        },
+        "<"
+      );
+    tlPlus
+      .from(
+        ".h2-tagline",
+        {
+          rotationX: 90,
+          duration: 1,
+          ease: "back.out(1.7)",
+        },
+        "<"
+      )
+      .from(
+        "#nav",
+        {
+          y: "-5rem",
+          duration: 0.5,
+          ease: "back.out(1.7)",
+        },
+        "<"
+      )
+      .from(
+        ".div-scorri",
+        {
+          y: "5rem",
+          duration: 0.5,
+          ease: "back.out(1.7)",
+        },
+        "<"
+      );
+    return masterTimeline;
+  }
 
     // Animazione freccia
-  function animaArrow() {
-      // Animazione del gradiente con rotazione completa in 10 secondi
-      let tl = gsap.timeline({ repeat: -1 });
-      
-      tl.to(".h1-usp", {
-          duration: 10,
-          onUpdate: function() {
-              // Ruotiamo l'angolo del gradiente partendo da 0 gradi e completando un giro
-              let progress = 0 + tl.progress() * 360;
-              gsap.set(".h1-usp", {
-                  backgroundImage: `linear-gradient(${progress}deg, #272727 0%, #ffffff 90%)`
-              });
-          }
-      });
-  
-      // Animazione del globo che ruota su se stesso
-      let globeAnimation = gsap.to(".globo", {
-          rotation: "+=360", // Rotazione completa
-          duration: 10, // Durata della rotazione
-          ease: "none", // Nessun easing per rotazione continua
-          repeat: -1 // Ripeti all'infinito
-          
-      });
-  
-      // Animazione della freccia che rimbalza
-      let arrowAnimation = gsap.to("#arrow", {        
-          scale: 0.5,
-          ease: "power2.inOut",
-          duration: 2,
-          repeat: -1,
-          yoyo: true
-      });
-  
-      // Ferma entrambe le animazioni quando ".hero-spacer" entra nella viewport
-      ScrollTrigger.create({
-          trigger: ".hero-spacer",
-          start: "top bottom",
-          end: "top 90%",
-          scrub: true,
-          onEnter: () => {
-              arrowAnimation.pause();
-              globeAnimation.pause();
-              tl.pause();
+    function animaArrow() {
+      // Anima da web1 a web2
+      let tlWeb1to2 = gsap.timeline();
+      let tlWeb2to3 = gsap.timeline();
+      let tlWeb3to4 = gsap.timeline();
+      let tlWeb4to1 = gsap.timeline();
+    
+      tlWeb1to2
+        .to("#asterix-mask", {
+          delay: 2,
+          rotate: "+=180",
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "linear",
+        })
+        .to(
+          "#web1",
+          {
+            x: "200%",
+            duration: 0.5,
+            ease: "power2.inOut",
           },
-          onLeaveBack: () => {
-              arrowAnimation.play();
-              globeAnimation.play();
-              tl.play();
-          }
+          "<"
+        )
+        .to(
+          "#web2",
+          {
+            x: 0,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to("#web1", { opacity: 0, x: "-200%", duration: 0 })
+        .to("#web1", { opacity: 1 });
+    
+      // Anima da web2 a web3
+      tlWeb2to3
+        .to("#asterix-mask", {
+          delay: 2,
+          rotate: "+=180",
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "linear",
+        })
+        .to(
+          "#web2",
+          {
+            x: "200%",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to(
+          "#web3",
+          {
+            x: 0,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to("#web2", { opacity: 0, x: "-200%", duration: 0 })
+        .to("#web2", { opacity: 1 });
+    
+      // Anima da web3 a web4
+      tlWeb3to4
+        .to("#asterix-mask", {
+          delay: 2,
+          rotate: "+=180",
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "linear",
+        })
+        .to(
+          "#web3",
+          {
+            x: "200%",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to(
+          "#web4",
+          {
+            x: 0,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to("#web3", { opacity: 0, x: "-200%", duration: 0 })
+        .to("#web3", { opacity: 1 });
+    
+      // Anima da web4 a web1 (riavvio del ciclo)
+      tlWeb4to1
+        .to("#asterix-mask", {
+          delay: 2,
+          rotate: "+=180",
+          transformOrigin: "center",
+          duration: 0.5,
+          ease: "linear",
+        })
+        .to(
+          "#web4",
+          {
+            x: "200%",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to(
+          "#web1",
+          {
+            x: 0,
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+        .to("#web4", { opacity: 0, x: "-200%", duration: 0 })
+        .to("#web4", { opacity: 1 });
+    
+      // Metti tutte le timeline in una principale con ripetizione infinita
+      let webAnimation = gsap.timeline({ repeat: -1 });
+      webAnimation.add(tlWeb1to2).add(tlWeb2to3).add(tlWeb3to4).add(tlWeb4to1);
+    
+      // Animazione rotazione continua del design
+      let designAnimation = gsap.timeline({ repeat: -1 });
+      designAnimation
+        .to(".letter.i", {
+          delay: 1,
+          rotationX: -90,
+          transformOrigin: "center",
+          duration: 1,
+          ease: "power2.inOut",
+        })
+        .to(".svg-letter-i", {
+          transformOrigin: "center",
+          rotationX: 0,
+          duration: 1,
+          ease: "back.out(3)",
+        })
+        .to(".svg-letter-i", {
+          delay: 1,
+          rotationX: -270,
+          transformOrigin: "center",
+          duration: 1,
+          ease: "back.out(3)",
+        })
+        .to(".letter.i", {
+          transformOrigin: "center",
+          rotationX: 0,
+          duration: 1,
+          ease: "back.out(3)",
+        });
+    
+      let scorriAnimation = gsap.timeline({ repeat: -1 });
+      scorriAnimation
+        .to(".span-scorri", {
+          delay: 2,
+          opacity: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        })
+        .to(
+          ".freccia-scorri",
+          {
+            opacity: 1,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          "-=0.5"
+        )
+        .to(".freccia-scorri", {
+          delay: 2,
+          opacity: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        })
+        .to(
+          ".span-scorri",
+          {
+            opacity: 1,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          "-=0.5"
+        );
+    
+      // Ferma le animazioni quando ".hero" esce dalla viewport
+      ScrollTrigger.create({
+        trigger: ".hero",
+        start: "bottom center",
+        end: "bottom top",
+        scrub: true,
+        onEnter: () => {
+          webAnimation.pause();
+          designAnimation.pause();
+          scorriAnimation.pause();
+        },
+        onLeaveBack: () => {
+          webAnimation.play();
+          designAnimation.play();
+          scorriAnimation.play();
+        },
       });
-  
+    
       // Avvia tutte le animazioni
-      arrowAnimation.play();
-      globeAnimation.play();    
-  }
+      webAnimation.play();
+      designAnimation.play();
+      scorriAnimation.play();
+    }
+
  function initializeScrollFlipAnimations() {
   function attr(defaultVal, attrVal) {
     const defaultValType = typeof defaultVal;
@@ -1680,119 +2075,126 @@ function burgerAnimation(isHomePage = false) {
   //scrollTrigger
   function createScrollTriggerHero() {
     ScrollTrigger.create({
-        scrub: true,
-        trigger: ".hero-trigger",
-        start: "top 95%",
-        end: "top 85%",
-        onEnter: () => {
-            gsap.timeline()
-                .to(".usp .word, .scorri", {
-                    opacity: 0,
-                    x: "100vw",
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                    stagger: { amount: 0.3 },
-                })
-                .to(".h1-usp", {
-                opacity:0,
-								duration:0.25,
-                ease:"linear"
-                },"<")
-                .to(".gradient", {
-                  scale:0,
-                  opacity:0
-                },"<")               
-                .to(".brand_header", {
-                    y: "-10rem",
-                    opacity: 0,
-                    ease: "back.out(1.7)",
-                    duration: 1,
-                }, "<");
-        },
-        onLeaveBack: () => {
-            gsap.timeline()
-                .to(".usp .word, .scorri", {
-                    opacity: 1,
-                    x: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                    stagger: { amount: 0.3 },
-                })  
-                 .to(".h1-usp", {
-                opacity:1,
-								duration:0.5,
-                ease:"linear"
-                },"<")
-                .to(".gradient", {
-                  scale:1,
-                  opacity:1
-                },"<")    
-                .to(".brand_header", {
-                    y: 0,
-                    opacity: 1,
-                    ease: "back.out(1.7)",
-                    duration: 1,
-                }, "<");
-        },
+      trigger: ".hero-trigger",
+      start: "top 95%",
+      end: "top 85%",
+      onEnter: () => {
+        gsap.to(
+          ".brand_header",
+          {
+            y: "-10rem",
+            opacity: 0,
+            ease: "none",
+            duration: 1,
+          },
+          "<"
+        );
+      },
+      onLeaveBack: () => {
+        gsap.to(
+          ".brand_header",
+          {
+            y: 0,
+            opacity: 1,
+            ease: "none",
+            duration: 1,
+          },
+          "<"
+        );
+      },
     });
-
+    const navbar = document.querySelector("#nav"); // Seleziona la navbar
+    const heroCta = document.querySelector(".btn-cta.herotop");
+  
     ScrollTrigger.create({
-        trigger: ".hero-trigger",
-        start: "bottom 35%",
-        end: "bottom center",
-        scrub: true,
-        toggleActions: "play none none reverse",
-        onEnter: () => {
-            gsap.timeline()
-                .to("#nav", {
-                    backdropFilter: "blur(10px)",
-                    boxShadow: "0 2px 5px 2px rgba(0, 0, 0, 0.4)",
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                })
-                .to("#logo-home", {
-                    opacity: 1,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
-                .to(".call, .header", {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
-                .to(".cta-contact-nav", {
-                    y: 0,
-                    duration: 0.5,
-                    ease: "back.out(1.7)",
-                }, "<");
-        },
-        onLeaveBack: () => {
-            gsap.timeline()
-                .to(".call, .header", {
-                    opacity: 1,
-                    duration: 1,
-                    ease: "none",
-                }, "<")
-                .to("#nav", {
-                    backdropFilter: "blur(0px)",
-                    boxShadow: "none",
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
-                .to("#logo-home", {
-                    opacity: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                }, "<")
-                .to(".cta-contact-nav", {
-                    y: "-5rem",
-                    duration: 0.5,
-                    ease: "back.out(1.7)",
-                }, "<");
-        },
+      trigger: heroCta,
+      start: () => `top ${navbar.offsetHeight}px`,
+      end: "bottom top",
+      scrub: true,
+      toggleActions: "play none none reverse",
+      onEnter: () => {
+        gsap
+          .timeline()
+          .to("#nav", {
+            boxShadow: "0 2px 5px 2px rgba(0, 0, 0, 0.4)",
+            duration: 0.5,
+            ease: "power4.inOut",
+          })
+          .to(
+            "#cta-nav",
+            {
+              y: 0,
+              duration: 0.3,
+              ease: "power4.inOut",
+            },
+            "<"
+          )
+          .to(
+            ".header",
+            {
+              height: "0rem",
+              duration: 0.3,
+              ease: "power4.inOut",
+            },
+            "<"
+          )
+          .to(
+            ".div-scorri",
+            {
+              rotationX: 90,
+              transformOrigin: "bottom",
+              duration: 0.5,
+              ease: "power4.inOut",
+              stagger: { amount: 0.3 },
+            },
+            "<"
+          );
+      },
+      onLeaveBack: () => {
+        gsap
+          .timeline()
+          .to(
+            "#nav",
+            {
+              boxShadow: "none",
+              duration: 0.5,
+              ease: "power4.inOut",
+            },
+            "<"
+          )
+          .to(
+            "#cta-nav",
+            {
+              y: "-5rem",
+              duration: 0.3,
+              ease: "power4.inOut",
+            },
+            "<"
+          )
+          .to(
+            ".header",
+            {
+              height: "",
+              duration: 0.3,
+              ease: "power4.inOut",
+            },
+            "-=0.2"
+          )
+          .to(
+            ".div-scorri",
+            {
+              rotationX: 0,
+              transformOrigin: "bottom",
+              duration: 0.5,
+              ease: "power4.inOut",
+              stagger: { amount: 0.3 },
+            },
+            "<"
+          );
+      },
     });
     ScrollTrigger.refresh();
-}  
+  }
   //
 //CECO
 const cecoStretegy = {
@@ -1839,8 +2241,7 @@ const cecoStretegy = {
     // Animazioni per tutte le dimensioni
     tl.to(".top-wrapper", {
       y: "-55vh",
-      duration: 1,
-      borderRadius: "5rem",
+      duration: 1,      
     })
       .to(
         ".ceco-heading",
@@ -1877,8 +2278,7 @@ const cecoStretegy = {
         ".bottom-wrapper",
         {
           y: "60vh",
-          duration: 1,
-          borderRadius: "5rem",
+          duration: 1,          
         },
         "<"
       );
@@ -2646,16 +3046,10 @@ function logoAnima() {
 //funzione per l'animazione ingresso Servizio in HOME e ABOUT
 function serviceWrapper() {
   gsap.set(".color-cover", { width: "101%" });
-    // Seleziona tutte le sezioni che devono essere animate
-    document.querySelectorAll(".service-wrapper-container").forEach(container => {
-  
-      // Inizializza SplitType per i paragrafi all'interno del container corrente
-      let paraSplit = new SplitType(container.querySelector(".paragraph-service"), {
-        types: "words",
-        tagName: "span",
-      });
-  
-      // Crea il trigger per l'animazione generale
+
+  document
+    .querySelectorAll(".service-wrapper-container")
+    .forEach((container) => {
       ScrollTrigger.create({
         trigger: container,
         start: "top 60%",
@@ -2669,44 +3063,50 @@ function serviceWrapper() {
             width: "auto",
             duration: 0.6,
             ease: "power2.inOut",
-          })
-          .from(container.querySelectorAll(".paragraph-service .word"), {              
-            opacity: 0.2,
-            stagger: { amount: 0.2},
-            ease: "back.out(1.7)",
-          },"-=0.4");
-  
-          if (window.innerWidth > 992) {         
-            tl.from(container.querySelectorAll(".list"), {
-              opacity: 0,
-              y: -200,
-              duration: 1,
-              stagger: 0.1,
-              ease: "back.out(1.7)",
-              onComplete: () => {
-                container.querySelectorAll(".list").forEach(el => el.style = "");
-              }
-            }, "<");
-          } else {        
-            tl.from(container.querySelectorAll(".list"), {
-              delay:0.2,
-              opacity: 0,
-              x: -100,
-              duration: 0.6,
-              stagger: 0.1,
-              ease: "back.out(1.7)",
-              onComplete: () => {
-                container.querySelectorAll(".list").forEach(el => el.style = "");
-              }
-            }, "<");
+          });
+
+          if (window.innerWidth > 992) {
+            tl.from(
+              container.querySelectorAll(".list"),
+              {
+                opacity: 0,
+                y: -200,
+                duration: 1,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                onComplete: () => {
+                  container
+                    .querySelectorAll(".list")
+                    .forEach((el) => (el.style = ""));
+                },
+              },
+              "<"
+            );
+          } else {
+            tl.from(
+              container.querySelectorAll(".list"),
+              {
+                delay: 0.2,
+                opacity: 0,
+                x: -100,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                onComplete: () => {
+                  container
+                    .querySelectorAll(".list")
+                    .forEach((el) => (el.style = ""));
+                },
+              },
+              "<"
+            );
           }
         },
       });
     });
-  
-    // Aggiorna ScrollTrigger per riflettere i nuovi elementi
-    ScrollTrigger.refresh();
-  } 
+
+  ScrollTrigger.refresh();
+}
 //funzione per l'animazione ingresso Servizio in pagina
     function servicePageWrapper() {
       gsap.set(".color-cover", { width: "101%" });      
@@ -2732,7 +3132,7 @@ function serviceWrapper() {
           },
         });
       });
-    
+       
       // Aggiorna ScrollTrigger per riflettere i nuovi elementi
       ScrollTrigger.refresh();
     }
