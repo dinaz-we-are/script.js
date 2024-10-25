@@ -671,8 +671,7 @@ function burgerAnimation(isHomePage = false) {
   };
   
   //DATACOLOR
-  function dataColorAndScrollTop() {
-    // Gestione del cambio di colore con ScrollTrigger
+  function dataColorAndScrollTop() {   
     const elementsWithColor = document.querySelectorAll("[data-color]");
 
     elementsWithColor.forEach((element) => {
@@ -1932,6 +1931,11 @@ function burgerAnimation(isHomePage = false) {
           duration: 1,
           ease: "back.out(3)",
         })
+        .to(":root", { 
+          css: {"--linear-grad2": "#e0ff0d"} ,
+          duration: 1,
+          ease: "back.out(3)",
+        },"<")
         .to(".svg-letter-i", {
           delay: 1,
           rotationX: -270,
@@ -1944,7 +1948,12 @@ function burgerAnimation(isHomePage = false) {
           rotationX: 0,
           duration: 1,
           ease: "back.out(3)",
-        });
+        })
+        .to(":root", { 
+          css: {"--linear-grad2": "#f2f2f2"} ,
+          duration: 1,
+          ease: "back.out(3)",
+        },"<");
     
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
@@ -2241,7 +2250,8 @@ const cecoStretegy = {
     // Animazioni per tutte le dimensioni
     tl.to(".top-wrapper", {
       y: "-55vh",
-      duration: 1,      
+      duration: 1,
+      borderRadius: "1rem"      
     })
       .to(
         ".ceco-heading",
@@ -2268,7 +2278,7 @@ const cecoStretegy = {
         {
           y: "70vh",
           duration: 1,
-          borderRadius: "5rem",
+          borderRadius: "1rem",
         },
         "<"
       );
@@ -2278,7 +2288,8 @@ const cecoStretegy = {
         ".bottom-wrapper",
         {
           y: "60vh",
-          duration: 1,          
+          duration: 1,
+          borderRadius: "1rem"          
         },
         "<"
       );
