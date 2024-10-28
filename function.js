@@ -153,7 +153,7 @@ function burgerAnimation(isHomePage = false) {
         }
         tl.to(
           "#nav",
-          { backgroundColor: "#f2f2f2", duration: 0.5, ease: "linear" },
+          { backgroundColor: "#faffec", duration: 0.5, ease: "linear" },
           "-=0.8"
         )
           .to(
@@ -1099,33 +1099,41 @@ function burgerAnimation(isHomePage = false) {
   
     boxes.forEach((box) => {
       const gradientDiv = box.querySelector(".button-bg-gradient");
+      const gradientLight = box.querySelector(".button-bg-gradient-light");
   
       if (!gradientDiv) {
         console.error("Element gradientDiv not found.");
         return;
       }
   
-      const color1 = getComputedStyle(gradientDiv)
-        .getPropertyValue("--background-first")
-        .trim();
-      const color2 = getComputedStyle(gradientDiv)
-        .getPropertyValue("--primary")
-        .trim();
+      const color1 = getComputedStyle(gradientDiv).getPropertyValue("--background-first").trim();
+      const color2 = getComputedStyle(gradientDiv).getPropertyValue("--primary").trim();
   
-      // Crea una timeline per hover e touch
       const createTimeline = () => {
         const animationTimeline = gsap.timeline({ paused: true });
-  
         animationTimeline
           .to(
             gradientDiv,
             {
               backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
-              duration: 0.8,
-              ease: "linear",
+              duration: 0.6,
+              ease: "sine.inOut",
             },
             0
-          )
+          );
+  
+        if (gradientLight) {
+          animationTimeline.to(
+            gradientLight,
+            {   ease: "sine.inOut",        
+              opacity: 0,
+              duration: 0.6,
+            },
+            "<"
+          );
+        }
+  
+        animationTimeline
           .to(
             box.querySelector(".button-spacer"),
             {
@@ -1133,23 +1141,14 @@ function burgerAnimation(isHomePage = false) {
               duration: 0.6,
               ease: "power2.out",
             },
-            "<"
+            0
           )
-          .to(
-            box.querySelector(".button-bg-gradient-cover"),
-            {
-              x: "-100%",
-              duration: 0.6,
-              ease: "expo.out",
-            },
-            "<"
-          )
+         
           .to(
             box.querySelector(".text-cta"),
             {
-              marginRight: "0.75rem",
-              color: "black",
-              duration: 0.5,
+              marginRight: "0.75rem",         
+              duration: 0.6,
               ease: "power2.out",
             },
             "<"
@@ -1157,14 +1156,13 @@ function burgerAnimation(isHomePage = false) {
           .to(
             box.querySelector(".freccia-cta"),
             {
-              "--freccia-cta": "#0d0d0d",
-              duration: 0.5,
+              scale:1.1,            
+              duration: 0.6,
               ease: "power2.out",
             },
             "<"
           );
   
-        // Gestisci gli eventi hover e touch
         const playAnimation = () => animationTimeline.play();
         const reverseAnimation = () => animationTimeline.reverse();
   
@@ -1177,39 +1175,64 @@ function burgerAnimation(isHomePage = false) {
       };
   
       gsap.matchMedia().add("(min-width: 992px)", () => {
-        createTimeline(); // Ora usa la larghezza fissa di 5%
+        createTimeline();
       });
   
       gsap.matchMedia().add("(min-width: 320px) and (max-width: 991px)", () => {
-        createTimeline(); // Usa la stessa larghezza anche su schermi piccoli
+        createTimeline();
       });
   
-      // Attivare l'animazione in loop per viewport < 992px
       gsap.matchMedia().add("(max-width: 992px)", () => {
-        const loopTimeline = gsap.timeline({ repeat: -1, paused: true });
+        const loopTimeline = gsap.timeline({ repeat: -1, yoyo: true });
   
-        loopTimeline.to(
-          gradientDiv,
-          {
-            backgroundImage: `linear-gradient(to right, ${color2}, ${color1})`,
-            duration: 1.6,
-            ease: "linear",
-          },
-          0
-        );
-        loopTimeline.to(
-          gradientDiv,
-          {
-            backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
-            duration: 1.6,
-            ease: "linear",
-          },
-          1.5
-        );
+        loopTimeline
+          .to(
+            gradientDiv,
+            {
+              backgroundImage: `linear-gradient(to right, ${color1}, ${color2})`,
+              duration: 2,
+              ease: "sine.inOut",
+            },
+            0
+          );
+  
+        if (gradientLight) {
+          loopTimeline.to(
+            gradientLight,
+            {
+              opacity: 0,
+              duration: 2,
+              ease: "sine.inOut",
+            },
+            "<"
+          );
+        }
+  
+        loopTimeline
+          .to(
+            gradientDiv,
+            {
+              backgroundImage: `linear-gradient(to right, ${color2}, ${color1})`,
+              duration: 2,
+              ease: "sine.inOut",
+            },
+            2
+          );
+  
+        if (gradientLight) {
+          loopTimeline.to(
+            gradientLight,
+            {
+              opacity: 1,
+              duration: 2,
+              ease: "sine.inOut",
+            },
+            "<"
+          );
+        }
   
         loopTimeline.play();
   
-        // Gestisci gli eventi touch per interrompere e riavviare l'animazione in loop
         const stopLoop = () => loopTimeline.pause();
         const resumeLoop = () => loopTimeline.play();
   
@@ -1231,6 +1254,7 @@ function burgerAnimation(isHomePage = false) {
       }
     });
   }
+  
   //
   //videoPause
   function videoPause() {
@@ -1794,7 +1818,7 @@ function burgerAnimation(isHomePage = false) {
     
       tlWeb1to2
         .to("#asterix-mask", {
-          delay: 2,
+          delay: 1,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1824,7 +1848,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web2 a web3
       tlWeb2to3
         .to("#asterix-mask", {
-          delay: 2,
+          delay: 1,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1854,7 +1878,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web3 a web4
       tlWeb3to4
         .to("#asterix-mask", {
-          delay: 2,
+          delay: 1,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1884,7 +1908,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web4 a web1 (riavvio del ciclo)
       tlWeb4to1
         .to("#asterix-mask", {
-          delay: 2,
+          delay: 1,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1936,8 +1960,8 @@ function burgerAnimation(isHomePage = false) {
           duration: 1,
           ease: "back.out(3)",
         },"<")
-        .to(".svg-letter-i", {
-          delay: 1,
+        .to(".svg-letter-i", { 
+        	delay: 1,
           rotationX: -270,
           transformOrigin: "center",
           duration: 1,
@@ -1950,7 +1974,7 @@ function burgerAnimation(isHomePage = false) {
           ease: "back.out(3)",
         })
         .to(":root", { 
-          css: {"--linear-grad2": "#f2f2f2"} ,
+          css: {"--linear-grad2": "#faffec"} ,
           duration: 1,
           ease: "back.out(3)",
         },"<");
@@ -1958,7 +1982,7 @@ function burgerAnimation(isHomePage = false) {
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
         .to(".span-scorri", {
-          delay: 2,
+          delay: 1,
           opacity: 0,
           duration: 1,
           ease: "power2.inOut",
@@ -2321,7 +2345,7 @@ const cecoStretegy = {
             ease: "power1.out",
           });
           gsap.to(btn.querySelector(".plus-btn-ceco"), {
-            color: "#f2f2f2",
+            color: "#faffec",
             rotation: 90,
             scale: 1.1,
             duration: 0.5,
