@@ -588,8 +588,7 @@ function burgerAnimation(isHomePage = false) {
         {
           backgroundColor: "#ff006e",
           duration: 0.3,
-          ease:"sine.inOut",
-          paddingLeft:"+=1rem"        
+          ease:"sine.inOut",       
         },    
       )       
       .to(
@@ -608,14 +607,7 @@ function burgerAnimation(isHomePage = false) {
           duration: 0.3,
           ease: "power1.inOut",
         },"<"
-      )
-    .to("#arrow-proposito-link", {
-        color: "#faffec",        
-        duration: 0.3,
-        scale:1.1,
-        x:"10%",
-        ease: "back.out(3)",
-      },"-=0.1");
+      );
   
     // Eventi hover e touch
     linkItem.addEventListener("mouseenter", () => linkHoverTimeline.play());
@@ -2513,7 +2505,7 @@ function swiperHome() {
       centeredSlides: true,
       autoplay: {
         delay: 500,
-        disableOnInteraction: true,
+        disableOnInteraction: false,
       },
       speed: 500,
       on: {
@@ -2563,6 +2555,13 @@ function swiperHome() {
         );
       }
     }  
+    const swiperContainer = document.querySelector('.swiper-container-home');
+    swiperContainer.addEventListener('mouseenter', () => swiper.autoplay.stop());
+    swiperContainer.addEventListener('mouseleave', () => swiper.autoplay.start());
+
+    swiperContainer.addEventListener('touchstart', () => swiper.autoplay.stop());
+    swiperContainer.addEventListener('touchend', () => swiper.autoplay.start());
+    
     var observer = new IntersectionObserver(
       function (entries) {
         entries.forEach((entry) => {
@@ -2621,7 +2620,7 @@ function logoAnima() {
       centeredSlides: true,
       autoplay: {
         delay: 2000,
-        disableOnInteraction: true,
+        disableOnInteraction: false,
       },
       speed: 600,
       effect: "slide",
@@ -2672,6 +2671,13 @@ function logoAnima() {
         }
       });
     }
+
+    const swiperContainer = document.querySelector('.swiper-container');
+    swiperContainer.addEventListener('mouseenter', () => swiper.autoplay.stop());
+    swiperContainer.addEventListener('mouseleave', () => swiper.autoplay.start());
+
+    swiperContainer.addEventListener('touchstart', () => swiper.autoplay.stop());
+    swiperContainer.addEventListener('touchend', () => swiper.autoplay.start());
   
     var observer = new IntersectionObserver(
       function (entries) {
