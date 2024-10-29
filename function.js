@@ -2514,7 +2514,7 @@ function swiperHome() {
       centeredSlides: true,
       autoplay: {
         delay: 500,
-        disableOnInteraction: false,
+        disableOnInteraction: true,
       },
       speed: 500,
       on: {
@@ -2538,7 +2538,7 @@ function swiperHome() {
         scale: 1.1,
         opacity: 1,
         duration: 0.5,
-        ease: "power3.out",
+        ease: "power3.inOut",
       });  
       // Animazioni parallax per slide precedenti e successive
       if (slides[swiper.activeIndex - 1]) {
@@ -2548,7 +2548,7 @@ function swiperHome() {
             scale: 0.5,
             opacity: 0.6,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           }
         );
       }
@@ -2559,7 +2559,7 @@ function swiperHome() {
             scale: 0.5,
             opacity: 0.6,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           }
         );
       }
@@ -2622,9 +2622,10 @@ function logoAnima() {
       centeredSlides: true,
       autoplay: {
         delay: 2000,
-        disableOnInteraction: false,
+        disableOnInteraction: true,
       },
       speed: 600,
+      effect: "slide",
       navigation: {
         nextEl: document.querySelector(".swiper-button-next"),
         prevEl: document.querySelector(".swiper-button-prev"),
@@ -2648,26 +2649,26 @@ function logoAnima() {
             opacity: 1,
             scale: 1,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           });
           gsap.to(slide.querySelector(".parallax-bg-img"), {
             scale: 1,
             opacity: 1,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           });
         } else {
           gsap.to(slide, {
             opacity: 0.6,
             scale: 0.8,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           });
           gsap.to(slide.querySelector(".parallax-bg-img"), {
-            scale: 0.8,
+            scale: 0.9,
             opacity: 0.6,
             duration: 0.5,
-            ease: "power3.out",
+            ease: "power3.inOut",
           });
         }
       });
