@@ -24,7 +24,7 @@ function burgerAnimation(isHomePage = false) {
     })
       .to("#logo-hidden", { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" }, "<")
       .to("#logo-home", { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" }, ">")
-      .to(".line-top, .line-bottom", { backgroundColor: "", duration: 0.3, ease: "linear" }, "0")
+      .call(() => changeLogoColor(), null, 0)
       .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
       .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
       .to(".line-bottom", { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" }, "<")
@@ -99,7 +99,7 @@ function burgerAnimation(isHomePage = false) {
       tl.to("#nav", { backgroundColor: "#faffec", duration: 0.5, ease: "linear" }, "-=0.8")
         .to("#logo-home", { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" }, "<")
         .to("#logo-hidden", { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" }, ">")
-        .to(".line-top, .line-bottom", { backgroundColor: "#0d0d0d", duration: 0.3, ease: "linear" }, "-=0.6")
+        .call(() => changeLogoColor("", "", "", "#0d0d0d"), null, "-=0.6")
         .to(".menu-container", { x: 0, opacity: 1, duration: 0.3, ease: "power1.out" }, "-=0.6");
 
       menuOpen = true;
@@ -108,13 +108,20 @@ function burgerAnimation(isHomePage = false) {
     }
   }
 
-  // Aggiungi l'evento di click per scrollare al top se siamo nella home page
-  if (isHomePage) {
-    brandNavbar.addEventListener("click", scrollToTop);
-  }
-
   burgerButton.addEventListener("click", () => animateBurger(false));
   burgerMobileButton.addEventListener("click", () => animateBurger(true));
+
+  if (isHomePage) {
+    brandNavbar.addEventListener("click", function scrollToTop() {
+      const menuWrapper = document.querySelector(".menu-wrapper");
+      if (menuWrapper && getComputedStyle(menuWrapper).display !== "none") {
+        const isMobile = window.innerWidth <= 767;
+        closeMenu(isMobile, scrollToTop);
+      } else {
+        scrollToTop();
+      }
+    });
+  }
 }
 
    //
@@ -3122,6 +3129,7 @@ function serviceWrapper() {
       }
     };
     }
+
     function transitionPage() {
       let tl1 = gsap.timeline();  
   
