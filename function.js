@@ -234,7 +234,7 @@ function burgerAnimation(isHomePage = false) {
     const pathWrapper = isHomePage ? document.querySelector("#navbar-repo") : null;
     const menuWrapper = document.querySelector(".menu-wrapper");
     let navbarScrollTrigger = null;
-    let lastScrollY = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY; // Usa visualViewport.height su mobile e scrollY su desktop
+    let lastScrollY = window.innerWidth <= 768 ? window.scrollY : window.scrollY; // Usa scrollY per tutti
     let lastDirection = 0;
 
     const showAnim = gsap
@@ -252,19 +252,18 @@ function burgerAnimation(isHomePage = false) {
 
     function createNavbarScrollTrigger() {
       return ScrollTrigger.create({
-        start: "top top",
+        start: isHomePage ? "top 20%" : "top top",
         end: "max",
         refreshPriority: 1,
         onUpdate: (self) => {
           if (isMenuVisible()) return;
 
-          // Seleziona l'altezza della viewport corretta in base al dispositivo
-          const currentViewportHeight = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY;
-          const scrollDirection = currentViewportHeight < lastScrollY ? -1 : 1;
-          
-          // Evita riattivazioni indesiderate dell'animazione con piccole variazioni
-          if (Math.abs(currentViewportHeight - lastScrollY) < 10) return;
-          
+          // Usa scrollY per determinare la direzione dello scroll
+          const scrollDirection = window.scrollY < lastScrollY ? -1 : 1;
+
+          // Controlla variazioni minime per evitare trigger inutili
+          if (Math.abs(window.scrollY - lastScrollY) < 10) return;
+
           if (scrollDirection !== lastDirection) {
             if (scrollDirection === 1) {
               showAnim.reverse();
@@ -273,7 +272,7 @@ function burgerAnimation(isHomePage = false) {
             }
           }
 
-          lastScrollY = currentViewportHeight;
+          lastScrollY = window.scrollY;
           lastDirection = scrollDirection;
         },
       });
@@ -281,6 +280,7 @@ function burgerAnimation(isHomePage = false) {
 
     function checkAndUpdateNavbar() {
       if (isHomePage && pathWrapper) {
+        // In home page, attiva il trigger solo quando si entra nella viewport
         ScrollTrigger.create({
           trigger: pathWrapper,
           start: "top 20%",
@@ -299,6 +299,7 @@ function burgerAnimation(isHomePage = false) {
           },
         });
       } else {
+        // Al di fuori della home, attiva immediatamente il trigger
         navbarScrollTrigger = createNavbarScrollTrigger();
       }
     }
@@ -306,7 +307,7 @@ function burgerAnimation(isHomePage = false) {
     window.addEventListener(
       "resize",
       debounce(() => {
-        lastScrollY = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY;
+        lastScrollY = window.scrollY;
         if (navbarScrollTrigger) {
           navbarScrollTrigger.kill();
           navbarScrollTrigger = createNavbarScrollTrigger();
@@ -331,6 +332,7 @@ function burgerAnimation(isHomePage = false) {
       subtree: true,
     });
 }
+
 
   //
   const menuNavigation = {
@@ -1775,7 +1777,7 @@ function burgerAnimation(isHomePage = false) {
     
       tlWeb1to2
         .to("#asterix-mask", {
-          delay: 1,
+          delay: 0.5,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1805,7 +1807,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web2 a web3
       tlWeb2to3
         .to("#asterix-mask", {
-          delay: 1,
+          delay: 0.5,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1835,7 +1837,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web3 a web4
       tlWeb3to4
         .to("#asterix-mask", {
-          delay: 1,
+          delay: 0.5,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1865,7 +1867,7 @@ function burgerAnimation(isHomePage = false) {
       // Anima da web4 a web1 (riavvio del ciclo)
       tlWeb4to1
         .to("#asterix-mask", {
-          delay: 1,
+          delay: 0.5,
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1939,7 +1941,7 @@ function burgerAnimation(isHomePage = false) {
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
         .to(".span-scorri", {
-          delay: 1,
+          delay: 2,
           opacity: 0,
           duration: 1,
           ease: "power2.inOut",
