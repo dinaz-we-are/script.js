@@ -668,8 +668,7 @@ function burgerAnimation(isHomePage = false) {
       this.animateLinkItemMagazine();
       this.shareBtnAnimation();
     },
-  };
-  
+  };  
   //DATACOLOR
   function dataColorAndScrollTop() {   
     const elementsWithColor = document.querySelectorAll("[data-color]");
