@@ -586,7 +586,7 @@ function burgerAnimation(isHomePage = false) {
       .to(
         linkItem,
         {
-          backgroundColor: "#f06",
+          backgroundColor: "#ff006e",
           duration: 0.2,
           ease:"ease.out",
           paddingLeft:"+=1rem"        
@@ -595,7 +595,7 @@ function burgerAnimation(isHomePage = false) {
       .to(
         [".h-magazine", ".sublink-first-menu"], 
         {
-          color: "#f4f4f4",
+          color: "#faffec",
           duration: 0.3,
           ease: "power1.out",
         }
@@ -610,10 +610,9 @@ function burgerAnimation(isHomePage = false) {
         },"<"
       )
     .to("#arrow-proposito-link", {
-        color: "#f4f4f4",
-        scale: 1.2,
+        color: "#faffec",        
         duration: 0.2,
-        x:"1rem",
+        x:"5%",
         ease: "back.out(3)",
       },"-=0.1");
   
