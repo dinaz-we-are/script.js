@@ -587,8 +587,8 @@ function burgerAnimation(isHomePage = false) {
         linkItem,
         {
           backgroundColor: "#ff006e",
-          duration: 0.2,
-          ease:"ease.out",
+          duration: 0.3,
+          ease:"sine.inOut",
           paddingLeft:"+=1rem"        
         },    
       )       
@@ -597,21 +597,22 @@ function burgerAnimation(isHomePage = false) {
         {
           color: "#faffec",
           duration: 0.3,
-          ease: "power1.out",
-        }
+          ease: "power1.inOut",
+        },"<"
       )
       .to(
         ".span-link-magazine",
         {
           color: "#0d0d0d",
-          rotationZ: 10, // Corretto da "ratationZ" a "rotationZ"
-          duration: 0.2,
-          ease: "power1.out",
+          rotationZ: 10, 
+          duration: 0.3,
+          ease: "power1.inOut",
         },"<"
       )
     .to("#arrow-proposito-link", {
         color: "#faffec",        
-        duration: 0.2,
+        duration: 0.3,
+        scale:1.1,
         x:"5%",
         ease: "back.out(3)",
       },"-=0.1");
