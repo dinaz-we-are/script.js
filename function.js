@@ -3151,15 +3151,15 @@ function serviceWrapper() {
           let currentUrl = anchor.getAttribute("href");
           const isMobile = window.innerWidth <= 767;
           const delay = isMobile ? parseInt(anchor.getAttribute("data-delay"), 10) : 0;
-    
+  
           if (anchor.hostname === window.location.hostname && !currentUrl.includes("#") && anchor.getAttribute("target") !== "_blank") {
             e.preventDefault();
-    
+  
             const navigate = () => {
               let tl = gsap.timeline({ onComplete: () => (window.location.href = currentUrl) });
-              tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100});
+              tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100, opacity: 0 });
             };
-    
+  
             if (delay) {
               setTimeout(navigate, delay);
             } else {
@@ -3168,7 +3168,7 @@ function serviceWrapper() {
           }
         });
       });
-    
+  
     window.onpageshow = function(event) {
       if (event.persisted) {
         window.location.reload();
@@ -3179,64 +3179,64 @@ function serviceWrapper() {
     }
     function transitionPage() {
       let tl1 = gsap.timeline();  
-    
+  
       // Controlla se esiste .cover-page prima di animarla
       if (document.querySelector(".cover-page")) {
         tl1.to(".cover-page", {
           opacity: 1,
-          ease: "power2.out",
-          duration: 0.5,
-        })        
-      .to(".page-heading-wrapper", {
+          ease: "power2.out"
+        });
+      }
+  
+      tl1.to(".page-heading-wrapper", {
         opacity: 1,
-        x: "0vw",
+        x: "0rem",
         ease: "power2.out",
-      })    
-      .to("#nav", {
+      });
+  
+      tl1.to("#nav", {
         y: "0rem",
         ease: "power2.out"
-      },"<");}
-    
+      });
+  
       // link click
       $("a:not(.excluded-class)").on("click", function (e) {
         let currentUrl = $(this).attr("href");
         const isMobile = window.innerWidth <= 767;
         const delay = isMobile ? parseInt($(this).attr("data-delay"), 10) : 0;
-    
+  
         if (
           $(this).prop("hostname") === window.location.host &&
           !currentUrl.includes("#") &&
           $(this).attr("target") !== "_blank"
         ) {
           e.preventDefault();
-    
+  
           if (delay) {
             setTimeout(() => {
               let tl = gsap.timeline({
                 onComplete: () => (window.location.href = currentUrl),
               });
-    
+  
               tl.fromTo(
                 ".page-wrapper, #nav, .menu-wrapper",
                 { xPercent: 0 },
-                { xPercent: 100 }
+                { xPercent: 100, opacity: 0 }
               );
             }, delay);
           } else {
             let tl = gsap.timeline({
               onComplete: () => (window.location.href = currentUrl),
             });
-    
+  
             tl.fromTo(
               ".page-wrapper, #nav, .menu-wrapper",
               { xPercent: 0 },
-              { xPercent: 100 }
+              { xPercent: 100, opacity: 0 }
             );
           }
         }
       });
-    
-      // On Back Button Tap
       window.onpageshow = function (event) {
         if (event.persisted) window.location.reload();
       };
