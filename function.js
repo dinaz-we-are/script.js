@@ -234,15 +234,16 @@ function burgerAnimation(isHomePage = false) {
     const pathWrapper = isHomePage ? document.querySelector("#navbar-repo") : null;
     const menuWrapper = document.querySelector(".menu-wrapper");
     let navbarScrollTrigger = null;
-    let lastScrollY = window.innerWidth <= 768 ? window.scrollY : window.scrollY; // Usa scrollY per tutti
+    let lastScrollY = window.scrollY;
     let lastDirection = 0;
+    const scrollThreshold = 16; // Define 1rem equivalent in pixels
 
     const showAnim = gsap
       .from(stickyElement, {
         yPercent: -100,
         paused: true,
-        duration: 0.2,
-        ease: "ease.out",
+        duration: 0.3,
+        ease: "power2.Out",
       })
       .progress(1);
 
@@ -250,79 +251,64 @@ function burgerAnimation(isHomePage = false) {
       return getComputedStyle(menuWrapper).display === "flex";
     }
 
-    function createNavbarScrollTrigger() {
-      return ScrollTrigger.create({
-        start: isHomePage ? "top 20%" : "top top",
-        end: "max",
-        refreshPriority: 1,
-        onUpdate: (self) => {
-          if (isMenuVisible()) return;
+    function handleScroll() {
+      const currentScrollY = window.scrollY;
+      const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
 
-          // Usa scrollY per determinare la direzione dello scroll
-          const scrollDirection = window.scrollY < lastScrollY ? -1 : 1;
+      // If below threshold, don't trigger the animation
+      if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
 
-          // Controlla variazioni minime per evitare trigger inutili
-          if (Math.abs(window.scrollY - lastScrollY) < 10) return;
-
-          if (scrollDirection !== lastDirection) {
-            if (scrollDirection === 1) {
-              showAnim.reverse();
-            } else {
-              showAnim.play();
-            }
-          }
-
-          lastScrollY = window.scrollY;
-          lastDirection = scrollDirection;
-        },
-      });
+      if (scrollDirection !== lastDirection) {
+        if (scrollDirection === 1) {
+          showAnim.reverse(); // Hide navbar on scroll down
+        } else {
+          showAnim.play(); // Show navbar on scroll up
+        }
+        lastDirection = scrollDirection;
+      }
+      lastScrollY = currentScrollY;
     }
 
-    function checkAndUpdateNavbar() {
+    function initNavbarScroll() {
       if (isHomePage && pathWrapper) {
-        // In home page, attiva il trigger solo quando si entra nella viewport
+        // Trigger only when reaching the pathWrapper section on the home page
         ScrollTrigger.create({
           trigger: pathWrapper,
           start: "top 20%",
           end: "bottom center",
           onEnter: () => {
             if (!navbarScrollTrigger) {
-              navbarScrollTrigger = createNavbarScrollTrigger();
+              navbarScrollTrigger = gsap.ticker.add(handleScroll);
             }
           },
           onLeaveBack: () => {
             if (navbarScrollTrigger) {
-              navbarScrollTrigger.kill();
+              gsap.ticker.remove(handleScroll);
               navbarScrollTrigger = null;
               gsap.set(stickyElement, { y: 0 });
             }
           },
         });
       } else {
-        // Al di fuori della home, attiva immediatamente il trigger
-        navbarScrollTrigger = createNavbarScrollTrigger();
+        navbarScrollTrigger = gsap.ticker.add(handleScroll);
       }
     }
 
-    window.addEventListener(
-      "resize",
-      debounce(() => {
-        lastScrollY = window.scrollY;
-        if (navbarScrollTrigger) {
-          navbarScrollTrigger.kill();
-          navbarScrollTrigger = createNavbarScrollTrigger();
-        }
-        checkAndUpdateNavbar();
-      }, 200), { passive: true }
-    );
+    window.addEventListener("resize", () => {
+      lastScrollY = window.scrollY;
+      if (navbarScrollTrigger) {
+        gsap.ticker.remove(handleScroll);
+        navbarScrollTrigger = null;
+      }
+      initNavbarScroll();
+    });
 
-    checkAndUpdateNavbar();
+    initNavbarScroll();
 
-    // Observer per monitorare le modifiche a .menu-wrapper
     const observer = new MutationObserver(() => {
       if (navbarScrollTrigger) {
-        navbarScrollTrigger.kill();
-        navbarScrollTrigger = createNavbarScrollTrigger();
+        gsap.ticker.remove(handleScroll);
+        initNavbarScroll();
       }
     });
 
@@ -332,7 +318,6 @@ function burgerAnimation(isHomePage = false) {
       subtree: true,
     });
 }
-
 
   //
   const menuNavigation = {
