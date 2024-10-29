@@ -260,17 +260,17 @@ function burgerAnimation(isHomePage = false) {
 
           // Controlla la direzione dello scroll usando visualViewport.height
           const currentViewportHeight = window.visualViewport.height;
-          const scrollDirection = currentViewportHeight > lastScrollY ? -1 : 1;
-          
+          const scrollDirection = currentViewportHeight < lastScrollY ? -1 : 1; // Invertito
+
           // Condizione per evitare che piccoli cambiamenti riattivino l'animazione
           if (Math.abs(currentViewportHeight - lastScrollY) < 10) return;
           
           if (scrollDirection !== lastDirection) {
             // Scroll up
-            if (scrollDirection === -1) {
-              showAnim.play();
+            if (scrollDirection === 1) {
+              showAnim.reverse(); // Nasconde la navbar
             } else {
-              showAnim.reverse();
+              showAnim.play(); // Mostra la navbar
             }
           }
 
@@ -331,6 +331,7 @@ function burgerAnimation(isHomePage = false) {
       subtree: true,
     });
 }
+
   //
   const menuNavigation = {
     animateBurger: function () {
