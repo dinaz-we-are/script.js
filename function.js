@@ -4,6 +4,10 @@ function burgerAnimation(isHomePage = false) {
   const brandNavbar = document.querySelector(".brand-navbar");
   let menuOpen = false;
 
+  function scrollToTop() {
+    gsap.to(window, { scrollTo: 0, duration: 0.5, ease: "power2.out" });
+  }
+
   function closeMenu(isMobile, callback) {
     const tl = gsap.timeline({
       onComplete: () => {
@@ -18,51 +22,27 @@ function burgerAnimation(isHomePage = false) {
       duration: 0.3,
       ease: "power1.out",
     })
-      .to(
-        "#logo-hidden",
-        { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" },
-        "<"
-      )
-      .to(
-        "#logo-home",
-        { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" },
-        ">"
-      )
-      .to(".line-top, .line-bottom", {backgroundColor: "", duration:0.3, ease:"linear"}, "0")
+      .to("#logo-hidden", { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" }, "<")
+      .to("#logo-home", { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" }, ">")
+      .to(".line-top, .line-bottom", { backgroundColor: "", duration: 0.3, ease: "linear" }, "0")
       .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
       .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
-      .to(
-        ".line-bottom",
-        { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
-        "<"
-      )
-      .to(
-        ".line-top",
-        { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
-        "<"
-      )
-      .to(
-        ".menu-wrapper-row",
-        {
-          width: 0,
-          duration: 0.2,
-          ease: "power1.out",
-          stagger: isMobile ? 0.1 : 0.2,
-        },
-        "<"
-      )
+      .to(".line-bottom", { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" }, "<")
+      .to(".line-top", { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" }, "<")
+      .to(".menu-wrapper-row", {
+        width: 0,
+        duration: 0.2,
+        ease: "power1.out",
+        stagger: isMobile ? 0.1 : 0.2,
+      }, "<")
       .set(".cta-contact-nav", { display: "flex" }, "<")
       .set(".brand-container", { display: "none" }, "<")
-      .to(
-        ".cta-contact-nav",
-        {
-          rotationX: 0,
-          opacity: 1,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "<"
-      )
+      .to(".cta-contact-nav", {
+        rotationX: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power1.out",
+      }, "<")
       .to(".page-wrapper", { opacity: 1 }, "-=0.6")
       .set(".menu-wrapper", { display: "none" }, "-=0.4");
 
@@ -92,74 +72,35 @@ function burgerAnimation(isHomePage = false) {
         })
         .set(".brand-container", { display: "flex" })
         .set(".cta-contact-nav", { display: "none" }, "<")
-        .to(
-          ".menu-wrapper-row",
-          {
-            width: "100%",
-            duration: 0.2,
-            ease: "power1.out",
-            stagger: 0.2,
-          },
-          "-=0.5"
-        )
-        .to(
-          ".line-top",
-          {
-            y: isMobile ? "11px" : "14px",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "<"
-        )
-        .to(
-          ".line-bottom",
-          {
-            y: isMobile ? "-11px" : "-14px",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "<"
-        )
-        .to(
-          ".line-middle",
-          { opacity: 0, duration: 0.2, ease: "power1.out" },
-          "<"
-        )
+        .to(".menu-wrapper-row", {
+          width: "100%",
+          duration: 0.2,
+          ease: "power1.out",
+          stagger: 0.2,
+        }, "-=0.5")
+        .to(".line-top", {
+          y: isMobile ? "11px" : "14px",
+          duration: 0.3,
+          ease: "power1.out",
+        }, "<")
+        .to(".line-bottom", {
+          y: isMobile ? "-11px" : "-14px",
+          duration: 0.3,
+          ease: "power1.out",
+        }, "<")
+        .to(".line-middle", { opacity: 0, duration: 0.2, ease: "power1.out" }, "<")
         .to(".line-top", { rotationZ: -45, duration: 0.2, ease: "power1.out" })
-        .to(
-          ".line-bottom",
-          { rotationZ: 45, duration: 0.2, ease: "power1.out" },
-          "<"
-        );
+        .to(".line-bottom", { rotationZ: 45, duration: 0.2, ease: "power1.out" }, "<");
+
       if (isHomePage) {
         tl.to(".background-nav", { opacity: 0, duration: 0.5 }, "-=1");
       }
-      tl.to(
-        "#nav",
-        { backgroundColor: "#faffec", duration: 0.5, ease: "linear" },
-        "-=0.8"
-      )
-        .to(
-          "#logo-home",
-          { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" },
-          "<"
-        )
-        .to(
-          "#logo-hidden",
-          { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" },
-          ">"
-        )
-        .to(".line-top, .line-bottom", {backgroundColor: "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
-        .to(
-          ".menu-container",
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "-=0.6"
-        );
+
+      tl.to("#nav", { backgroundColor: "#faffec", duration: 0.5, ease: "linear" }, "-=0.8")
+        .to("#logo-home", { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" }, "<")
+        .to("#logo-hidden", { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" }, ">")
+        .to(".line-top, .line-bottom", { backgroundColor: "#0d0d0d", duration: 0.3, ease: "linear" }, "-=0.6")
+        .to(".menu-container", { x: 0, opacity: 1, duration: 0.3, ease: "power1.out" }, "-=0.6");
 
       menuOpen = true;
     } else {
@@ -167,9 +108,15 @@ function burgerAnimation(isHomePage = false) {
     }
   }
 
+  // Aggiungi l'evento di click per scrollare al top se siamo nella home page
+  if (isHomePage) {
+    brandNavbar.addEventListener("click", scrollToTop);
+  }
+
   burgerButton.addEventListener("click", () => animateBurger(false));
   burgerMobileButton.addEventListener("click", () => animateBurger(true));
 }
+
    //
   function initializeScrollControlButtons() {
     const blockScrollButtons = document.querySelectorAll("[data-block-scroll]");
