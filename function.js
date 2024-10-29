@@ -613,7 +613,7 @@ function burgerAnimation(isHomePage = false) {
         color: "#faffec",        
         duration: 0.3,
         scale:1.1,
-        x:"5%",
+        x:"10%",
         ease: "back.out(3)",
       },"-=0.1");
   
