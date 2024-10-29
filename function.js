@@ -1,205 +1,175 @@
 function burgerAnimation(isHomePage = false) {
-    const burgerButton = document.querySelector("#burger");
-    const burgerMobileButton = document.querySelector("#burger-mobile");
-    const brandNavbar = document.querySelector(".brand-navbar");
-    let menuOpen = false;
-  
-    function performScroll() {
-      gsap.to(document.body, {
-        duration: 0.2,
-        opacity: 0,
-        onComplete: function () {
-          gsap.to(window, {
-            scrollTo: { y: 0 },
-            onComplete: function () {
-              gsap.to(document.body, { duration: 0.2, opacity: 1 });
-            },
-          });
+  const burgerButton = document.querySelector("#burger");
+  const burgerMobileButton = document.querySelector("#burger-mobile");
+  const brandNavbar = document.querySelector(".brand-navbar");
+  let menuOpen = false;
+
+  function closeMenu(isMobile, callback) {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        ScrollTrigger.refresh();
+        if (callback) callback();
+      },
+    });
+
+    tl.to(".menu-container", {
+      x: "-100vw",
+      opacity: 0,
+      duration: 0.3,
+      ease: "power1.out",
+    })
+      .to(
+        "#logo-hidden",
+        { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" },
+        "<"
+      )
+      .to(
+        "#logo-home",
+        { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" },
+        ">"
+      )
+      .to(".line-top, .line-bottom", {backgroundColor: "", duration:0.3, ease:"linear"}, "0")
+      .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
+      .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
+      .to(
+        ".line-bottom",
+        { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
+        "<"
+      )
+      .to(
+        ".line-top",
+        { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
+        "<"
+      )
+      .to(
+        ".menu-wrapper-row",
+        {
+          width: 0,
+          duration: 0.2,
+          ease: "power1.out",
+          stagger: isMobile ? 0.1 : 0.2,
         },
-      });
+        "<"
+      )
+      .set(".cta-contact-nav", { display: "flex" }, "<")
+      .set(".brand-container", { display: "none" }, "<")
+      .to(
+        ".cta-contact-nav",
+        {
+          rotationX: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power1.out",
+        },
+        "<"
+      )
+      .to(".page-wrapper", { opacity: 1 }, "-=0.6")
+      .set(".menu-wrapper", { display: "none" }, "-=0.4");
+
+    if (isHomePage) {
+      tl.to(".background-nav", { opacity: 1, duration: 0 }, "-=1");
     }
-  
-    function closeMenu(isMobile, callback) {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          ScrollTrigger.refresh();
-          if (callback) callback();
-        },
-      });
-  
-      tl.to(".menu-container", {
-        x: "-100vw",
-        opacity: 0,
-        duration: 0.3,
-        ease: "power1.out",
-      })
+
+    menuOpen = false;
+  }
+
+  function animateBurger(isMobile, callback) {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        ScrollTrigger.refresh();
+        if (callback) callback();
+      },
+    });
+
+    if (!menuOpen) {
+      tl.set(".menu-wrapper", { display: "flex" })
+        .to(".page-wrapper", { opacity: 0 }, "-=0.5")
+        .to(".cta-contact-nav", {
+          rotationX: 90,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power1.out",
+        })
+        .set(".brand-container", { display: "flex" })
+        .set(".cta-contact-nav", { display: "none" }, "<")
         .to(
-          "#logo-hidden",
+          ".menu-wrapper-row",
+          {
+            width: "100%",
+            duration: 0.2,
+            ease: "power1.out",
+            stagger: 0.2,
+          },
+          "-=0.5"
+        )
+        .to(
+          ".line-top",
+          {
+            y: isMobile ? "11px" : "14px",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "<"
+        )
+        .to(
+          ".line-bottom",
+          {
+            y: isMobile ? "-11px" : "-14px",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "<"
+        )
+        .to(
+          ".line-middle",
+          { opacity: 0, duration: 0.2, ease: "power1.out" },
+          "<"
+        )
+        .to(".line-top", { rotationZ: -45, duration: 0.2, ease: "power1.out" })
+        .to(
+          ".line-bottom",
+          { rotationZ: 45, duration: 0.2, ease: "power1.out" },
+          "<"
+        );
+      if (isHomePage) {
+        tl.to(".background-nav", { opacity: 0, duration: 0.5 }, "-=1");
+      }
+      tl.to(
+        "#nav",
+        { backgroundColor: "#faffec", duration: 0.5, ease: "linear" },
+        "-=0.8"
+      )
+        .to(
+          "#logo-home",
           { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" },
           "<"
         )
         .to(
-          "#logo-home",
-          { opacity: "", rotateY: 0, duration: 0.5, ease: "power1.out" },
+          "#logo-hidden",
+          { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" },
           ">"
         )
-        .to(".line-top, .line-bottom", {backgroundColor: "", duration:0.3, ease:"linear"}, "0")
-        .to("#nav", { backgroundColor: "", duration: 0.5, ease: "linear" }, "<")
-        .to(".line-middle", { opacity: 1, ease: "power1.out" }, "<")
+        .to(".line-top, .line-bottom", {backgroundColor: "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
         .to(
-          ".line-bottom",
-          { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
-          "<"
-        )
-        .to(
-          ".line-top",
-          { y: "0", rotationZ: 0, duration: 0.3, ease: "power1.out" },
-          "<"
-        )
-        .to(
-          ".menu-wrapper-row",
+          ".menu-container",
           {
-            width: 0,
-            duration: 0.2,
-            ease: "power1.out",
-            stagger: isMobile ? 0.1 : 0.2,
-          },
-          "<"
-        )
-        .set(".cta-contact-nav", { display: "flex" }, "<")
-        .set(".brand-container", { display: "none" }, "<")
-        .to(
-          ".cta-contact-nav",
-          {
-            rotationX: 0,
+            x: 0,
             opacity: 1,
-            duration: 0.5,
+            duration: 0.3,
             ease: "power1.out",
           },
-          "<"
-        )
-        .to(".page-wrapper", { opacity: 1 }, "-=0.6")
-        .set(".menu-wrapper", { display: "none" }, "-=0.4");
-  
-      if (isHomePage) {
-        tl.to(".background-nav", { opacity: 1, duration: 0 }, "-=1");
-      }
-  
-      menuOpen = false;
-    }
-  
-    function animateBurger(isMobile, callback) {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          ScrollTrigger.refresh();
-          if (callback) callback();
-        },
-      });
-  
-      if (!menuOpen) {
-        tl.set(".menu-wrapper", { display: "flex" })
-          .to(".page-wrapper", { opacity: 0 }, "-=0.5")
-          .to(".cta-contact-nav", {
-            rotationX: 90,
-            opacity: 0,
-            duration: 0.5,
-            ease: "power1.out",
-          })
-          .set(".brand-container", { display: "flex" })
-          .set(".cta-contact-nav", { display: "none" }, "<")
-          .to(
-            ".menu-wrapper-row",
-            {
-              width: "100%",
-              duration: 0.2,
-              ease: "power1.out",
-              stagger: 0.2,
-            },
-            "-=0.5"
-          )
-          // Prima parte dell'animazione: movimento verticale
-          .to(
-            ".line-top",
-            {
-              y: isMobile ? "11px" : "14px",
-              duration: 0.3,
-              ease: "power1.out",
-            },
-            "<"
-          )
-          .to(
-            ".line-bottom",
-            {
-              y: isMobile ? "-11px" : "-14px",
-              duration: 0.3,
-              ease: "power1.out",
-            },
-            "<"
-          )
-          .to(
-            ".line-middle",
-            { opacity: 0, duration: 0.2, ease: "power1.out" },
-            "<"
-          )
-          // Seconda parte dell'animazione: rotazione
-          .to(".line-top", { rotationZ: -45, duration: 0.2, ease: "power1.out" })
-          .to(
-            ".line-bottom",
-            { rotationZ: 45, duration: 0.2, ease: "power1.out" },
-            "<"
-          );
-        if (isHomePage) {
-          tl.to(".background-nav", { opacity: 0, duration: 0.5 }, "-=1");
-        }
-        tl.to(
-          "#nav",
-          { backgroundColor: "#faffec", duration: 0.5, ease: "linear" },
-          "-=0.8"
-        )
-          .to(
-            "#logo-home",
-            { opacity: 0, rotateY: 90, duration: 0.5, ease: "power1.out" },
-            "<"
-          )
-          .to(
-            "#logo-hidden",
-            { opacity: 1, rotateY: 0, duration: 0.5, ease: "power1.out" },
-            ">"
-          )
-          .to(".line-top, .line-bottom", {backgroundColor: "#0d0d0d", duration:0.3, ease:"linear"}, "-=0.6")
-          .to(
-            ".menu-container",
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power1.out",
-            },
-            "-=0.6"
-          );
-  
-        menuOpen = true;
-      } else {
-        closeMenu(isMobile, callback);
-      }
-    }
-  
-    burgerButton.addEventListener("click", () => animateBurger(false));
-    burgerMobileButton.addEventListener("click", () => animateBurger(true));
-  
-    if (isHomePage) {
-      brandNavbar.addEventListener("click", function scrollToTop() {
-        const menuWrapper = document.querySelector(".menu-wrapper");
-        if (menuWrapper && getComputedStyle(menuWrapper).display !== "none") {
-          // Se è visibile, chiudi il menu prima di eseguire l'animazione di scroll
-          const isMobile = window.innerWidth <= 767;
-          closeMenu(isMobile, performScroll);
-        } else {
-          performScroll();
-        }
-      });
+          "-=0.6"
+        );
+
+      menuOpen = true;
+    } else {
+      closeMenu(isMobile, callback);
     }
   }
+
+  burgerButton.addEventListener("click", () => animateBurger(false));
+  burgerMobileButton.addEventListener("click", () => animateBurger(true));
+}
    //
   function initializeScrollControlButtons() {
     const blockScrollButtons = document.querySelectorAll("[data-block-scroll]");
@@ -260,14 +230,12 @@ function burgerAnimation(isHomePage = false) {
   //
   function navbarRepo(isHomePage = false) {
     const stickyElement = document.querySelector("#nav");
-    const pathWrapper = isHomePage
-      ? document.querySelector("#navbar-repo")
-      : null;
+    const pathWrapper = isHomePage ? document.querySelector("#navbar-repo") : null;
     const menuWrapper = document.querySelector(".menu-wrapper");
     let navbarScrollTrigger = null;
-    let isPathWrapperInView = false;
-    let lastViewportHeight = window.innerHeight;
-  
+    let lastScrollY = window.visualViewport.height; // Usa visualViewport.height per una gestione stabile
+    let lastDirection = 0;
+
     const showAnim = gsap
       .from(stickyElement, {
         yPercent: -100,
@@ -276,40 +244,42 @@ function burgerAnimation(isHomePage = false) {
         ease: "ease.out",
       })
       .progress(1);
-  
+
     function isMenuVisible() {
       return getComputedStyle(menuWrapper).display === "flex";
     }
-  
+
     function createNavbarScrollTrigger() {
       return ScrollTrigger.create({
         start: "top top",
         end: "max",
+        refreshPriority: 1, // Alta priorità per evitare interferenze
         onUpdate: (self) => {
-          const currentViewportHeight = window.innerHeight;
-  
           // Check if the menu is visible
-          if (isMenuVisible()) {
-            return; // Skip the animation if menu is visible
-          }
-  
-          // Check if the viewport height changed significantly
-          if (Math.abs(currentViewportHeight - lastViewportHeight) > 50) {
-            lastViewportHeight = currentViewportHeight;
-            if (currentViewportHeight > lastViewportHeight) {
-              showAnim.play(); // Show navbar when address bar appears
+          if (isMenuVisible()) return;
+
+          // Controlla la direzione dello scroll usando visualViewport.height
+          const currentViewportHeight = window.visualViewport.height;
+          const scrollDirection = currentViewportHeight > lastScrollY ? -1 : 1;
+          
+          // Condizione per evitare che piccoli cambiamenti riattivino l'animazione
+          if (Math.abs(currentViewportHeight - lastScrollY) < 10) return;
+          
+          if (scrollDirection !== lastDirection) {
+            // Scroll up
+            if (scrollDirection === -1) {
+              showAnim.play();
             } else {
-              showAnim.reverse(); // Hide navbar when address bar disappears
+              showAnim.reverse();
             }
-            return;
           }
-  
-          // Normal scroll behavior
-          self.direction === -1 ? showAnim.play() : showAnim.reverse();
+
+          lastScrollY = currentViewportHeight;
+          lastDirection = scrollDirection;
         },
       });
     }
-  
+
     function checkAndUpdateNavbar() {
       if (isHomePage && pathWrapper) {
         ScrollTrigger.create({
@@ -317,13 +287,11 @@ function burgerAnimation(isHomePage = false) {
           start: "top 20%",
           end: "bottom center",
           onEnter: () => {
-            isPathWrapperInView = true;
             if (!navbarScrollTrigger) {
               navbarScrollTrigger = createNavbarScrollTrigger();
             }
           },
           onLeaveBack: () => {
-            isPathWrapperInView = false;
             if (navbarScrollTrigger) {
               navbarScrollTrigger.kill();
               navbarScrollTrigger = null;
@@ -335,11 +303,10 @@ function burgerAnimation(isHomePage = false) {
         navbarScrollTrigger = createNavbarScrollTrigger();
       }
     }
-  
+
     window.addEventListener(
       "resize",
       debounce(() => {
-        lastViewportHeight = window.innerHeight;
         if (navbarScrollTrigger) {
           navbarScrollTrigger.kill();
           navbarScrollTrigger = createNavbarScrollTrigger();
@@ -347,9 +314,9 @@ function burgerAnimation(isHomePage = false) {
         checkAndUpdateNavbar();
       }, 200), { passive: true }
     );
-  
+
     checkAndUpdateNavbar();
-  
+
     // Observer per monitorare le modifiche a .menu-wrapper
     const observer = new MutationObserver(() => {
       if (navbarScrollTrigger) {
@@ -357,13 +324,13 @@ function burgerAnimation(isHomePage = false) {
         navbarScrollTrigger = createNavbarScrollTrigger();
       }
     });
-  
+
     observer.observe(menuWrapper, {
       attributes: true,
       childList: true,
       subtree: true,
     });
-  }
+}
   //
   const menuNavigation = {
     animateBurger: function () {
@@ -2619,10 +2586,10 @@ function logoAnima() {
       loop: true,
       centeredSlides: true,
       autoplay: {
-        delay: 2000,
+        delay:1500,
         disableOnInteraction: false,
       },
-      speed: 600,
+      speed: 500,
       effect: "slide",
       navigation: {
         nextEl: document.querySelector(".swiper-button-next"),
@@ -3190,7 +3157,7 @@ function serviceWrapper() {
     
             const navigate = () => {
               let tl = gsap.timeline({ onComplete: () => (window.location.href = currentUrl) });
-              tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100, opacity: 0 });
+              tl.fromTo(".page-wrapper, .navbar, .menu-wrapper", { xPercent: 0 }, { xPercent: 100});
             };
     
             if (delay) {
@@ -3217,20 +3184,18 @@ function serviceWrapper() {
       if (document.querySelector(".cover-page")) {
         tl1.to(".cover-page", {
           opacity: 1,
-          ease: "power2.out"
-        });
-      }
-  
-      tl1.to(".page-heading-wrapper", {
+          ease: "power2.out",
+          duration: 0.5,
+        })        
+      .to(".page-heading-wrapper", {
         opacity: 1,
-        x: "0rem",
+        x: "0vw",
         ease: "power2.out",
-      });
-    
-      tl1.to("#nav", {
+      })    
+      .to("#nav", {
         y: "0rem",
         ease: "power2.out"
-      });
+      },"<");}
     
       // link click
       $("a:not(.excluded-class)").on("click", function (e) {
@@ -3254,7 +3219,7 @@ function serviceWrapper() {
               tl.fromTo(
                 ".page-wrapper, #nav, .menu-wrapper",
                 { xPercent: 0 },
-                { xPercent: 100, opacity: 0 }
+                { xPercent: 100 }
               );
             }, delay);
           } else {
@@ -3265,7 +3230,7 @@ function serviceWrapper() {
             tl.fromTo(
               ".page-wrapper, #nav, .menu-wrapper",
               { xPercent: 0 },
-              { xPercent: 100, opacity: 0 }
+              { xPercent: 100 }
             );
           }
         }
