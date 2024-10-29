@@ -233,7 +233,7 @@ function burgerAnimation(isHomePage = false) {
     const pathWrapper = isHomePage ? document.querySelector("#navbar-repo") : null;
     const menuWrapper = document.querySelector(".menu-wrapper");
     let navbarScrollTrigger = null;
-    let lastScrollY = window.visualViewport.height; // Usa visualViewport.height per una gestione stabile
+    let lastScrollY = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY; // Usa visualViewport.height su mobile e scrollY su desktop
     let lastDirection = 0;
 
     const showAnim = gsap
@@ -253,24 +253,22 @@ function burgerAnimation(isHomePage = false) {
       return ScrollTrigger.create({
         start: "top top",
         end: "max",
-        refreshPriority: 1, // Alta priorità per evitare interferenze
+        refreshPriority: 1,
         onUpdate: (self) => {
-          // Check if the menu is visible
           if (isMenuVisible()) return;
 
-          // Controlla la direzione dello scroll usando visualViewport.height
-          const currentViewportHeight = window.visualViewport.height;
-          const scrollDirection = currentViewportHeight < lastScrollY ? -1 : 1; // Invertito
-
-          // Condizione per evitare che piccoli cambiamenti riattivino l'animazione
+          // Seleziona l'altezza della viewport corretta in base al dispositivo
+          const currentViewportHeight = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY;
+          const scrollDirection = currentViewportHeight < lastScrollY ? -1 : 1;
+          
+          // Evita riattivazioni indesiderate dell'animazione con piccole variazioni
           if (Math.abs(currentViewportHeight - lastScrollY) < 10) return;
           
           if (scrollDirection !== lastDirection) {
-            // Scroll up
             if (scrollDirection === 1) {
-              showAnim.reverse(); // Nasconde la navbar
+              showAnim.reverse();
             } else {
-              showAnim.play(); // Mostra la navbar
+              showAnim.play();
             }
           }
 
@@ -307,6 +305,7 @@ function burgerAnimation(isHomePage = false) {
     window.addEventListener(
       "resize",
       debounce(() => {
+        lastScrollY = window.innerWidth <= 768 ? window.visualViewport.height : window.scrollY;
         if (navbarScrollTrigger) {
           navbarScrollTrigger.kill();
           navbarScrollTrigger = createNavbarScrollTrigger();
@@ -415,10 +414,9 @@ function burgerAnimation(isHomePage = false) {
         hoverTimeline.to(
           box.querySelector(".sublink"),
           {
-            scale: 0.8,
+            scale: 0.9,
             y: 5,
-            duration: 0.5,
-            color: "#f06",
+            duration: 0.5,            
             transformOrigin: "top left",
             ease: "power1.out",
           },
@@ -459,10 +457,9 @@ function burgerAnimation(isHomePage = false) {
         touchTimeline.to(
           box.querySelector(".sublink"),
           {
-            scale: 0.8,
+            scale: 0.9,
             y: 5,
-            duration: 0.5,
-            color: "#f06",
+            duration: 0.5,           
             transformOrigin: "top left",
             ease: "power1.out",
           },
