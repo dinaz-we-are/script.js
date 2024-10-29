@@ -1519,11 +1519,20 @@ function burgerAnimation(isHomePage = false) {
       rotationY: 90,
       ease: "power2.out",
       duration: 1,
-    });
+    })
+    .from(
+        ".h2-tagline",
+        {
+          rotationX: 90,
+          opacity:0,
+          duration: 0.5,
+          ease: "power2.out",
+        }        
+      );
     tlLogo
       .from("#Vect-1", {
         x: "-120%",
-        duration: 1,
+        duration: 0.5,
         ease: "expo.out",
       })
       .from(
@@ -1660,7 +1669,7 @@ function burgerAnimation(isHomePage = false) {
           rotate: -180,
           transformOrigin: "center",
           duration: 0.5,
-          ease: "power2",
+          ease: "power2.out",
         },
         "<"
       )
@@ -1669,7 +1678,7 @@ function burgerAnimation(isHomePage = false) {
         {
           x: 0,
           duration: 0.5,
-          ease: "power2",
+          ease: "power2.out",
         },
         "<"
       );
@@ -1699,14 +1708,14 @@ function burgerAnimation(isHomePage = false) {
       .to(".letter.p2", {
         rotationY: "0",
         duration: 1,
-        ease: "back.out(1.7)",
+        ease: "power2.out",
       })
       .to(
         ".letter.hidden",
         {
           y: "100%",
           duration: 1,
-          ease: "back.out(1.7)",
+          ease: "power2.out",
           stagger: 0.2,
         },
         "-=0.6"
@@ -1716,36 +1725,26 @@ function burgerAnimation(isHomePage = false) {
         {
           y: 0,
           duration: 1,
-          ease: "back.out(1.7)",
+          ease: "power2.out",
           stagger: 0.2,
         },
         "<"
       );
-    tlPlus
-      .from(
-        ".h2-tagline",
-        {
-          rotationX: 90,
-          duration: 1,
-          ease: "back.out(1.7)",
-        },
-        "<"
-      )
+    tlPlus      
       .from(
         "#nav",
         {
           y: "-5rem",
           duration: 0.5,
-          ease: "back.out(1.7)",
-        },
-        "<"
+          ease: "power2.out",
+        }       
       )
       .from(
         ".div-scorri",
         {
           y: "5rem",
           duration: 0.5,
-          ease: "back.out(1.7)",
+          ease: "power2.out",
         },
         "<"
       );
