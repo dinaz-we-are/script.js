@@ -1519,16 +1519,7 @@ function burgerAnimation(isHomePage = false) {
       rotationY: 90,
       ease: "power2.out",
       duration: 1,
-    })
-    .from(
-        ".h2-tagline",
-        {
-          rotationX: 90,
-          opacity:0,
-          duration: 0.5,
-          ease: "power2.out",
-        }        
-      );
+    });
     tlLogo
       .from("#Vect-1", {
         x: "-120%",
@@ -1684,17 +1675,26 @@ function burgerAnimation(isHomePage = false) {
       );
   
     tlSviluppo
+.from(
+        ".h2-tagline",
+        {
+          rotationX: 90,
+          opacity:0,
+          duration: 0.5,
+          ease: "power2.out",
+        }        
+      )
       .from(".span-parentesi1, .span-parentesi2", {
         rotationY: -810, // Ruotate fuori dallo schermo
-        duration: 2.5,
+        duration: 2,
         ease: "power2.inOut",
-      })
+      },"<")
       .to(".span-parentesi2", {
         x: "0%",
         duration: 0.6, // Durata dell'espansione
         ease: "power2.out",
       })
-      .to(".btn-cta.herotop", { x: 0, duration: 0.5, ease: "power2.out" }, "<")
+      .to(".btn-cta.herotop", { x: 0, duration: 0.6, ease: "power2.out" }, "<")
       .from(
         ".letter.hidden, .letter.p1, .letter.p2, .svg-letter-o",
         {
@@ -1750,6 +1750,7 @@ function burgerAnimation(isHomePage = false) {
       );
     return masterTimeline;
   }
+  
 
     // Animazione freccia
     function animaArrow() {
