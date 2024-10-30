@@ -1696,7 +1696,7 @@ function burgerAnimation(isHomePage = false) {
       })
       .to(".btn-cta.herotop", { x: 0, duration: 0.6, ease: "power2.out" }, "<")
       .from(
-        ".letter.hidden, .letter.p1, .letter.p2, .svg-letter-o",
+        ".letter.hidden, .letter.p2, .svg-letter-o",
         {
           rotationY: -90,
           duration: 0.3, // Durata dell'espansione
@@ -1716,7 +1716,7 @@ function burgerAnimation(isHomePage = false) {
           y: "100%",
           duration: 1,
           ease: "power2.out",
-          stagger: 0.2,
+          stagger: 0.1,
         },
         "-=0.6"
       )
@@ -1726,7 +1726,7 @@ function burgerAnimation(isHomePage = false) {
           y: 0,
           duration: 1,
           ease: "power2.out",
-          stagger: 0.2,
+          stagger: 0.1,
         },
         "<"
       );
