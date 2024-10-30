@@ -1492,7 +1492,7 @@ function burgerAnimation(isHomePage = false) {
         animaArrow();
       },
     });
-      
+
     masterTimeline
       .add(tlSviluppo, 0)
       .add(tlLogo, 0.8)
@@ -1738,6 +1738,7 @@ function burgerAnimation(isHomePage = false) {
       .to(
         ".div-scorri",
         {
+          opacity: 1,
           y: "0rem",
           duration: 0.5,
           ease: "power2.out",
