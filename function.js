@@ -1476,12 +1476,6 @@ function burgerAnimation(isHomePage = false) {
  
   //
   function initializeGSAPAnimations() {
-    const tl1 = gsap.timeline({
-      onComplete: () => {
-        document.getElementById("cover-div").style.display = "none";
-      },
-    });
-    let rotationAnimation;
     const tlLogo = gsap.timeline();
     const tld = gsap.timeline();
     const tle = gsap.timeline();
@@ -1491,14 +1485,14 @@ function burgerAnimation(isHomePage = false) {
     const tln = gsap.timeline();
     const tlPlus = gsap.timeline();
     const tlSviluppo = gsap.timeline();
+  
     const masterTimeline = gsap.timeline({
       onComplete: () => {
         console.log("Tutte le animazioni sono completate");
-        // Aggiungi qui il callback, per esempio, l'avvio di una nuova animazione
         animaArrow();
       },
     });
-  
+      
     masterTimeline
       .add(tlSviluppo, 0)
       .add(tlLogo, 0.8)
@@ -1510,26 +1504,22 @@ function burgerAnimation(isHomePage = false) {
       .add(tln, 3)
       .add(tlPlus, 2.5);
   
-    tl1.to("#cover-div", { opacity: 0, duration: 0.1 });
-    gsap.timeline().call(function () {
-      console.log("Animazione completata");
-    });
-  
-    tld.from(".letter.d", {
-      rotationY: 90,
+    tld.to(".letter.d", {
+      rotationY: 0,
       ease: "power2.out",
       duration: 1,
     });
+  
     tlLogo
-      .from("#Vect-1", {
-        x: "-120%",
+      .to("#Vect-1", {
+        x: "0%",
         duration: 0.5,
         ease: "expo.out",
       })
-      .from(
+      .to(
         "#Vect-2",
         {
-          x: "120%",
+          x: "0%",
           duration: 0.5,
           ease: "expo.out",
         },
@@ -1545,46 +1535,45 @@ function burgerAnimation(isHomePage = false) {
         },
         "-=0.1"
       );
+  
     tle
-      .from(".svg-letter-ee", {
-        y: "-150%",
+      .to(".svg-letter-ee", {
+        y: "0%",
         ease: "elastic.out",
         duration: 1,
       })
       .to(".svg-letter-ee", {
         rotationY: 90,
         ease: "linear",
-        transformOrigin: "right",
         duration: 0.5,
       })
-      .from(
+      .to(
         ".letter.ee",
         {
-          rotationY: -90,
-          transformOrigin: "left",
+          rotationY: 0,
           ease: "linear",
           duration: 0.5,
         },
-        "-=0.3"
+        "-=0.25"
       );
   
-    tls.from(".letter.s", {
-      y: "150%",
+    tls.to(".letter.s", {
+      y: "0%",
       duration: 0.5,
-      ease: "power2.inOut", // Movimento fluido
+      ease: "power2.inOut",
     });
   
     tlg
-      .from(".letter.g", {
-        scale: 0.5,
-        opacity: 0,
+      .to(".letter.g", {
+        scale: 1,
+        opacity: 1,
         duration: 0.5,
         ease: "power2.inOut",
       })
       .from(
         ".letter.g",
         {
-          rotation: -720,
+          rotationZ: -720,
           duration: 1,
           ease: "expo.out",
         },
@@ -1617,15 +1606,15 @@ function burgerAnimation(isHomePage = false) {
       );
   
     tli
-      .from(".letter.i", {
-        y: "-100%",
+      .to(".letter.i", {
+        y: "0%",
         duration: 1,
         ease: "power2.inOut",
       })
-      .from(
+      .to(
         ".letter.agency",
         {
-          x: "200%",
+          x: "0%",
           duration: 0.5,
           ease: "expo.out",
         },
@@ -1633,22 +1622,22 @@ function burgerAnimation(isHomePage = false) {
       );
   
     tln
-      .from(".letter.n", {
-        x: "-100%",
+      .to(".letter.n", {
+        x: "0%",
         duration: 1,
         ease: "power2.inOut",
       })
       .to(".letter.d", {
         y: "-50%",
-        ease: "bouce.out",
+        ease: "power2.inOut",
         duration: 0.5,
         yoyo: true,
         repeat: 1,
       })
-      .from(
+      .to(
         ".letter.web",
         {
-          y: -200,
+          y: "0%",
           duration: 0.5,
           ease: "expo.out",
         },
@@ -1675,31 +1664,40 @@ function burgerAnimation(isHomePage = false) {
       );
   
     tlSviluppo
-.from(
-        ".h2-tagline",
+      .to(".h2-tagline", {
+        rotationX: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out",
+      })
+      .to(
+        ".span-parentesi1, .span-parentesi2",
         {
-          rotationX: 90,
-          opacity:0,
-          duration: 0.5,
-          ease: "power2.out",
-        }        
+          rotationY: 720, // Ruotate fuori dallo schermo
+          duration: 2,
+          ease: "power2.inOut",
+        },
+        "<"
       )
-      .from(".span-parentesi1, .span-parentesi2", {
-        rotationY: -810, // Ruotate fuori dallo schermo
-        duration: 2,
-        ease: "power2.inOut",
-      },"<")
       .to(".span-parentesi2", {
         x: "0%",
         duration: 0.6, // Durata dell'espansione
         ease: "power2.out",
       })
-      .to(".btn-cta.herotop", { x: 0, duration: 0.6, ease: "power2.out" }, "<")
-      .from(
+      .to(
+        ".btn-cta.herotop",
+        {
+          x: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
         ".letter.hidden, .letter.p2, .svg-letter-o",
         {
-          rotationY: -90,
-          duration: 0.3, // Durata dell'espansione
+          rotationY: 0,
+          duration: 0.3,
           ease: "power2.out",
           stagger: 0.1,
         },
@@ -1730,28 +1728,23 @@ function burgerAnimation(isHomePage = false) {
         },
         "<"
       );
-    tlPlus      
-      .from(
-        "#nav",
-        {
-          y: "-5rem",
-          duration: 0.5,
-          ease: "power2.out",
-        }       
-      )
-      .from(
+  
+    tlPlus
+      .to("#nav", {
+        y: "0rem",
+        duration: 0.5,
+        ease: "power2.out",
+      })
+      .to(
         ".div-scorri",
         {
-          y: "5rem",
+          y: "0rem",
           duration: 0.5,
           ease: "power2.out",
         },
         "<"
       );
-    return masterTimeline;
   }
-  
-
     // Animazione freccia
     function animaArrow() {
       // Anima da web1 a web2
