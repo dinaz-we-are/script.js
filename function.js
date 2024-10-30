@@ -1500,15 +1500,15 @@ function burgerAnimation(isHomePage = false) {
     });
   
     masterTimeline
-      .add(tlSviluppo, 0.1)
-      .add(tlLogo, 0.9)
-      .add(tld, 0.5)
-      .add(tle, 1.4)
-      .add(tlg, 2.1)
+      .add(tlSviluppo, 0)
+      .add(tlLogo, 0.8)
+      .add(tld, 0.4)
+      .add(tle, 1.3)
+      .add(tlg, 2)
       .add(tls, 2)
       .add(tli, 3)
-      .add(tln, 3.4)
-      .add(tlPlus, 2.6);
+      .add(tln, 3)
+      .add(tlPlus, 2.5);
   
     tl1.to("#cover-div", { opacity: 0, duration: 0.1 });
     gsap.timeline().call(function () {
