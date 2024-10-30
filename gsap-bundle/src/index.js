@@ -10,6 +10,9 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 // Registra tutti i plugin con GSAP
 gsap.registerPlugin(Flip, ScrollTrigger, Observer, ScrollToPlugin);
 
+import Swiper from 'swiper';
+import SplitType from 'split-type';
+
 // Esportazione globale di GSAP e di tutti i plugin
 if (typeof window !== "undefined") {
   window.gsap = gsap;
@@ -17,5 +20,8 @@ if (typeof window !== "undefined") {
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
+
+  window.Swiper = Swiper;
+  window.SplitType = SplitType;
 }
 
