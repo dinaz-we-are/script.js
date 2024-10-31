@@ -1489,7 +1489,9 @@ function burgerAnimation(isHomePage = false) {
     const masterTimeline = gsap.timeline({
       onComplete: () => {
         console.log("Tutte le animazioni sono completate");
-        requestAnimationFrame(() => animaArrow());
+       requestIdleCallback(() => {
+    setTimeout(() => animaArrow(), 500);
+});
       },
     });
 
@@ -1542,6 +1544,11 @@ function burgerAnimation(isHomePage = false) {
         ease: "elastic.out",
         duration: 1,
       })
+      .to(".h2-tagline", {
+        rotationX: 0,        
+        duration: 0.5,
+        ease: "power2.out",
+      },"-=0.8")
       .to(".svg-letter-ee", {
         rotationY: 90,
         ease: "linear",
@@ -1663,21 +1670,14 @@ function burgerAnimation(isHomePage = false) {
         "<"
       );
   
-    tlSviluppo
-      .to(".h2-tagline", {
-        rotationX: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-      })
+    tlSviluppo      
       .to(
         ".span-parentesi1, .span-parentesi2",
         {
           rotationY: 720, // Ruotate fuori dallo schermo
           duration: 2,
           ease: "power2.inOut",
-        },
-        "<"
+        }        
       )
       .to(".span-parentesi2", {
         x: "0%",
@@ -1755,8 +1755,7 @@ function burgerAnimation(isHomePage = false) {
       let tlWeb4to1 = gsap.timeline();
     
       tlWeb1to2
-        .to("#asterix-mask", {
-          delay: 0.5,
+        .to("#asterix-mask", {    
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1880,8 +1879,7 @@ function burgerAnimation(isHomePage = false) {
       // Animazione rotazione continua del design
       let designAnimation = gsap.timeline({ repeat: -1 });
       designAnimation
-        .to(".letter.i", {
-          delay: 1,
+        .to(".letter.i", {         
           rotationX: -90,
           transformOrigin: "center",
           duration: 1,
@@ -1973,6 +1971,7 @@ function burgerAnimation(isHomePage = false) {
       designAnimation.play();
       scorriAnimation.play();
     }
+
 
  function initializeScrollFlipAnimations() {
   function attr(defaultVal, attrVal) {
