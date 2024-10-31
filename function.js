@@ -1489,7 +1489,7 @@ function burgerAnimation(isHomePage = false) {
     const masterTimeline = gsap.timeline({
       onComplete: () => {
         console.log("Tutte le animazioni sono completate");
-        animaArrow();
+        requestAnimationFrame(() => animaArrow());
       },
     });
 
