@@ -239,85 +239,89 @@ function burgerAnimation(isHomePage = false) {
     const scrollThreshold = 16; // Define 1rem equivalent in pixels
 
     const showAnim = gsap
-      .from(stickyElement, {
-        yPercent: -100,
-        paused: true,
-        duration: 0.3,
-        ease: "power2.Out",
-      })
-      .progress(1);
+        .from(stickyElement, {
+            yPercent: -100,
+            paused: true,
+            duration: 0.25,
+            ease: "power2.inOut",
+        })
+        .progress(1);
 
     function isMenuVisible() {
-      return getComputedStyle(menuWrapper).display === "flex";
+        return getComputedStyle(menuWrapper).display === "flex";
     }
 
     function handleScroll() {
-      const currentScrollY = window.scrollY;
-      const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
+        const currentScrollY = window.scrollY;
+        const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
 
-      // If below threshold, don't trigger the animation
-      if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
+        // If below threshold, don't trigger the animation
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
 
-      if (scrollDirection !== lastDirection) {
-        if (scrollDirection === 1) {
-          showAnim.reverse(); // Hide navbar on scroll down
-        } else {
-          showAnim.play(); // Show navbar on scroll up
+        if (scrollDirection !== lastDirection) {
+            if (scrollDirection === 1) {
+                showAnim.reverse(); // Hide navbar on scroll down
+            } else {
+                showAnim.play(); // Show navbar on scroll up
+            }
+            lastDirection = scrollDirection;
         }
-        lastDirection = scrollDirection;
-      }
-      lastScrollY = currentScrollY;
+        lastScrollY = currentScrollY;
+    }
+
+    function addScrollListener() {
+        if (!navbarScrollTrigger) {
+            navbarScrollTrigger = gsap.ticker.add(handleScroll);
+        }
+    }
+
+    function removeScrollListener() {
+        if (navbarScrollTrigger) {
+            gsap.ticker.remove(handleScroll);
+            navbarScrollTrigger = null;
+        }
     }
 
     function initNavbarScroll() {
-      if (isHomePage && pathWrapper) {
-        // Trigger only when reaching the pathWrapper section on the home page
-        ScrollTrigger.create({
-          trigger: pathWrapper,
-          start: "top 20%",
-          end: "bottom center",
-          onEnter: () => {
-            if (!navbarScrollTrigger) {
-              navbarScrollTrigger = gsap.ticker.add(handleScroll);
-            }
-          },
-          onLeaveBack: () => {
-            if (navbarScrollTrigger) {
-              gsap.ticker.remove(handleScroll);
-              navbarScrollTrigger = null;
-              gsap.set(stickyElement, { y: 0 });
-            }
-          },
-        });
-      } else {
-        navbarScrollTrigger = gsap.ticker.add(handleScroll);
-      }
+        if (isHomePage && pathWrapper) {
+            ScrollTrigger.create({
+                trigger: pathWrapper,
+                start: "top 20%",
+                end: "bottom center",
+                onEnter: addScrollListener,
+                onLeaveBack: () => {
+                    removeScrollListener();
+                    gsap.set(stickyElement, { y: 0 });
+                },
+            });
+        } else {
+            addScrollListener();
+        }
     }
 
+    // Reinitialize navbar scroll behavior on window resize
     window.addEventListener("resize", () => {
-      lastScrollY = window.scrollY;
-      if (navbarScrollTrigger) {
-        gsap.ticker.remove(handleScroll);
-        navbarScrollTrigger = null;
-      }
-      initNavbarScroll();
+        lastScrollY = window.scrollY;
+        removeScrollListener();
+        initNavbarScroll();
     });
 
+    // Initialize navbar scroll behavior
     initNavbarScroll();
 
+    // Observe menu changes and reinitialize if necessary
     const observer = new MutationObserver(() => {
-      if (navbarScrollTrigger) {
-        gsap.ticker.remove(handleScroll);
+        removeScrollListener();
         initNavbarScroll();
-      }
     });
 
     observer.observe(menuWrapper, {
-      attributes: true,
-      childList: true,
-      subtree: true,
+        attributes: true,
+        childList: true,
+        subtree: true,
     });
 }
+
 
   //
   const menuNavigation = {
