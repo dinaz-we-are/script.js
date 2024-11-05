@@ -1894,9 +1894,9 @@ function burgerAnimation(isHomePage = false) {
         })
         .to(":root", { 
           css: {"--linear-grad2": "#ff006e"} ,
-          duration: 1,
-          ease: "back.out(3)",
-        },"<")
+          duration: 0.5,
+          ease: "none",
+        },"-=0.5")
         .to(".svg-letter-i", { 
         	delay: 1,
           rotationX: -270,
@@ -1912,9 +1912,9 @@ function burgerAnimation(isHomePage = false) {
         })
         .to(":root", { 
           css: {"--linear-grad2": ""} ,
-          duration: 1,
-          ease: "back.out(3)",
-        },"<");
+          duration: 0.5,
+          ease: "none",
+        },"-=0.5");
     
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
