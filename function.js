@@ -1759,7 +1759,8 @@ function burgerAnimation(isHomePage = false) {
       let tlWeb4to1 = gsap.timeline();
     
       tlWeb1to2
-        .to("#asterix-mask", {    
+        .to("#asterix-mask", {
+          delay: 0.5,    
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1788,7 +1789,8 @@ function burgerAnimation(isHomePage = false) {
     
       // Anima da web2 a web3
       tlWeb2to3
-        .to("#asterix-mask", {          
+        .to("#asterix-mask", {
+          delay: 0.5,          
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1817,7 +1819,8 @@ function burgerAnimation(isHomePage = false) {
     
       // Anima da web3 a web4
       tlWeb3to4
-        .to("#asterix-mask", {          
+        .to("#asterix-mask", {
+          delay: 0.5,          
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
@@ -1846,7 +1849,8 @@ function burgerAnimation(isHomePage = false) {
     
       // Anima da web4 a web1 (riavvio del ciclo)
       tlWeb4to1
-        .to("#asterix-mask", {          
+        .to("#asterix-mask", {
+          delay: 0.5,          
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
