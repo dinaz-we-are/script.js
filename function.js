@@ -1763,7 +1763,7 @@ function burgerAnimation(isHomePage = false) {
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
-          ease: "linear",
+          ease: "power2.inOut",
         })
         .to(
           "#web1",
@@ -1792,7 +1792,7 @@ function burgerAnimation(isHomePage = false) {
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
-          ease: "linear",
+          ease: "power2.inOut",
         })
         .to(
           "#web2",
@@ -1821,7 +1821,7 @@ function burgerAnimation(isHomePage = false) {
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
-          ease: "linear",
+          ease: "power2.inOut",
         })
         .to(
           "#web3",
@@ -1850,7 +1850,7 @@ function burgerAnimation(isHomePage = false) {
           rotate: "+=180",
           transformOrigin: "center",
           duration: 0.5,
-          ease: "linear",
+          ease: "power2.inOut",
         })
         .to(
           "#web4",
@@ -1893,7 +1893,7 @@ function burgerAnimation(isHomePage = false) {
           ease: "back.out(3)",
         })
         .to(":root", { 
-          css: {"--linear-grad2": "#ffe30d"} ,
+          css: {"--linear-grad2": "#ff006e"} ,
           duration: 1,
           ease: "back.out(3)",
         },"<")
