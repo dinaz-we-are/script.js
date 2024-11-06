@@ -1676,14 +1676,14 @@ function burgerAnimation(isHomePage = false) {
   
     tlSviluppo      
       .to(
-        ".span-parentesi1, .span-parentesi2",
+        ".svg-letter-parentesi1, .svg-letter-parentesi2",
         {
           rotationY: 720, // Ruotate fuori dallo schermo
           duration: 2,
           ease: "power2.inOut",
         }        
       )
-      .to(".span-parentesi2", {
+      .to(".svg-letter-parentesi2", {
         x: "0%",
         duration: 0.6, // Durata dell'espansione
         ease: "power2.out",
