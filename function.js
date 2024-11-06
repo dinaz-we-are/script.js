@@ -285,8 +285,6 @@ function burgerAnimation(isHomePage = false) {
     function initNavbarScroll() {
         if (isHomePage && pathWrapper) {
             ScrollTrigger.create({
-              scrub: true,
-    invalidateOnRefresh: true,
                 trigger: pathWrapper,
                 start: "top 20%",
                 end: "bottom center",
@@ -637,8 +635,6 @@ function burgerAnimation(isHomePage = false) {
                     start: "top 70%",
                     end: "top top",
                     toggleActions: "play none none reverse",
-                    scrub: true,
-                    invalidateOnRefresh: true,
                 },
             });
         } else {
@@ -684,8 +680,6 @@ function burgerAnimation(isHomePage = false) {
                         start: "top 20%",
                         end: "top top",
                         toggleActions: "play none none reverse",
-                        scrub: true,
-                    invalidateOnRefresh: true,
                     },
                 }
             );
@@ -711,8 +705,6 @@ function burgerAnimation(isHomePage = false) {
                         start: "top 20%",
                         end: "top top",
                         toggleActions: "play none none reverse",
-                        scrub: true,
-                    invalidateOnRefresh: true,
                     },
                 }
             );
@@ -738,8 +730,6 @@ function burgerAnimation(isHomePage = false) {
                         start: "top 10%",
                         end: "top top",
                         toggleActions: "play none none reverse",
-                        scrub: true,
-                    invalidateOnRefresh: true,
                     },
                 }
             );
@@ -762,8 +752,6 @@ function burgerAnimation(isHomePage = false) {
                         start: "top 70%",
                         end: "top top",
                         toggleActions: "play none none reverse",
-                        scrub: true,
-                    invalidateOnRefresh: true,
                     },
                 });
     
@@ -799,8 +787,6 @@ function burgerAnimation(isHomePage = false) {
                             start: "top 90%",
                             end: "top 10%",
                             toggleActions: "play none none reverse",
-                            scrub: true,
-                    invalidateOnRefresh: true,
                             onEnter: () => {
                                 gsap.to(images, {
                                     opacity: 0,
@@ -851,8 +837,6 @@ function burgerAnimation(isHomePage = false) {
                         start: "top 70%",
                         end: "top top",
                         toggleActions: "play none none reverse",
-                        scrub: true,
-                    invalidateOnRefresh: true,
                     },
                 });
     
@@ -888,8 +872,6 @@ function burgerAnimation(isHomePage = false) {
                             start: "top 80%",
                             end: "top 20%",
                             toggleActions: "play none none reverse",
-                            scrub: true,
-                    invalidateOnRefresh: true,
                             onEnter: () => {
                                 gsap.to(images, {
                                     opacity: 0,
@@ -938,8 +920,6 @@ function burgerAnimation(isHomePage = false) {
                   start: "top 20%",
                   end: "top top",
                   toggleActions: "play none none reverse",
-                  scrub: true,
-                    invalidateOnRefresh: true,
               },
           });
       });}
@@ -1216,8 +1196,6 @@ function burgerAnimation(isHomePage = false) {
           start: "top 95%",
           end: "bottom 5%",
           toggleActions: "play none none reverse",
-          scrub: true,
-          invalidateOnRefresh: true,
           onEnter: () =>
             gsap.to(box, { x: 0, duration: 0.6, ease: "power2.out" }),
         });
@@ -1250,8 +1228,6 @@ function burgerAnimation(isHomePage = false) {
                 trigger: entry.target,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: true,
-                invalidateOnRefresh: true,
                 onLeave: () => video.pause(),
                 onEnterBack: () => video.play(),
                 onLeaveBack: () => video.pause(),
@@ -1275,8 +1251,6 @@ function burgerAnimation(isHomePage = false) {
             trigger: container,
             start: "top bottom",
             end: "bottom top",
-            scrub: true,
-            invalidateOnRefresh: true,
             onEnter: () => video.play(),
             onLeave: () => video.pause(),
             onEnterBack: () => video.play(),
@@ -1521,7 +1495,6 @@ function burgerAnimation(isHomePage = false) {
         console.log("Tutte le animazioni sono completate");
        requestIdleCallback(() => {
     setTimeout(() => animaArrow(), 500);
-    ScrollTrigger.refresh();
 });
       },
     });
@@ -1985,8 +1958,7 @@ function burgerAnimation(isHomePage = false) {
         trigger: ".hero",
         start: "bottom center",
         end: "bottom top",
-        scrub: true,     
-        invalidateOnRefresh: true,
+        scrub: true,
         onEnter: () => {
           webAnimation.pause();
           designAnimation.pause();
@@ -2048,7 +2020,6 @@ function burgerAnimation(isHomePage = false) {
             start: startSetting,
             end: endSetting,
             scrub: true,
-            invalidateOnRefresh: true,                    
           },
         });
         timeline.add(
@@ -2082,8 +2053,6 @@ function burgerAnimation(isHomePage = false) {
       trigger: ".hero-trigger",
       start: "top 95%",
       end: "top 85%",
-      invalidateOnRefresh: true,
-      scrub: true,
       onEnter: () => {
         gsap.to(
           ".brand_header",
@@ -2115,8 +2084,7 @@ function burgerAnimation(isHomePage = false) {
     ScrollTrigger.create({
       trigger: heroCta,
       start: () => `top ${navbar.offsetHeight}px`,
-      end: "bottom top",     
-      invalidateOnRefresh: true,
+      end: "bottom top",
       scrub: true,
       toggleActions: "play none none reverse",
       onEnter: () => {
@@ -2199,7 +2167,8 @@ function burgerAnimation(isHomePage = false) {
             "<"
           );
       },
-    });    
+    });
+    ScrollTrigger.refresh();
   }
   //
 //CECO
@@ -2232,8 +2201,6 @@ const cecoStretegy = {
       end: "bottom bottom",
       toggleActions: "play none none resume",
       animation: animationCeco,
-      invalidateOnRefresh: true,
-      scrub: true,
     });
 
     let isMobile = window.innerWidth < 768;
@@ -2242,8 +2209,7 @@ const cecoStretegy = {
       scrollTrigger: {
         trigger: ".trigger-ceco",
         start: "bottom 80%",
-        end: "bottom top",        
-        invalidateOnRefresh: true,
+        end: "bottom top",
         scrub: true,
       },
     });
@@ -2432,8 +2398,6 @@ const cecoStretegy = {
     ScrollTrigger.create({
       trigger: ".trigger-ceco-2",
       start: "top+=100vh top",
-      invalidateOnRefresh: true,
-      scrub: true,
       onEnter: () => changeNavColor(newNavColor), 
       onLeaveBack: () => changeNavColor(originalNavColor), 
     });
@@ -2441,8 +2405,6 @@ const cecoStretegy = {
     ScrollTrigger.create({
       trigger: ".trigger-ceco-2",
       start: "bottom top",
-      invalidateOnRefresh: true,
-      scrub: true,
       onEnterBack: () => changeNavColor(newNavColor), // Cambia il colore al nuovo
       onLeave: () => changeNavColor(originalNavColor), // Ripristina il colore originale
     });
@@ -2469,8 +2431,6 @@ const cecoStretegy = {
     ScrollTrigger.create({
       trigger: ".trigger-ceco-2",
       start: "top+=80vh top",
-      invalidateOnRefresh: true,
-      scrub: true,
       onEnter: startContinuousRotation,
       onLeaveBack: () => {
         // Fermare l'animazione e resettare la rotazione quando si torna indietro
@@ -2593,15 +2553,13 @@ function logoAnima() {
   
       ScrollTrigger.create({
         trigger: logo,
-        start: "top 80%", 
+        start: "top 80%", // Inizia l'animazione quando il top dell'elemento è al 80% della 
         end: "bottom top",
-        invalidateOnRefresh: true,
-        scrub: true,
         onEnter: () => anim.play(),
         onEnterBack: () => anim.play(),
         onLeave: () => anim.reverse(),
         onLeaveBack: () => anim.reverse(),
-        toggleActions: "play none none reverse", 
+        toggleActions: "play none none reverse", // Gioca l'animazione all'ingresso e la ripete all'uscita
       });
     });
   }
@@ -3088,7 +3046,6 @@ function serviceWrapper() {
         trigger: container,
         start: "top 60%",
         end: "bottom bottom",
-        invalidateOnRefresh: true,
         scrub: true,
         toggleActions: "play none none none",
         onEnter: () => {
@@ -3138,7 +3095,9 @@ function serviceWrapper() {
           }
         },
       });
-    });  
+    });
+
+  ScrollTrigger.refresh();
 }
 //funzione per l'animazione ingresso Servizio in pagina
     function servicePageWrapper() {
@@ -3153,7 +3112,6 @@ function serviceWrapper() {
           trigger: container,
           start: "top 60%",
           end: "bottom bottom",
-          invalidateOnRefresh: true,
           scrub: true,
           toggleActions: "play none none none",
           onEnter: () => {           
@@ -3165,8 +3123,10 @@ function serviceWrapper() {
             })
           },
         });
-      });       
-    
+      });
+       
+      // Aggiorna ScrollTrigger per riflettere i nuovi elementi
+      ScrollTrigger.refresh();
     }
     
     function transitionHome() {
@@ -3411,8 +3371,6 @@ function serviceWrapper() {
         trigger: ".newsletter-section",
         start: "center center",
         toggleActions: "play none none reverse",
-        invalidateOnRefresh: true,
-        scrub: true,
         onEnter: () => {
           gsap.fromTo(
             ".arrow-proposito-newsletter",
@@ -3522,8 +3480,6 @@ function serviceWrapper() {
           trigger: post, // Ogni singolo post è il trigger
           start: "top 80%", // L'animazione parte quando il post è al 80% della viewport
           toggleActions: "play none none none", // Anima quando entra, reverte quando esce
-          invalidateOnRefresh: true,
-          scrub: true,
           onEnter: () => {
             // Animazione per il singolo post
             gsap.to(post, {
