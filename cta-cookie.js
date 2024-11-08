@@ -119,6 +119,7 @@ const consentManager = {
       cookieConfig.cookieMaxAge
     );
     gtmManager.fireGTMEvent("allCookiesAccepted");
+    activateScripts();
     uiManager.hideBanner();
     closeCookiePreferences();
   },
@@ -169,6 +170,9 @@ const consentManager = {
       JSON.stringify(userConsents),
       cookieConfig.cookieMaxAge
     );
+    if (analyticsConsent || marketingConsent) {
+      activateScripts(); // Attiva subito gli script
+    }
     gtmManager.updateConsentMode(userConsents);
     closeCookiePreferences();
   },
