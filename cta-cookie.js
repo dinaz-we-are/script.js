@@ -255,29 +255,24 @@ const gtmManager = {
   },
 };
 
-// Funzione per attivare gli script contrassegnati con cta="activate"
-const activateScripts = () => {
+function activateScripts() {
   const scripts = document.querySelectorAll('script[cta="activate"]');
   scripts.forEach((script) => {
-    if (script.type === "text/plain") {
-      script.type = "text/javascript"; // Cambia il tipo per attivare lo script
+    // Rimuovi l'attributo type per eseguire lo script
+    script.removeAttribute("type");
+
+    // Se è uno script esterno, ricrea l'elemento per ricaricarlo
+    if (script.src) {
       const newScript = document.createElement("script");
-
-      // Se lo script ha un attributo src, crea un nuovo elemento script
-      if (script.src) {
-        newScript.src = script.src;
-        newScript.async = script.async;
-      } else {
-        // Altrimenti, copia il contenuto interno dello script
-        newScript.innerHTML = script.innerHTML;
-      }
-
-      // Aggiungi il nuovo script al documento e rimuovi quello originale
+      newScript.async = script.async;
+      newScript.src = script.src;
       document.head.appendChild(newScript);
-      script.parentNode.removeChild(script);
+    } else {
+      // Se è uno script inline, eseguilo direttamente
+      eval(script.innerText);
     }
   });
-};
+}
 
 // Funzione per inizializzare i servizi di tracking in base al consenso
 function initializeTracking() {
@@ -293,6 +288,7 @@ function initializeTracking() {
   }
 }
 
+// Inizializza i servizi di tracking al caricamento della pagina
 document.addEventListener("DOMContentLoaded", initializeTracking);
 
 document.addEventListener("DOMContentLoaded", () => {
