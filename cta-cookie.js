@@ -2,18 +2,27 @@
 
 // Configurazione di base
 const cookieConfig = {
-  mode: "opt-in", // Modalità di consenso: 'opt-in', 'opt-out', 'informational'
-  cookieMaxAge: 180, // Durata in giorni dei cookie
-  debugMode: false, // Modalità debug
-  consentMode: true, // Integrazione con Google Consent Mode
+  mode: "opt-in",
+  cookieMaxAge: 180,
+  debugMode: false,
+  consentMode: true,
   categories: {
-    essential: true, // Cookie essenziali attivi di default
-    analytics: false, // Cookie disabilitati fino al consenso
-    marketing: false, // Cookie disabilitati fino al consenso
-    personalization: false, // Cookie disabilitati fino al consenso
-    uncategorized: false, // Cookie disabilitati fino al consenso
+    essential: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+    uncategorized: false,
   },
 };
+
+// Inizializza Google Consent Mode V2 con le impostazioni predefinite
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500 // Attende l'aggiornamento del consenso
+});
 
 // Modulo per la gestione dei cookie
 const cookieManager = {
@@ -84,8 +93,6 @@ const resetCookies = () => {
   location.reload();
 };
 
-
-
 // Aggiungi l'event listener per il pulsante di reset
 const resetButton = document.querySelector("[cta='reset']");
 if (resetButton) {
@@ -128,6 +135,10 @@ if (!cookieManager.getCookie("cta")) {
 // Modulo per la gestione degli eventi e della logica del consenso
 const consentManager = {
   allowAll: () => {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'analytics_storage': 'granted'
+    });
     cookieManager.setCookie(
       "cta",
       JSON.stringify({
@@ -144,6 +155,10 @@ const consentManager = {
     closeCookiePreferences();
   },
   denyAll: () => {
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
+    });
     const defaultConsents = {
       essential: true,
       analytics: false,
@@ -178,6 +193,11 @@ const consentManager = {
     const personalizationConsent = personalizationCheckbox
       ? personalizationCheckbox.checked
       : false;
+
+      gtag('consent', 'update', {
+        'ad_storage': marketingConsent ? 'granted' : 'denied',
+        'analytics_storage': analyticsConsent ? 'granted' : 'denied'
+      });
 
     const userConsents = {
       essential: true,
