@@ -47,12 +47,128 @@ const cookieAnimation = {
         },
       });
     }
-  },  
+  }, 
+  initializeCookieCheckboxes: function () {
+    // Funzione per animare e gestire i checkbox singolarmente
+    const toggleCheckboxAnimation = (
+      checkboxId,
+      containerAttr,
+      toggleAttr,
+      category,
+      isChecked
+    ) => {
+      const checkbox = document.querySelector(checkboxId);
+      const container = document.querySelector(`[cta-checkbox='${containerAttr}']`);
+      const toggle = container?.querySelector(`[cta-toggle='${toggleAttr}']`);
+  
+      if (checkbox && container && toggle) {
+        // Imposta lo stato iniziale del checkbox e applica l'animazione
+        checkbox.checked = isChecked;
+        if (isChecked) {
+          gsap.to(toggle, { x: 20, duration: 0.3, ease: "power2.inOut" });
+          gsap.to(container, {
+            backgroundColor: "#ff006e",
+            duration: 0.3,
+            ease: "power2.inOut",
+          });
+        } else {
+          gsap.to(toggle, { x: 0, duration: 0.3, ease: "power2.inOut" });
+          gsap.to(container, {
+            backgroundColor: "",
+            duration: 0.3,
+            ease: "power2.inOut",
+          });
+        }
+  
+        // Aggiungi un event listener al click del checkbox
+        checkbox.addEventListener("click", () => {
+          if (checkbox.checked) {
+            gsap.to(toggle, { x: 20, duration: 0.3, ease: "power2.inOut" });
+            gsap.to(container, {
+              backgroundColor: "#ff006e",
+              duration: 0.3,
+              ease: "power2.inOut",
+            });
+          } else {
+            gsap.to(toggle, { x: 0, duration: 0.3, ease: "power2.inOut" });
+            gsap.to(container, {
+              backgroundColor: "",
+              duration: 0.3,
+              ease: "power2.inOut",
+            });
+          }
+  
+          // Aggiorna il cookie con il nuovo stato
+          const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+            essential: true,
+            analytics: false,
+            marketing: false,
+            personalization: false,
+          };
+          savedConsents[category] = checkbox.checked;
+          cookieManager.setCookie(
+            "cta",
+            JSON.stringify(savedConsents),
+            cookieConfig.cookieMaxAge
+          );
+        });
+      } else {
+        console.warn(`Elemento non trovato per l'animazione del checkbox: ${category}`);
+      }
+    };
+  
+    // Funzione per attivare/disattivare tutti i checkbox
+    const toggleAllCheckboxes = (isChecked) => {
+      toggleCheckboxAnimation("#cookie-marketing", "marketing", "marketing", "marketing", isChecked);
+      toggleCheckboxAnimation("#cookie-analytics", "analytics", "analytics", "analytics", isChecked);
+      toggleCheckboxAnimation("#cookie-personalization", "personalization", "personalization", "personalization", isChecked);
+  
+      const newConsents = {
+        essential: true,
+        analytics: isChecked,
+        marketing: isChecked,
+        personalization: isChecked,
+      };
+      cookieManager.setCookie("cta", JSON.stringify(newConsents), cookieConfig.cookieMaxAge);
+    };
+  
+    // Event listener per i pulsanti cta='allow' e cta='deny'
+    const allowButtons = document.querySelectorAll("[cta='allow']");
+    if (allowButtons.length > 0) {
+      allowButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          toggleAllCheckboxes(true);
+          uiManager.hideBanner();
+        });
+      });
+    }
+  
+    const denyButtons = document.querySelectorAll("[cta='deny']");
+    if (denyButtons.length > 0) {
+      denyButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          toggleAllCheckboxes(false);
+          uiManager.hideBanner();
+        });
+      });
+    }
+  
+    const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+      essential: true,
+      analytics: false,
+      marketing: false,
+      personalization: false,
+    };
+    toggleCheckboxAnimation("#cookie-marketing", "marketing", "marketing", "marketing", savedConsents.marketing);
+    toggleCheckboxAnimation("#cookie-analytics", "analytics", "analytics", "analytics", savedConsents.analytics);
+    toggleCheckboxAnimation("#cookie-personalization", "personalization", "personalization", "personalization", savedConsents.personalization);
+  },
   init: function () {
     this.animateBanner();
     this.animateBannerClose();
     this.cookiePreferences();
-    this.closeCookiePreferences();    
+    this.closeCookiePreferences();
+    this.initializeCookieCheckboxes();    
   },
 };
 

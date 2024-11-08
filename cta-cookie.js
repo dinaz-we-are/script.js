@@ -57,7 +57,7 @@ const resetCookies = () => {
   cookieManager.clearAllCookies();
 
   // Chiudi il banner delle preferenze
-  closeCookiePreferences();
+  cookieAnimation.closeCookiePreferences();
 
   // Mostra un messaggio di conferma o esegui eventuali altre azioni
   console.log(
@@ -77,25 +77,25 @@ const uiManager = {
   showBanner: () => {
     const banner = document.querySelector("#banner-cookie");
     if (banner) {
-      animateBanner();
+      cookieAnimation.animateBanner();
     }
   },
   hideBanner: () => {
     const banner = document.querySelector("#banner-cookie");
     if (banner) {
-      animateBannerClose();
+      cookieAnimation.animateBannerClose();
     }
   },
   closeBannerWithoutConsent: () => {
     const banner = document.querySelector("#banner-cookie");
     if (banner) {
-      animateBannerClose();
+      cookieAnimation.animateBannerClose();
     }
   },
   handlePreferences: () => {
     const preferences = document.querySelector("#cookie-preferences");
     if (preferences) {
-      cookiePreferences();
+      cookieAnimation.cookiePreferences();
     }
   },
 };
@@ -120,7 +120,7 @@ const consentManager = {
     );
     gtmManager.fireGTMEvent("allCookiesAccepted");
     uiManager.hideBanner();
-    closeCookiePreferences();
+    cookieAnimation.closeCookiePreferences();
   },
   denyAll: () => {
     const defaultConsents = {
@@ -136,7 +136,7 @@ const consentManager = {
     );
     gtmManager.fireGTMEvent("allCookiesDenied");
     uiManager.hideBanner();
-    closeCookiePreferences();
+    cookieAnimation.closeCookiePreferences();
   },
   handleFormSubmit: (event) => {
     event.preventDefault();
@@ -170,7 +170,7 @@ const consentManager = {
       cookieConfig.cookieMaxAge
     );
     gtmManager.updateConsentMode(userConsents);
-    closeCookiePreferences();
+    cookieAnimation.closeCookiePreferences();
   },
 };
 
@@ -213,7 +213,7 @@ if (preferencesForm) {
 // Event listener per il pulsante di chiusura delle preferenze
 const preferencesCloseButton = document.querySelector("#preferences-close");
 if (preferencesCloseButton) {
-  preferencesCloseButton.addEventListener("click", closeCookiePreferences);
+  preferencesCloseButton.addEventListener("click",  cookieAnimation.closeCookiePreferences);
 }
 
 // Event listener per il pulsante di conferma delle preferenze
@@ -254,168 +254,4 @@ const gtmManager = {
     }
   },
 };
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Funzione per animare e gestire i checkbox singolarmente
-  const toggleCheckboxAnimation = (
-    checkboxId,
-    containerAttr,
-    toggleAttr,
-    category,
-    isChecked
-  ) => {
-    const checkbox = document.querySelector(checkboxId);
-    const container = document.querySelector(
-      `[cta-checkbox='${containerAttr}']`
-    );
-    const toggle = container?.querySelector(`[cta-toggle='${toggleAttr}']`);
-
-    if (checkbox && container && toggle) {
-      // Imposta lo stato iniziale del checkbox e applica l'animazione
-      checkbox.checked = isChecked;
-      if (isChecked) {
-        gsap.to(toggle, { x: 20, duration: 0.3, ease: "power2.inOut" });
-        gsap.to(container, {
-          backgroundColor: "#ff006e",
-          duration: 0.3,
-          ease: "power2.inOut",
-        });
-      } else {
-        gsap.to(toggle, { x: 0, duration: 0.3, ease: "power2.inOut" });
-        gsap.to(container, {
-          backgroundColor: "",
-          duration: 0.3,
-          ease: "power2.inOut",
-        });
-      }
-
-      // Aggiungi un event listener al click del checkbox
-      checkbox.addEventListener("click", () => {
-        if (checkbox.checked) {
-          // Animazione al primo click (ON)
-          gsap.to(toggle, { x: 20, duration: 0.3, ease: "power2.inOut" });
-          gsap.to(container, {
-            backgroundColor: "#ff006e",
-            duration: 0.3,
-            ease: "power2.inOut",
-          });
-        } else {
-          // Animazione al secondo click (OFF)
-          gsap.to(toggle, { x: 0, duration: 0.3, ease: "power2.inOut" });
-          gsap.to(container, {
-            backgroundColor: "",
-            duration: 0.3,
-            ease: "power2.inOut",
-          });
-        }
-
-        // Aggiorna il cookie con il nuovo stato
-        const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-          essential: true,
-          analytics: false,
-          marketing: false,
-          personalization: false,
-        };
-        savedConsents[category] = checkbox.checked;
-        cookieManager.setCookie(
-          "cta",
-          JSON.stringify(savedConsents),
-          cookieConfig.cookieMaxAge
-        );
-      });
-    } else {
-      console.warn(
-        `Elemento non trovato per l'animazione del checkbox: ${category}`
-      );
-    }
-  };
-
-  // Funzione per attivare/disattivare tutti i checkbox
-  const toggleAllCheckboxes = (isChecked) => {
-    toggleCheckboxAnimation(
-      "#cookie-marketing",
-      "marketing",
-      "marketing",
-      "marketing",
-      isChecked
-    );
-    toggleCheckboxAnimation(
-      "#cookie-analytics",
-      "analytics",
-      "analytics",
-      "analytics",
-      isChecked
-    );
-    toggleCheckboxAnimation(
-      "#cookie-personalization",
-      "personalization",
-      "personalization",
-      "personalization",
-      isChecked
-    );
-
-    // Aggiorna il cookie con il nuovo stato per tutti i consensi
-    const newConsents = {
-      essential: true,
-      analytics: isChecked,
-      marketing: isChecked,
-      personalization: isChecked,
-    };
-    cookieManager.setCookie(
-      "cta",
-      JSON.stringify(newConsents),
-      cookieConfig.cookieMaxAge
-    );
-  };
-
-  // Event listener per i pulsanti cta='allow' e cta='deny'
-  const allowButtons = document.querySelectorAll("[cta='allow']");
-  if (allowButtons.length > 0) {
-    allowButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        toggleAllCheckboxes(true); // Attiva tutti i checkbox
-        uiManager.hideBanner();
-      });
-    });
-  }
-
-  const denyButtons = document.querySelectorAll("[cta='deny']");
-  if (denyButtons.length > 0) {
-    denyButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        toggleAllCheckboxes(false); // Disattiva tutti i checkbox
-        uiManager.hideBanner();
-      });
-    });
-  }
-
-  // Attiva le animazioni e la gestione del cookie per ciascun checkbox
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
-  toggleCheckboxAnimation(
-    "#cookie-marketing",
-    "marketing",
-    "marketing",
-    "marketing",
-    savedConsents.marketing
-  );
-  toggleCheckboxAnimation(
-    "#cookie-analytics",
-    "analytics",
-    "analytics",
-    "analytics",
-    savedConsents.analytics
-  );
-  toggleCheckboxAnimation(
-    "#cookie-personalization",
-    "personalization",
-    "personalization",
-    "personalization",
-    savedConsents.personalization
-  );
-});
 
