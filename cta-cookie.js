@@ -48,6 +48,7 @@ const cookieManager = {
       document.cookie =
         cookieName + "=; Max-Age=-99999999; path=/; SameSite=None; Secure";
     }
+    cookieManager.clearTrackingCookies();
   },
 };
 
@@ -65,6 +66,17 @@ const resetCookies = () => {
   );
   location.reload();
 };
+
+// Funzione per cancellare i cookie di tracciamento come Google Analytics e Tag Manager
+cookieManager.clearTrackingCookies = () => {
+  const trackingCookies = [
+    "_ga", "_gid", "_gat", "_gac_", "_gtm", "_ga_<property_id>"
+  ];
+  trackingCookies.forEach(cookieName => {
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=None; Secure`;
+  });
+};
+
 
 // Aggiungi l'event listener per il pulsante di reset
 const resetButton = document.querySelector("[cta='reset']");
@@ -135,6 +147,7 @@ const consentManager = {
       JSON.stringify(defaultConsents),
       cookieConfig.cookieMaxAge
     );
+    cookieManager.clearTrackingCookies();
     gtmManager.fireGTMEvent("allCookiesDenied");
     uiManager.hideBanner();
     closeCookiePreferences();
