@@ -50,25 +50,22 @@ const cookieManager = {
     }    
   },
   clearTrackingCookies: () => {
-    // Elenca i nomi dei cookie di Google Analytics e Google Tag Manager
-    const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm"];
-
-  // Cancella ciascun cookie per il dominio corrente con diversi percorsi
-  trackingCookies.forEach(cookieName => {
-    // Cancella il cookie con il dominio specificato
-    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${document.domain}; SameSite=None; Secure`;
-    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
-
-    // Cancella il cookie senza specificare il dominio
-    document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
-
-    // Prova anche a cancellare il cookie con un percorso specifico
-    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${document.domain}; SameSite=None; Secure`;
-    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
-  });
-
-  console.log("Tentativo di cancellazione dei cookie di tracciamento completato.");
-  },
+   // Elenca i cookie di Google Analytics e Google Tag Manager
+   const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm", "_gcl_au"];
+  
+   // Ottieni il dominio attuale
+   const domainParts = window.location.hostname.split(".");
+   let domain = domainParts.slice(-2).join("."); // Considera solo il dominio principale
+ 
+   // Tenta di cancellare i cookie specificando il dominio
+   trackingCookies.forEach(cookieName => {
+     // Prova a cancellare il cookie con il dominio principale
+     document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${domain}; SameSite=None; Secure`;
+ 
+     // Prova anche a cancellare senza specificare il dominio (per sicurezza)
+     document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
+   }); 
+ },
 };
 
 // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
