@@ -1,3 +1,61 @@
+const cookieAnimation = {
+  animateBanner: function () {
+    const banner = document.getElementById("banner-cookie");
+    if (banner) {
+      gsap.fromTo(
+        banner,
+        { y: "10rem", display: "none" }, // Posizione iniziale e opacità
+        {
+          y: "0rem",
+          display: "flex",
+          duration: 1,
+          delay: 3,
+          ease: "power2.inOut",
+        } // Posizione finale, opacità, durata e ritardo
+      );
+    }
+  },
+  animateBannerClose: function () {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      gsap.to(banner, {
+        y: "10rem",
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          banner.style.display = "none"; // Imposta display a none dopo l'animazione
+        },
+      });
+    }
+  },
+  cookiePreferences: function () {
+    const preferences = document.querySelector("#cookie-preferences");
+    if (preferences) {
+      preferences.style.display = "flex"; // Mostra il centro preferenze
+      gsap.to(preferences, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
+    }
+  },
+  closeCookiePreferences: function () {
+    const preferences = document.querySelector("#cookie-preferences");
+    if (preferences) {
+      gsap.to(preferences, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          preferences.style.display = "none";
+        },
+      });
+    }
+  },  
+  init: function () {
+    this.animateBanner();
+    this.animateBannerClose();
+    this.cookiePreferences();
+    this.closeCookiePreferences();    
+  },
+};
+
 function burgerAnimation(isHomePage = false) {
   const burgerButton = document.querySelector("#burger");
   const burgerMobileButton = document.querySelector("#burger-mobile");
@@ -170,7 +228,6 @@ function burgerAnimation(isHomePage = false) {
   burgerButton.addEventListener("click", () => animateBurger(false));
   burgerMobileButton.addEventListener("click", () => animateBurger(true));
 }
-
    //
   function initializeScrollControlButtons() {
     const blockScrollButtons = document.querySelectorAll("[data-block-scroll]");
@@ -321,8 +378,6 @@ function burgerAnimation(isHomePage = false) {
         subtree: true,
     });
 }
-
-
   //
   const menuNavigation = {
     animateBurger: function () {
