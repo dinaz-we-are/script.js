@@ -47,8 +47,17 @@ const cookieManager = {
       const cookieName = cookies[i].split("=")[0];
       document.cookie =
         cookieName + "=; Max-Age=-99999999; path=/; SameSite=None; Secure";
-    }
-    cookieManager.clearTrackingCookies();
+    }    
+  },
+  clearTrackingCookies: () => {
+    // Elenca i nomi dei cookie di Google Analytics e Google Tag Manager
+    const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm"];
+  
+    trackingCookies.forEach(cookieName => {
+      document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
+      // Prova anche a cancellare i cookie senza il dominio specificato
+      document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
+    });
   },
 };
 
@@ -56,6 +65,7 @@ const cookieManager = {
 const resetCookies = () => {
   // Cancella tutti i cookie
   cookieManager.clearAllCookies();
+  cookieManager.clearTrackingCookies();
 
   // Chiudi il banner delle preferenze
   closeCookiePreferences();
@@ -67,15 +77,6 @@ const resetCookies = () => {
   location.reload();
 };
 
-// Funzione per cancellare i cookie di tracciamento come Google Analytics e Tag Manager
-cookieManager.clearTrackingCookies = () => {
-  const trackingCookies = [
-    "_ga", "_gid", "_gat", "_gac_", "_gtm", "_ga_<property_id>"
-  ];
-  trackingCookies.forEach(cookieName => {
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=None; Secure`;
-  });
-};
 
 
 // Aggiungi l'event listener per il pulsante di reset
