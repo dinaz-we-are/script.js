@@ -50,39 +50,6 @@ const cookieManager = {
     }
   },
 };
-function enableGoogleAnalytics() {
-  if (typeof gtag === "function") {
-    gtag("consent", "update", { analytics_storage: "granted" });
-  }
-}
-
-// Funzione per gestire l'attivazione di Google Tag Manager
-function enableGoogleTagManager() {
-  if (window.dataLayer) {
-    window.dataLayer.push({ event: "consent_granted" });
-  }
-}
-
-// Funzione per inizializzare i servizi di tracking in base al consenso
-function initializeTracking() {
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
-
-  if (savedConsents.analytics) {
-    enableGoogleAnalytics();
-  }
-
-  if (savedConsents.marketing) {
-    enableGoogleTagManager();
-  }
-}
-
-// Inizializza i servizi di tracking al caricamento della pagina
-document.addEventListener("DOMContentLoaded", initializeTracking);
 
 // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
 const resetCookies = () => {
@@ -287,6 +254,46 @@ const gtmManager = {
     }
   },
 };
+
+// Funzione per attivare gli script contrassegnati con cta="activate"
+const activateScripts = () => {
+  const scripts = document.querySelectorAll('script[cta="activate"]');
+  scripts.forEach((script) => {
+    if (script.type === "text/plain") {
+      script.type = "text/javascript"; // Cambia il tipo per attivare lo script
+      const newScript = document.createElement("script");
+
+      // Se lo script ha un attributo src, crea un nuovo elemento script
+      if (script.src) {
+        newScript.src = script.src;
+        newScript.async = script.async;
+      } else {
+        // Altrimenti, copia il contenuto interno dello script
+        newScript.innerHTML = script.innerHTML;
+      }
+
+      // Aggiungi il nuovo script al documento e rimuovi quello originale
+      document.head.appendChild(newScript);
+      script.parentNode.removeChild(script);
+    }
+  });
+};
+
+// Funzione per inizializzare i servizi di tracking in base al consenso
+function initializeTracking() {
+  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+    essential: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+  };
+
+  if (savedConsents.analytics || savedConsents.marketing) {
+    activateScripts();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initializeTracking);
 
 document.addEventListener("DOMContentLoaded", () => {
   // Funzione per animare e gestire i checkbox singolarmente
