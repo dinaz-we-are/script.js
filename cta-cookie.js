@@ -52,12 +52,22 @@ const cookieManager = {
   clearTrackingCookies: () => {
     // Elenca i nomi dei cookie di Google Analytics e Google Tag Manager
     const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm"];
-  
-    trackingCookies.forEach(cookieName => {
-      document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
-      // Prova anche a cancellare i cookie senza il dominio specificato
-      document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
-    });
+
+  // Cancella ciascun cookie per il dominio corrente con diversi percorsi
+  trackingCookies.forEach(cookieName => {
+    // Cancella il cookie con il dominio specificato
+    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${document.domain}; SameSite=None; Secure`;
+    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
+
+    // Cancella il cookie senza specificare il dominio
+    document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
+
+    // Prova anche a cancellare il cookie con un percorso specifico
+    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${document.domain}; SameSite=None; Secure`;
+    document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=None; Secure`;
+  });
+
+  console.log("Tentativo di cancellazione dei cookie di tracciamento completato.");
   },
 };
 
