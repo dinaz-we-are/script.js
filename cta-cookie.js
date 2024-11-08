@@ -50,6 +50,39 @@ const cookieManager = {
     }
   },
 };
+function enableGoogleAnalytics() {
+  if (typeof gtag === "function") {
+    gtag("consent", "update", { analytics_storage: "granted" });
+  }
+}
+
+// Funzione per gestire l'attivazione di Google Tag Manager
+function enableGoogleTagManager() {
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: "consent_granted" });
+  }
+}
+
+// Funzione per inizializzare i servizi di tracking in base al consenso
+function initializeTracking() {
+  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+    essential: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+  };
+
+  if (savedConsents.analytics) {
+    enableGoogleAnalytics();
+  }
+
+  if (savedConsents.marketing) {
+    enableGoogleTagManager();
+  }
+}
+
+// Inizializza i servizi di tracking al caricamento della pagina
+document.addEventListener("DOMContentLoaded", initializeTracking);
 
 // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
 const resetCookies = () => {
