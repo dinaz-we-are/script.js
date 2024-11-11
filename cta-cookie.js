@@ -15,6 +15,15 @@ const cookieConfig = {
   },
 };
 
+// Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
+const resetCookies = () => {
+  cookieManager.clearAllCookies();
+  cookieManager.clearTrackingCookies();
+  closeCookiePreferences();
+  console.log("Tutti i cookie sono stati cancellati e il banner è stato chiuso.");
+  location.reload();
+};
+
 // Modulo per la gestione dei cookie
 const cookieManager = {
   setCookie: (name, value, days) => {
