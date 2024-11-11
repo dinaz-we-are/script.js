@@ -52,7 +52,7 @@ const resetCookies = () => {
   location.reload();
 };
 
-// Modulo per la gestione dei cookie
+// **Modulo per la gestione dei cookie**
 const cookieManager = {
   setCookie: (name, value, days) => {
     let expires = "";
@@ -153,93 +153,6 @@ function initializeTracking() {
   }
 }
 
-// Modulo per la gestione degli eventi e della logica del consenso
-const consentManager = {
-  allowAll: () => {
-    gtag("consent", "update", {
-      ad_storage: "granted",
-      analytics_storage: "granted",
-    });
-    cookieManager.setCookie(
-      "cta",
-      JSON.stringify({
-        essential: true,
-        analytics: true,
-        marketing: true,
-        personalization: true,
-      }),
-      cookieConfig.cookieMaxAge
-    );
-    gtmManager.fireGTMEvent("allCookiesAccepted");
-    activateScripts();
-    uiManager.hideBanner();
-    closeCookiePreferences();
-  },
-  denyAll: () => {
-    gtag("consent", "update", {
-      ad_storage: "denied",
-      analytics_storage: "denied",
-    });
-    const defaultConsents = {
-      essential: true,
-      analytics: false,
-      marketing: false,
-      personalization: false,
-    };
-    cookieManager.setCookie(
-      "cta",
-      JSON.stringify(defaultConsents),
-      cookieConfig.cookieMaxAge
-    );
-    cookieManager.clearTrackingCookies();
-    gtmManager.fireGTMEvent("allCookiesDenied");
-    uiManager.hideBanner();
-    closeCookiePreferences();
-  },
-  handleFormSubmit: (event) => {
-    event.preventDefault();
-
-    const analyticsCheckbox = document.querySelector("#cookie-analytics");
-    const marketingCheckbox = document.querySelector("#cookie-marketing");
-    const personalizationCheckbox = document.querySelector(
-      "#cookie-personalization"
-    );
-
-    const analyticsConsent = analyticsCheckbox
-      ? analyticsCheckbox.checked
-      : false;
-    const marketingConsent = marketingCheckbox
-      ? marketingCheckbox.checked
-      : false;
-    const personalizationConsent = personalizationCheckbox
-      ? personalizationCheckbox.checked
-      : false;
-
-    gtag("consent", "update", {
-      ad_storage: marketingConsent ? "granted" : "denied",
-      analytics_storage: analyticsConsent ? "granted" : "denied",
-    });
-
-    const userConsents = {
-      essential: true,
-      analytics: analyticsConsent,
-      marketing: marketingConsent,
-      personalization: personalizationConsent,
-    };
-
-    cookieManager.setCookie(
-      "cta",
-      JSON.stringify(userConsents),
-      cookieConfig.cookieMaxAge
-    );
-    if (analyticsConsent || marketingConsent) {
-      activateScripts();
-    }
-    gtmManager.updateConsentMode(userConsents);
-    closeCookiePreferences();
-  },
-};
-
 // **Event listener per il caricamento del DOM**
 document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.querySelector("[cta='reset']");
@@ -292,6 +205,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeButton = document.querySelector("#banner-close");
   if (closeButton) {
     closeButton.addEventListener("click", uiManager.closeBannerWithoutConsent);
+  }
+
+  // Mostra il banner se l'utente non ha dato il consenso
+  if (!cookieManager.getCookie("cta")) {
+    uiManager.showBanner();
   }
 });
 
