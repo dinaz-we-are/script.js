@@ -72,182 +72,123 @@ const cookieManager = {
   },
 };
 
-// Funzione per inizializzare i servizi di tracking in base al consenso
-function initializeTracking() {
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
+// **Modulo per l'integrazione con Google Tag Manager**
+const gtmManager = {
+  fireGTMEvent: (eventName) => {
+    if (window.dataLayer) {
+      window.dataLayer.push({ event: eventName });
+      if (cookieConfig.debugMode) {
+        console.log(`Evento GTM ${eventName} inviato.`);
+      }
+    }
+  },
+  updateConsentMode: (consents) => {
+    if (cookieConfig.consentMode && window.gtag) {
+      window.gtag("consent", "update", {
+        ad_storage: consents.marketing ? "granted" : "denied",
+        analytics_storage: consents.analytics ? "granted" : "denied",
+        functionality_storage: consents.personalization ? "granted" : "denied",
+      });
+      if (cookieConfig.debugMode) {
+        console.log("Google Consent Mode aggiornato:", consents);
+      }
+    }
+  },
+};
 
-  if (savedConsents.analytics || savedConsents.marketing) {
-    activateScripts();
-  }
-}
+// Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
+const resetCookies = () => {
+  cookieManager.clearAllCookies();
+  cookieManager.clearTrackingCookies();
+  closeCookiePreferences();
+  console.log("Tutti i cookie sono stati cancellati e il banner è stato chiuso.");
+  location.reload();
+};
 
 // Event listener per il caricamento del DOM
 document.addEventListener("DOMContentLoaded", () => {
-  // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
-  const resetCookies = () => {
-    cookieManager.clearAllCookies();
-    cookieManager.clearTrackingCookies();
-    closeCookiePreferences();
-    console.log("Tutti i cookie sono stati cancellati e il banner è stato chiuso.");
-    location.reload();
-  };
-
-  // Modulo per la gestione della UI
-  const uiManager = {
-    showBanner: () => {
-      const banner = document.querySelector("#banner-cookie");
-      if (banner) {
-        animateBanner();
-      }
-    },
-    hideBanner: () => {
-      const banner = document.querySelector("#banner-cookie");
-      if (banner) {
-        animateBannerClose();
-      }
-    },
-    closeBannerWithoutConsent: () => {
-      const banner = document.querySelector("#banner-cookie");
-      if (banner) {
-        animateBannerClose();
-      }
-    },
-    handlePreferences: () => {
-      const preferences = document.querySelector("#cookie-preferences");
-      if (preferences) {
-        cookiePreferences();
-      }
-    },
-  };
-
-  // Mostra il banner se l'utente non ha dato il consenso
-  if (!cookieManager.getCookie("cta")) {
-    uiManager.showBanner();
+  const resetButton = document.querySelector("[cta='reset']");
+  if (resetButton) {
+    resetButton.addEventListener("click", resetCookies);
   }
 
-  // Modulo per la gestione degli eventi e della logica del consenso
-  const consentManager = {
-    allowAll: () => {
-      gtag("consent", "update", {
-        ad_storage: "granted",
-        analytics_storage: "granted",
+  const allowButtons = document.querySelectorAll("[cta='allow']");
+  if (allowButtons.length > 0) {
+    allowButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        consentManager.allowAll();
+        toggleAllCheckboxes(true); // Corregge il problema dei checkbox
       });
-      cookieManager.setCookie(
-        "cta",
-        JSON.stringify({
-          essential: true,
-          analytics: true,
-          marketing: true,
-          personalization: true,
-        }),
-        cookieConfig.cookieMaxAge
-      );
-      gtmManager.fireGTMEvent("allCookiesAccepted");
-      activateScripts();
-      uiManager.hideBanner();
-      closeCookiePreferences();
-    },
-    denyAll: () => {
-      gtag("consent", "update", {
-        ad_storage: "denied",
-        analytics_storage: "denied",
+    });
+  }
+
+  const denyButtons = document.querySelectorAll("[cta='deny']");
+  if (denyButtons.length > 0) {
+    denyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        consentManager.denyAll();
+        toggleAllCheckboxes(false); // Corregge il problema dei checkbox
       });
-      const defaultConsents = {
-        essential: true,
-        analytics: false,
-        marketing: false,
-        personalization: false,
-      };
-      cookieManager.setCookie(
-        "cta",
-        JSON.stringify(defaultConsents),
-        cookieConfig.cookieMaxAge
-      );
-      cookieManager.clearTrackingCookies();
-      gtmManager.fireGTMEvent("allCookiesDenied");
-      uiManager.hideBanner();
-      closeCookiePreferences();
-    },
-    handleFormSubmit: (event) => {
+    });
+  }
+
+  const openPreferencesButtons = document.querySelectorAll("[cta='open-preferences']");
+  if (openPreferencesButtons.length > 0) {
+    openPreferencesButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        uiManager.closeBannerWithoutConsent();
+        uiManager.handlePreferences();
+      });
+    });
+  }
+
+  const preferencesForm = document.querySelector("#wf-form-Cookie-Preferences-form");
+  if (preferencesForm) {
+    preferencesForm.addEventListener("submit", consentManager.handleFormSubmit);
+  }
+
+  const preferencesCloseButton = document.querySelector("#preferences-close");
+  if (preferencesCloseButton) {
+    preferencesCloseButton.addEventListener("click", closeCookiePreferences);
+  }
+
+  const submitButton = document.querySelector("[cta='submit']");
+  if (submitButton) {
+    submitButton.addEventListener("click", (event) => {
       event.preventDefault();
+      consentManager.handleFormSubmit(event);
+    });
+  }
 
-      const analyticsCheckbox = document.querySelector("#cookie-analytics");
-      const marketingCheckbox = document.querySelector("#cookie-marketing");
-      const personalizationCheckbox = document.querySelector(
-        "#cookie-personalization"
-      );
-
-      const analyticsConsent = analyticsCheckbox
-        ? analyticsCheckbox.checked
-        : false;
-      const marketingConsent = marketingCheckbox
-        ? marketingCheckbox.checked
-        : false;
-      const personalizationConsent = personalizationCheckbox
-        ? personalizationCheckbox.checked
-        : false;
-
-      gtag("consent", "update", {
-        ad_storage: marketingConsent ? "granted" : "denied",
-        analytics_storage: analyticsConsent ? "granted" : "denied",
-      });
-
-      const userConsents = {
-        essential: true,
-        analytics: analyticsConsent,
-        marketing: marketingConsent,
-        personalization: personalizationConsent,
-      };
-
-      cookieManager.setCookie(
-        "cta",
-        JSON.stringify(userConsents),
-        cookieConfig.cookieMaxAge
-      );
-      if (analyticsConsent || marketingConsent) {
-        activateScripts();
-      }
-      gtmManager.updateConsentMode(userConsents);
-      closeCookiePreferences();
-    },
-  };
-
-  // Aggiungi event listener ai pulsanti
-  document.querySelector("[cta='reset']")?.addEventListener("click", resetCookies);
-
-  document.querySelectorAll("[cta='allow']").forEach((button) =>
-    button.addEventListener("click", consentManager.allowAll)
-  );
-
-  document.querySelectorAll("[cta='deny']").forEach((button) =>
-    button.addEventListener("click", consentManager.denyAll)
-  );
-
-  document.querySelectorAll("[cta='open-preferences']").forEach((button) =>
-    button.addEventListener("click", () => {
-      uiManager.closeBannerWithoutConsent();
-      uiManager.handlePreferences();
-    })
-  );
-
-  document
-    .querySelector("#wf-form-Cookie-Preferences-form")
-    ?.addEventListener("submit", consentManager.handleFormSubmit);
-
-  document.querySelector("#preferences-close")?.addEventListener("click", closeCookiePreferences);
-
-  document.querySelector("[cta='submit']")?.addEventListener("click", (event) => {
-    event.preventDefault();
-    consentManager.handleFormSubmit(event);
-  });
-
-  document.querySelector("#banner-close")?.addEventListener("click", uiManager.closeBannerWithoutConsent);
+  const closeButton = document.querySelector("#banner-close");
+  if (closeButton) {
+    closeButton.addEventListener("click", uiManager.closeBannerWithoutConsent);
+  }
 });
+
+// **Funzione per attivare/disattivare i checkbox**
+const toggleAllCheckboxes = (isChecked) => {
+  document.querySelectorAll("[type='checkbox']").forEach((checkbox) => {
+    checkbox.checked = isChecked;
+  });
+};
+
+// Funzione per attivare gli script in base al consenso
+function activateScripts() {
+  const scripts = document.querySelectorAll('script[cta="activate"]');
+  scripts.forEach((script) => {
+    script.removeAttribute("type");
+
+    if (script.src) {
+      const newScript = document.createElement("script");
+      newScript.async = script.async;
+      newScript.src = script.src;
+      document.head.appendChild(newScript);
+    } else {
+      eval(script.innerText);
+    }
+  });
+}
 
 // Inizializza i servizi di tracking al caricamento della pagina
 document.addEventListener("DOMContentLoaded", initializeTracking);
