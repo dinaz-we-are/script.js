@@ -15,7 +15,35 @@ const cookieConfig = {
   },
 };
 
-// Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
+// **Modulo per la gestione della UI**
+const uiManager = {
+  showBanner: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBanner();
+    }
+  },
+  hideBanner: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBannerClose();
+    }
+  },
+  closeBannerWithoutConsent: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBannerClose();
+    }
+  },
+  handlePreferences: () => {
+    const preferences = document.querySelector("#cookie-preferences");
+    if (preferences) {
+      cookiePreferences();
+    }
+  },
+};
+
+// **Funzione per resettare tutti i cookie e chiudere il banner delle preferenze**
 const resetCookies = () => {
   cookieManager.clearAllCookies();
   cookieManager.clearTrackingCookies();
