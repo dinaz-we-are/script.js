@@ -77,34 +77,7 @@ const cookieManager = {
  },
 };
 
-
-// Modulo per la gestione della UI
-document.addEventListener("DOMContentLoaded", () => {
-  // Aggiungi l'event listener per il pulsante di reset
-  const resetButton = document.querySelector("[cta='reset']");
-if (resetButton) {
-  resetButton.addEventListener("click", resetCookies);
-}
-  const banner = document.querySelector("#banner-cookie");
-  const preferences = document.querySelector("#cookie-preferences");
-  
-  // Usa queste variabili per evitare ricerche ripetute
-  const uiManager = {
-    showBanner: () => {
-      if (banner) animateBanner();
-    },
-    hideBanner: () => {
-      if (banner) animateBannerClose();
-    },
-    closeBannerWithoutConsent: () => {
-      if (banner) animateBannerClose();
-    },
-    handlePreferences: () => {
-      if (preferences) cookiePreferences();
-    },
-  };
-
-  // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
+// Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
 const resetCookies = () => {
   // Cancella tutti i cookie
   cookieManager.clearAllCookies();
@@ -120,11 +93,44 @@ const resetCookies = () => {
   location.reload();
 };
 
- // Mostra il banner se l'utente non ha dato il consenso
-  if (!cookieManager.getCookie("cta")) {
-    uiManager.showBanner();
-  }
-});
+// Aggiungi l'event listener per il pulsante di reset
+const resetButton = document.querySelector("[cta='reset']");
+if (resetButton) {
+  resetButton.addEventListener("click", resetCookies);
+}
+
+// Modulo per la gestione della UI
+const uiManager = {
+  showBanner: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBanner();
+    }
+  },
+  hideBanner: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBannerClose();
+    }
+  },
+  closeBannerWithoutConsent: () => {
+    const banner = document.querySelector("#banner-cookie");
+    if (banner) {
+      animateBannerClose();
+    }
+  },
+  handlePreferences: () => {
+    const preferences = document.querySelector("#cookie-preferences");
+    if (preferences) {
+      cookiePreferences();
+    }
+  },
+};
+
+// Mostra il banner se l'utente non ha dato il consenso
+if (!cookieManager.getCookie("cta")) {
+  uiManager.showBanner();
+}
 
 // Modulo per la gestione degli eventi e della logica del consenso
 const consentManager = {
@@ -213,65 +219,62 @@ const consentManager = {
   },
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Aggiungi event listener ai pulsanti di consenso
-  const allowButtons = document.querySelectorAll("[cta='allow']");
-  if (allowButtons.length > 0) {
-    allowButtons.forEach((button) => {
-      button.addEventListener("click", consentManager.allowAll);
+// Aggiungi event listener ai pulsanti di consenso
+const allowButtons = document.querySelectorAll("[cta='allow']");
+if (allowButtons.length > 0) {
+  allowButtons.forEach((button) => {
+    button.addEventListener("click", consentManager.allowAll);
+  });
+}
+
+const denyButtons = document.querySelectorAll("[cta='deny']");
+if (denyButtons.length > 0) {
+  denyButtons.forEach((button) => {
+    button.addEventListener("click", consentManager.denyAll);
+  });
+}
+
+// Event listener per i pulsanti di apertura delle preferenze
+const openPreferencesButtons = document.querySelectorAll(
+  "[cta='open-preferences']"
+);
+if (openPreferencesButtons.length > 0) {
+  openPreferencesButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      uiManager.closeBannerWithoutConsent();
+      uiManager.handlePreferences();
     });
-  }
+  });
+}
 
-  const denyButtons = document.querySelectorAll("[cta='deny']");
-  if (denyButtons.length > 0) {
-    denyButtons.forEach((button) => {
-      button.addEventListener("click", consentManager.denyAll);
-    });
-  }
+// Event listener per il form delle preferenze
+const preferencesForm = document.querySelector(
+  "#wf-form-Cookie-Preferences-form"
+);
+if (preferencesForm) {
+  preferencesForm.addEventListener("submit", consentManager.handleFormSubmit);
+}
 
-  // Event listener per i pulsanti di apertura delle preferenze
-  const openPreferencesButtons = document.querySelectorAll(
-    "[cta='open-preferences']"
-  );
-  if (openPreferencesButtons.length > 0) {
-    openPreferencesButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        uiManager.closeBannerWithoutConsent();
-        uiManager.handlePreferences();
-      });
-    });
-  }
+// Event listener per il pulsante di chiusura delle preferenze
+const preferencesCloseButton = document.querySelector("#preferences-close");
+if (preferencesCloseButton) {
+  preferencesCloseButton.addEventListener("click", closeCookiePreferences);
+}
 
-  // Event listener per il form delle preferenze
-  const preferencesForm = document.querySelector(
-    "#wf-form-Cookie-Preferences-form"
-  );
-  if (preferencesForm) {
-    preferencesForm.addEventListener("submit", consentManager.handleFormSubmit);
-  }
+// Event listener per il pulsante di conferma delle preferenze
+const submitButton = document.querySelector("[cta='submit']");
+if (submitButton) {
+  submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    consentManager.handleFormSubmit(event);
+  });
+}
 
-  // Event listener per il pulsante di chiusura delle preferenze
-  const preferencesCloseButton = document.querySelector("#preferences-close");
-  if (preferencesCloseButton) {
-    preferencesCloseButton.addEventListener("click", closeCookiePreferences);
-  }
-
-  // Event listener per il pulsante di conferma delle preferenze
-  const submitButton = document.querySelector("[cta='submit']");
-  if (submitButton) {
-    submitButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      consentManager.handleFormSubmit(event);
-    });
-  }
-
-  // Event listener per il pulsante di chiusura senza consenso
-  const closeButton = document.querySelector("#banner-close");
-  if (closeButton) {
-    closeButton.addEventListener("click", uiManager.closeBannerWithoutConsent);
-  }
-});
-
+// Event listener per il pulsante di chiusura senza consenso
+const closeButton = document.querySelector("#banner-close");
+if (closeButton) {
+  closeButton.addEventListener("click", uiManager.closeBannerWithoutConsent);
+}
 
 // Modulo per l'integrazione con Google Tag Manager
 const gtmManager = {
