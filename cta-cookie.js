@@ -15,17 +15,6 @@ const cookieConfig = {
   },
 };
 
-// Inizializza Google Consent Mode V2 con le impostazioni predefinite
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-  dataLayer.push(arguments);
-}
-gtag("consent", "default", {
-  ad_storage: "denied",
-  analytics_storage: "denied",
-  wait_for_update: 500, // Attende l'aggiornamento del consenso
-});
-
 // Modulo per la gestione dei cookie
 const cookieManager = {
   setCookie: (name, value, days) => {
@@ -96,16 +85,125 @@ const gtmManager = {
   },
 };
 
-// Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
-const resetCookies = () => {
-  cookieManager.clearAllCookies();
-  cookieManager.clearTrackingCookies();
-  closeCookiePreferences();
-  console.log("Tutti i cookie sono stati cancellati e il banner è stato chiuso.");
-  location.reload();
+// **Funzione per attivare gli script in base al consenso**
+function activateScripts() {
+  const scripts = document.querySelectorAll('script[cta="activate"]');
+  scripts.forEach((script) => {
+    script.removeAttribute("type");
+
+    if (script.src) {
+      const newScript = document.createElement("script");
+      newScript.async = script.async;
+      newScript.src = script.src;
+      document.head.appendChild(newScript);
+    } else {
+      eval(script.innerText);
+    }
+  });
+}
+
+// **Funzione per inizializzare i servizi di tracking**
+function initializeTracking() {
+  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+    essential: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+  };
+
+  if (savedConsents.analytics || savedConsents.marketing) {
+    activateScripts();
+  }
+}
+
+// Modulo per la gestione degli eventi e della logica del consenso
+const consentManager = {
+  allowAll: () => {
+    gtag("consent", "update", {
+      ad_storage: "granted",
+      analytics_storage: "granted",
+    });
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify({
+        essential: true,
+        analytics: true,
+        marketing: true,
+        personalization: true,
+      }),
+      cookieConfig.cookieMaxAge
+    );
+    gtmManager.fireGTMEvent("allCookiesAccepted");
+    activateScripts();
+    uiManager.hideBanner();
+    closeCookiePreferences();
+  },
+  denyAll: () => {
+    gtag("consent", "update", {
+      ad_storage: "denied",
+      analytics_storage: "denied",
+    });
+    const defaultConsents = {
+      essential: true,
+      analytics: false,
+      marketing: false,
+      personalization: false,
+    };
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify(defaultConsents),
+      cookieConfig.cookieMaxAge
+    );
+    cookieManager.clearTrackingCookies();
+    gtmManager.fireGTMEvent("allCookiesDenied");
+    uiManager.hideBanner();
+    closeCookiePreferences();
+  },
+  handleFormSubmit: (event) => {
+    event.preventDefault();
+
+    const analyticsCheckbox = document.querySelector("#cookie-analytics");
+    const marketingCheckbox = document.querySelector("#cookie-marketing");
+    const personalizationCheckbox = document.querySelector(
+      "#cookie-personalization"
+    );
+
+    const analyticsConsent = analyticsCheckbox
+      ? analyticsCheckbox.checked
+      : false;
+    const marketingConsent = marketingCheckbox
+      ? marketingCheckbox.checked
+      : false;
+    const personalizationConsent = personalizationCheckbox
+      ? personalizationCheckbox.checked
+      : false;
+
+    gtag("consent", "update", {
+      ad_storage: marketingConsent ? "granted" : "denied",
+      analytics_storage: analyticsConsent ? "granted" : "denied",
+    });
+
+    const userConsents = {
+      essential: true,
+      analytics: analyticsConsent,
+      marketing: marketingConsent,
+      personalization: personalizationConsent,
+    };
+
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify(userConsents),
+      cookieConfig.cookieMaxAge
+    );
+    if (analyticsConsent || marketingConsent) {
+      activateScripts();
+    }
+    gtmManager.updateConsentMode(userConsents);
+    closeCookiePreferences();
+  },
 };
 
-// Event listener per il caricamento del DOM
+// **Event listener per il caricamento del DOM**
 document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.querySelector("[cta='reset']");
   if (resetButton) {
@@ -115,20 +213,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const allowButtons = document.querySelectorAll("[cta='allow']");
   if (allowButtons.length > 0) {
     allowButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        consentManager.allowAll();
-        toggleAllCheckboxes(true); // Corregge il problema dei checkbox
-      });
+      button.addEventListener("click", consentManager.allowAll);
     });
   }
 
   const denyButtons = document.querySelectorAll("[cta='deny']");
   if (denyButtons.length > 0) {
     denyButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        consentManager.denyAll();
-        toggleAllCheckboxes(false); // Corregge il problema dei checkbox
-      });
+      button.addEventListener("click", consentManager.denyAll);
     });
   }
 
@@ -166,34 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// **Funzione per attivare/disattivare i checkbox**
-const toggleAllCheckboxes = (isChecked) => {
-  document.querySelectorAll("[type='checkbox']").forEach((checkbox) => {
-    checkbox.checked = isChecked;
-  });
-};
-
-// Funzione per attivare gli script in base al consenso
-function activateScripts() {
-  const scripts = document.querySelectorAll('script[cta="activate"]');
-  scripts.forEach((script) => {
-    script.removeAttribute("type");
-
-    if (script.src) {
-      const newScript = document.createElement("script");
-      newScript.async = script.async;
-      newScript.src = script.src;
-      document.head.appendChild(newScript);
-    } else {
-      eval(script.innerText);
-    }
-  });
-}
-
-// Inizializza i servizi di tracking al caricamento della pagina
-document.addEventListener("DOMContentLoaded", initializeTracking);
-
-// Funzioni di animazione
+// **Funzioni di animazione**
 function animateBanner() {
   const banner = document.getElementById("banner-cookie");
   if (banner) {
