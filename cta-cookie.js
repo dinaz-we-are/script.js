@@ -17,13 +17,11 @@ const cookieConfig = {
 
 // Inizializza Google Consent Mode V2 con le impostazioni predefinite
 window.dataLayer = window.dataLayer || [];
-function gtag() {
-  dataLayer.push(arguments);
-}
-gtag("consent", "default", {
-  ad_storage: "denied",
-  analytics_storage: "denied",
-  wait_for_update: 500, // Attende l'aggiornamento del consenso
+function gtag() { dataLayer.push(arguments); }
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500 // Attende l'aggiornamento del consenso
 });
 
 // Modulo per la gestione dei cookie
@@ -58,25 +56,25 @@ const cookieManager = {
       const cookieName = cookies[i].split("=")[0];
       document.cookie =
         cookieName + "=; Max-Age=-99999999; path=/; SameSite=None; Secure";
-    }
+    }    
   },
   clearTrackingCookies: () => {
-    // Elenca i cookie di Google Analytics e Google Tag Manager
-    const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm", "_gcl_au"];
-
-    // Ottieni il dominio attuale
-    const domainParts = window.location.hostname.split(".");
-    let domain = domainParts.slice(-2).join("."); // Considera solo il dominio principale
-
-    // Tenta di cancellare i cookie specificando il dominio
-    trackingCookies.forEach((cookieName) => {
-      // Prova a cancellare il cookie con il dominio principale
-      document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${domain}; SameSite=None; Secure`;
-
-      // Prova anche a cancellare senza specificare il dominio (per sicurezza)
-      document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
-    });
-  },
+   // Elenca i cookie di Google Analytics e Google Tag Manager
+   const trackingCookies = ["_ga", "_gid", "_gat", "_gac_", "_gtm", "_gcl_au"];
+  
+   // Ottieni il dominio attuale
+   const domainParts = window.location.hostname.split(".");
+   let domain = domainParts.slice(-2).join("."); // Considera solo il dominio principale
+ 
+   // Tenta di cancellare i cookie specificando il dominio
+   trackingCookies.forEach(cookieName => {
+     // Prova a cancellare il cookie con il dominio principale
+     document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${domain}; SameSite=None; Secure`;
+ 
+     // Prova anche a cancellare senza specificare il dominio (per sicurezza)
+     document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=None; Secure`;
+   }); 
+ },
 };
 
 // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
@@ -100,31 +98,29 @@ const resetButton = document.querySelector("[cta='reset']");
 if (resetButton) {
   resetButton.addEventListener("click", resetCookies);
 }
-const bannerCookie = document.querySelector("#banner-cookie");
-const preferencesCookie = document.querySelector("#cookie-preferences");
 
 // Modulo per la gestione della UI
 const uiManager = {
   showBanner: () => {
-    const banner = document.querySelector(bannerCookie);
+    const banner = document.querySelector("#banner-cookie");
     if (banner) {
       animateBanner();
     }
   },
   hideBanner: () => {
-    const banner = document.querySelector(bannerCookie);
+    const banner = document.querySelector("#banner-cookie");
     if (banner) {
       animateBannerClose();
     }
   },
   closeBannerWithoutConsent: () => {
-    const banner = document.querySelector(bannerCookie);
+    const banner = document.querySelector("#banner-cookie");
     if (banner) {
       animateBannerClose();
     }
   },
   handlePreferences: () => {
-    const preferences = document.querySelector(preferencesCookie);
+    const preferences = document.querySelector("#cookie-preferences");
     if (preferences) {
       cookiePreferences();
     }
@@ -139,9 +135,9 @@ if (!cookieManager.getCookie("cta")) {
 // Modulo per la gestione degli eventi e della logica del consenso
 const consentManager = {
   allowAll: () => {
-    gtag("consent", "update", {
-      ad_storage: "granted",
-      analytics_storage: "granted",
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'analytics_storage': 'granted'
     });
     cookieManager.setCookie(
       "cta",
@@ -159,9 +155,9 @@ const consentManager = {
     closeCookiePreferences();
   },
   denyAll: () => {
-    gtag("consent", "update", {
-      ad_storage: "denied",
-      analytics_storage: "denied",
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
     });
     const defaultConsents = {
       essential: true,
@@ -198,10 +194,10 @@ const consentManager = {
       ? personalizationCheckbox.checked
       : false;
 
-    gtag("consent", "update", {
-      ad_storage: marketingConsent ? "granted" : "denied",
-      analytics_storage: analyticsConsent ? "granted" : "denied",
-    });
+      gtag('consent', 'update', {
+        'ad_storage': marketingConsent ? 'granted' : 'denied',
+        'analytics_storage': analyticsConsent ? 'granted' : 'denied'
+      });
 
     const userConsents = {
       essential: true,
@@ -504,7 +500,8 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 });
 
-function animateBanner() {
+
+function  animateBanner() {
   const banner = document.getElementById("banner-cookie");
   if (banner) {
     gsap.fromTo(
@@ -522,7 +519,7 @@ function animateBanner() {
 }
 
 function animateBannerClose() {
-  const banner = document.querySelector(bannerCookie);
+  const banner = document.querySelector("#banner-cookie");
   if (banner) {
     gsap.to(banner, {
       y: "10rem",
@@ -536,7 +533,7 @@ function animateBannerClose() {
 }
 
 function cookiePreferences() {
-  const preferences = document.querySelector(preferencesCookie);
+  const preferences = document.querySelector("#cookie-preferences");
   if (preferences) {
     preferences.style.display = "flex"; // Mostra il centro preferenze
     gsap.to(preferences, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
@@ -544,7 +541,7 @@ function cookiePreferences() {
 }
 
 function closeCookiePreferences() {
-  const preferences = document.querySelector(preferencesCookie);
+  const preferences = document.querySelector("#cookie-preferences");
   if (preferences) {
     gsap.to(preferences, {
       opacity: 0,
