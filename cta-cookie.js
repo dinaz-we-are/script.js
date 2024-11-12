@@ -256,7 +256,6 @@ function initializeTracking() {
 
 document.addEventListener("DOMContentLoaded", initializeTracking);
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const toggleCheckboxAnimation = (
     checkboxId,
@@ -324,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
           cookieConfig.cookieMaxAge
         );
 
-        // Aggiungi la chiamata a gtag("consent", "update", {...})
+        // Aggiorna gtag con il nuovo stato di consenso
         gtag("consent", "update", {
           ad_storage: savedConsents.marketing ? "granted" : "denied",
           analytics_storage: savedConsents.analytics ? "granted" : "denied",
