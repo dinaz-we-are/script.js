@@ -305,23 +305,18 @@ const gtmManager = {
 function activateScripts() {
   const scripts = document.querySelectorAll('script[cta="activate"]');
   scripts.forEach((script) => {
-    // Rimuovi l'attributo type per eseguire lo script
     script.removeAttribute("type");
-
-    // Se è uno script esterno, ricrea l'elemento per ricaricarlo
     if (script.src) {
       const newScript = document.createElement("script");
       newScript.async = script.async;
       newScript.src = script.src;
       document.head.appendChild(newScript);
     } else {
-      // Se è uno script inline, eseguilo direttamente
       eval(script.innerText);
     }
   });
 }
 
-// Funzione per inizializzare i servizi di tracking in base al consenso
 function initializeTracking() {
   const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
     essential: true,
@@ -335,11 +330,9 @@ function initializeTracking() {
   }
 }
 
-// Inizializza i servizi di tracking al caricamento della pagina
 document.addEventListener("DOMContentLoaded", initializeTracking);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Funzione per animare e gestire i checkbox singolarmente
   const toggleCheckboxAnimation = (
     checkboxId,
     containerAttr,
@@ -507,14 +500,14 @@ function animateBanner() {
   if (banner) {
     gsap.fromTo(
       banner,
-      { y: "10rem", display: "none" }, // Posizione iniziale e opacità
+      { y: "10rem", display: "none" },
       {
         y: "0rem",
         display: "flex",
         duration: 1,
         delay: 3,
         ease: "power2.inOut",
-      } // Posizione finale, opacità, durata e ritardo
+      }
     );
   }
 }
@@ -527,7 +520,7 @@ function animateBannerClose() {
       duration: 0.5,
       ease: "power2.inOut",
       onComplete: () => {
-        banner.style.display = "none"; // Imposta display a none dopo l'animazione
+        banner.style.display = "none";
       },
     });
   }
@@ -536,7 +529,7 @@ function animateBannerClose() {
 function cookiePreferences() {
   const preferences = document.querySelector("#cookie-preferences");
   if (preferences) {
-    preferences.style.display = "flex"; // Mostra il centro preferenze
+    preferences.style.display = "flex";
     gsap.to(preferences, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
   }
 }
