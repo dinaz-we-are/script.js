@@ -4,7 +4,7 @@
 const cookieConfig = {
   mode: "opt-in",
   cookieMaxAge: 180,
-  debugMode: true,
+  debugMode: false,
   consentMode: true,
   categories: {
     essential: true,
