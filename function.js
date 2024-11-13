@@ -3442,22 +3442,23 @@ function serviceWrapper() {
       });
     },
     thumbnailImageAnimation: function () {
-      // Seleziona i container specifici e i thumbnail all'interno del contesto desiderato
-      const containers = document.querySelectorAll(".related-post-category .categoria");
-      
+      const containers = document.querySelectorAll(".related-post-category");
+    
       containers.forEach((container) => {
-        // Seleziona solo la thumbnail-image all'interno di ciascun container
+        // Seleziona l'immagine della miniatura specifica all'interno del container
         const thumbnail = container.querySelector(".thumbnail-image");
     
-        // Debug: verifica se gli elementi sono stati selezionati correttamente
-        console.log("Thumbnail:", thumbnail, "Container:", container);
+        // Verifica se gli elementi sono correttamente selezionati
+        console.log("Thumbnail:", thumbnail);
+        console.log("Container:", container);
     
-        if (thumbnail) { // Verifica se esiste il thumbnail associato
+        // Se la miniatura esiste, crea l'animazione
+        if (thumbnail) {
           // Creiamo la timeline dell'animazione GSAP
           let tl = gsap.timeline({ paused: true });
     
           // Definiamo l'animazione hover
-          tl.to(thumbnail, {          
+          tl.to(thumbnail, {
             scale: 1.2, // Scala l'immagine
             duration: 0.5, // Durata dell'animazione
             ease: "power2.inOut", // Tipo di easing per una transizione più fluida
@@ -3465,7 +3466,7 @@ function serviceWrapper() {
           }).to(
             container,
             {
-              boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.2)", 
+              boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.2)", // Aggiungi un'ombra
               duration: 0.5,
               ease: "power2.inOut",
             },
@@ -3474,13 +3475,13 @@ function serviceWrapper() {
     
           // Aggiungiamo gli eventi hover
           container.addEventListener("mouseenter", () => {
-            console.log("Mouse enter:", container); // Debug
-            tl.play();
-          }); // Attiva l'animazione all'hover
+            console.log("Hover in");
+            tl.play(); // Attiva l'animazione all'hover
+          });
           container.addEventListener("mouseleave", () => {
-            console.log("Mouse leave:", container); // Debug
-            tl.reverse();
-          }); // Reverte l'animazione al termine dell'hover
+            console.log("Hover out");
+            tl.reverse(); // Reverte l'animazione al termine dell'hover
+          });
         }
       });
     },
