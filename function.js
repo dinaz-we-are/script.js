@@ -3230,40 +3230,44 @@ function serviceWrapper() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
-         const swiperContainer = document.querySelector(".related-articles-wrapper");
-      
-        if (swiperContainer) {
-          // Verifica ripetutamente la presenza dei pulsanti di navigazione
-          const checkButtonsInterval = setInterval(() => {
-            const nextButton = document.querySelector(".swiper-button-next");
-            const prevButton = document.querySelector(".swiper-button-prev");
-      
-            if (nextButton && prevButton) {
-              try {
-                const swiperPost = new Swiper(".related-articles-wrapper", {
-                  slidesPerView: "auto",
-                  spaceBetween: 32,
-                  centeredSlides: false,
-                  navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  },
-                  speed: 600, // Velocità della transizione in millisecondi
-                  effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
-                });
-      
-                console.log("Swiper inizializzato correttamente:", swiperPost);
-                clearInterval(checkButtonsInterval); // Ferma il controllo continuo
-              } catch (error) {
-                console.error("Errore durante l'inizializzazione di Swiper:", error);
-                clearInterval(checkButtonsInterval); // Ferma il controllo in caso di errore
-              }
-            }
-          }, 100); // Controlla ogni 100ms fino a trovare i pulsanti
+      const swiperContainers = document.querySelectorAll(".related-articles-wrapper");
+    
+      swiperContainers.forEach((swiperContainer, index) => {
+        // Genera selettori univoci per i pulsanti di navigazione
+        const nextButtonClass = `.swiper-button-next-${index}`;
+        const prevButtonClass = `.swiper-button-prev-${index}`;
+    
+        // Aggiungi classi uniche ai pulsanti di navigazione
+        let nextButton = swiperContainer.querySelector(".swiper-button-next");
+        let prevButton = swiperContainer.querySelector(".swiper-button-prev");
+    
+        if (nextButton && prevButton) {
+          nextButton.classList.add(`swiper-button-next-${index}`);
+          prevButton.classList.add(`swiper-button-prev-${index}`);
+    
+          try {
+            // Inizializza Swiper con i pulsanti di navigazione specifici
+            const swiperPost = new Swiper(swiperContainer, {
+              slidesPerView: "auto",
+              spaceBetween: 32,
+              centeredSlides: false,
+              navigation: {
+                nextEl: nextButtonClass,
+                prevEl: prevButtonClass,
+              },
+              speed: 600, // Velocità della transizione in millisecondi
+              effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+            });
+    
+            console.log("Swiper inizializzato correttamente:", swiperPost);
+          } catch (error) {
+            console.error("Errore durante l'inizializzazione di Swiper:", error);
+          }
         } else {
-          console.warn("Nessun elemento trovato per lo slider: .related-articles-wrapper");
+          console.warn("Pulsanti di navigazione non trovati per:", swiperContainer);
         }
-      },
+      });
+    },    
          
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
@@ -3276,8 +3280,8 @@ function serviceWrapper() {
             gsap.to(label, {
               duration: 0.3,
               paddingBottom: state ? "2rem" : "0rem",
-              borderTopRightRadius: state ? "1rem" : "0rem",
-              borderTopLeftRadius: state ? "1rem" : "0rem",
+              borderTopRightRadius: state ? "1rem" : "0.5rem",
+              borderTopLeftRadius: state ? "1rem" : "0.5rem",
               ease: "power1.out",
             });
           }
@@ -3444,28 +3448,36 @@ function serviceWrapper() {
       });
     },
     thumbnailImageAnimation: function () {
-            const thumbnails = document.querySelectorAll(
-        ".related-post-category .thumbnail-image"
-      );
-  
-      thumbnails.forEach((thumbnail) => {
+      const thumbnails = document.querySelectorAll(".related-post-category .thumbnail-image");
+      const containers = document.querySelectorAll(".related-post-category");
+    
+      containers.forEach((container, index) => {
+        const thumbnail = thumbnails[index]; // Associa correttamente il thumbnail al container
+    
         // Creiamo la timeline dell'animazione GSAP
         let tl = gsap.timeline({ paused: true });
-  
+    
         // Definiamo l'animazione hover
-        tl.to(thumbnail, {
-          borderRadius: "2rem",
-          scale: 1.1, // Scala l'immagine
+        tl.to(thumbnail, {          
+          scale: 1.2, // Scala l'immagine
           duration: 0.5, // Durata dell'animazione
-          ease: "power2.out", // Tipo di easing per una transizione più fluida
-          transformOrigin: "center center", // Imposta l'origine di trasformazione a destra
-        });
-  
+          ease: "power2.inOut", // Tipo di easing per una transizione più fluida
+          transformOrigin: "center center", // Imposta l'origine di trasformazione al centro
+        }).to(
+          container,
+          {
+            boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.2)", 
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "<" // Sincronizza le animazioni
+        );
+    
         // Aggiungiamo gli eventi hover
         thumbnail.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
         thumbnail.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
       });
-    },
+    },    
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
       gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
