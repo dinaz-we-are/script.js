@@ -3230,24 +3230,24 @@ function serviceWrapper() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
-      // Seleziona tutti i contenitori Swiper sulla pagina
+      // Seleziona tutti i contenitori degli slider
       const swiperContainers = document.querySelectorAll(".related-articles-wrapper");
     
       swiperContainers.forEach((swiperContainer) => {
-        // Seleziona i pulsanti di navigazione solo all'interno di ciascun container
-        const nextButton = swiperContainer.querySelector(".swiper-button-next");
-        const prevButton = swiperContainer.querySelector(".swiper-button-prev");
+        // Cerca i pulsanti di navigazione dentro lo stesso contenitore di slider
+        const nextButton = swiperContainer.closest(".related-articles-slider").querySelector(".swiper-button-next");
+        const prevButton = swiperContainer.closest(".related-articles-slider").querySelector(".swiper-button-prev");
     
         if (nextButton && prevButton) {
           try {
-            // Inizializza una nuova istanza di Swiper per ogni container
+            // Inizializza lo Swiper per ogni .related-articles-wrapper
             const swiperPost = new Swiper(swiperContainer, {
               slidesPerView: "auto",
               spaceBetween: 32,
               centeredSlides: false,
               navigation: {
-                nextEl: nextButton, // Collega il pulsante "next" corretto
-                prevEl: prevButton, // Collega il pulsante "prev" corretto
+                nextEl: nextButton, // Usa il pulsante "next" corretto
+                prevEl: prevButton, // Usa il pulsante "prev" corretto
               },
               speed: 600, // Velocità della transizione
               effect: "slide", // Effetto della transizione
@@ -3261,7 +3261,7 @@ function serviceWrapper() {
           console.warn("Pulsanti di navigazione non trovati per:", swiperContainer);
         }
       });
-    },     
+    },       
          
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
