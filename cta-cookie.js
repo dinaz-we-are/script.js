@@ -14,6 +14,7 @@ const cookieConfig = {
     uncategorized: false,
   },
 };
+
 document.addEventListener("DOMContentLoaded", () => {
   const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
     essential: true,
@@ -27,6 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ad_storage: savedConsents.marketing ? "granted" : "denied",
     analytics_storage: savedConsents.analytics ? "granted" : "denied",
     functionality_storage: savedConsents.personalization ? "granted" : "denied",
+    ad_personalization: savedConsents.marketing ? "granted" : "denied",
+    ad_user_data: savedConsents.marketing ? "granted" : "denied",
+    security_storage: savedConsents.essential ? "granted" : "denied",
+    personalization_storage: savedConsents.personalization ? "granted" : "denied",
   });
 
   // Se i consensi sono stati concessi, attiva gli script
@@ -44,6 +49,10 @@ gtag("consent", "default", {
   ad_storage: "denied",
   analytics_storage: "denied",
   functionality_storage: "denied",
+  ad_personalization: "denied",
+  ad_user_data: "denied",
+  security_storage: "denied",
+  personalization_storage: "denied",
   wait_for_update: 500,
 });
 
@@ -56,8 +65,7 @@ const cookieManager = {
       date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
       expires = "; expires=" + date.toUTCString();
     }
-    document.cookie =
-      `${name}=${value || ""}${expires}; path=/; SameSite=None; Secure`;
+    document.cookie = `${name}=${value || ""}${expires}; path=/; SameSite=None; Secure`;
   },
   getCookie: (name) => {
     const nameEQ = `${name}=`;
@@ -70,8 +78,7 @@ const cookieManager = {
     return null;
   },
   eraseCookie: (name) => {
-    document.cookie =
-      `${name}=; Max-Age=-99999999; path=/; SameSite=None; Secure`;
+    document.cookie = `${name}=; Max-Age=-99999999; path=/; SameSite=None; Secure`;
   },
   clearAllCookies: () => {
     document.cookie.split("; ").forEach((cookie) => {
@@ -135,13 +142,21 @@ const consentManager = {
       ad_storage: "granted",
       analytics_storage: "granted",
       functionality_storage: "granted",
+      ad_personalization: "granted",
+      ad_user_data: "granted",
+      security_storage: "granted",
+      personalization_storage: "granted",
     });
-    cookieManager.setCookie("cta", JSON.stringify({
-      essential: true,
-      analytics: true,
-      marketing: true,
-      personalization: true,
-    }), cookieConfig.cookieMaxAge);
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify({
+        essential: true,
+        analytics: true,
+        marketing: true,
+        personalization: true,
+      }),
+      cookieConfig.cookieMaxAge
+    );
     gtmManager.fireGTMEvent("allCookiesAccepted");
     activateScripts();
     uiManager.hideBanner();
@@ -152,9 +167,22 @@ const consentManager = {
       ad_storage: "denied",
       analytics_storage: "denied",
       functionality_storage: "denied",
+      ad_personalization: "denied",
+      ad_user_data: "denied",
+      security_storage: "denied",
+      personalization_storage: "denied",
     });
-    const defaultConsents = { essential: true, analytics: false, marketing: false, personalization: false };
-    cookieManager.setCookie("cta", JSON.stringify(defaultConsents), cookieConfig.cookieMaxAge);
+    const defaultConsents = {
+      essential: true,
+      analytics: false,
+      marketing: false,
+      personalization: false,
+    };
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify(defaultConsents),
+      cookieConfig.cookieMaxAge
+    );
     cookieManager.clearTrackingCookies();
     gtmManager.fireGTMEvent("allCookiesDenied");
     uiManager.hideBanner();
@@ -170,10 +198,23 @@ const consentManager = {
       ad_storage: marketingConsent ? "granted" : "denied",
       analytics_storage: analyticsConsent ? "granted" : "denied",
       functionality_storage: personalizationConsent ? "granted" : "denied",
+      ad_personalization: marketingConsent ? "granted" : "denied",
+      ad_user_data: marketingConsent ? "granted" : "denied",
+      security_storage: "granted",
+      personalization_storage: personalizationConsent ? "granted" : "denied",
     });
 
-    const userConsents = { essential: true, analytics: analyticsConsent, marketing: marketingConsent, personalization: personalizationConsent };
-    cookieManager.setCookie("cta", JSON.stringify(userConsents), cookieConfig.cookieMaxAge);
+    const userConsents = {
+      essential: true,
+      analytics: analyticsConsent,
+      marketing: marketingConsent,
+      personalization: personalizationConsent,
+    };
+    cookieManager.setCookie(
+      "cta",
+      JSON.stringify(userConsents),
+      cookieConfig.cookieMaxAge
+    );
     if (analyticsConsent || marketingConsent) activateScripts();
     gtmManager.updateConsentMode(userConsents);
     closeCookiePreferences();
@@ -221,6 +262,10 @@ const gtmManager = {
         ad_storage: consents.marketing ? "granted" : "denied",
         analytics_storage: consents.analytics ? "granted" : "denied",
         functionality_storage: consents.personalization ? "granted" : "denied",
+        ad_personalization: consents.marketing ? "granted" : "denied",
+        ad_user_data: consents.marketing ? "granted" : "denied",
+        security_storage: consents.essential ? "granted" : "denied",
+        personalization_storage: consents.personalization ? "granted" : "denied",
       });
       if (cookieConfig.debugMode) console.log("Google Consent Mode aggiornato:", consents);
     }
@@ -313,6 +358,10 @@ document.addEventListener("DOMContentLoaded", () => {
           ad_storage: savedConsents.marketing ? "granted" : "denied",
           analytics_storage: savedConsents.analytics ? "granted" : "denied",
           functionality_storage: savedConsents.personalization ? "granted" : "denied",
+          ad_personalization: savedConsents.marketing ? "granted" : "denied",
+          ad_user_data: savedConsents.marketing ? "granted" : "denied",
+          security_storage: savedConsents.essential ? "granted" : "denied",
+          personalization_storage: savedConsents.personalization ? "granted" : "denied",
         });
       });
     } else {
