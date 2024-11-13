@@ -3449,6 +3449,9 @@ function serviceWrapper() {
         // Seleziona solo la thumbnail-image all'interno di ciascun container
         const thumbnail = container.querySelector(".thumbnail-image");
     
+        // Debug: verifica se gli elementi sono stati selezionati correttamente
+        console.log("Thumbnail:", thumbnail, "Container:", container);
+    
         if (thumbnail) { // Verifica se esiste il thumbnail associato
           // Creiamo la timeline dell'animazione GSAP
           let tl = gsap.timeline({ paused: true });
@@ -3470,15 +3473,21 @@ function serviceWrapper() {
           );
     
           // Aggiungiamo gli eventi hover
-          container.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
-          container.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
+          container.addEventListener("mouseenter", () => {
+            console.log("Mouse enter:", container); // Debug
+            tl.play();
+          }); // Attiva l'animazione all'hover
+          container.addEventListener("mouseleave", () => {
+            console.log("Mouse leave:", container); // Debug
+            tl.reverse();
+          }); // Reverte l'animazione al termine dell'hover
         }
       });
-    },    
+    },
+    
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
-      gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
-      gsap.set(".btn-read .page", { opacity: 0, x: "-20rem" });
+      gsap.set(".related-post-category", { opacity: 0, y: "-20%" });      
   
       relatedPosts.forEach((post) => {
         // Creiamo un'animazione per ciascun .related-post-category individualmente
@@ -3493,19 +3502,7 @@ function serviceWrapper() {
               opacity: 1,
               duration: 0.5,
               ease: "power1.inOut",
-            });
-  
-            // Animazione per .cta-leggi all'interno di ogni post
-            gsap.to(
-              post.querySelector(".btn-read .page"),
-              {
-                x: "0rem",
-                opacity: 1,
-                duration: 0.3,
-                ease: "power1.inOut",
-              },
-              "-=0.2"
-            ); // Sovrapposizione delle animazioni
+            });          
           },
         });
       });
