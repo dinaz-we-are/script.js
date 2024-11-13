@@ -3230,44 +3230,38 @@ function serviceWrapper() {
 
   const propositoAnimation = {
     initializeSwiper: function () {
+      // Seleziona tutti i contenitori Swiper sulla pagina
       const swiperContainers = document.querySelectorAll(".related-articles-wrapper");
     
-      swiperContainers.forEach((swiperContainer, index) => {
-        // Genera selettori univoci per i pulsanti di navigazione
-        const nextButtonClass = `.swiper-button-next-${index}`;
-        const prevButtonClass = `.swiper-button-prev-${index}`;
-    
-        // Aggiungi classi uniche ai pulsanti di navigazione
-        let nextButton = swiperContainer.querySelector(".swiper-button-next");
-        let prevButton = swiperContainer.querySelector(".swiper-button-prev");
+      swiperContainers.forEach((swiperContainer) => {
+        // Seleziona i pulsanti di navigazione solo all'interno di ciascun container
+        const nextButton = swiperContainer.querySelector(".swiper-button-next");
+        const prevButton = swiperContainer.querySelector(".swiper-button-prev");
     
         if (nextButton && prevButton) {
-          nextButton.classList.add(`swiper-button-next-${index}`);
-          prevButton.classList.add(`swiper-button-prev-${index}`);
-    
           try {
-            // Inizializza Swiper con i pulsanti di navigazione specifici
+            // Inizializza una nuova istanza di Swiper per ogni container
             const swiperPost = new Swiper(swiperContainer, {
               slidesPerView: "auto",
               spaceBetween: 32,
               centeredSlides: false,
               navigation: {
-                nextEl: nextButtonClass,
-                prevEl: prevButtonClass,
+                nextEl: nextButton, // Collega il pulsante "next" corretto
+                prevEl: prevButton, // Collega il pulsante "prev" corretto
               },
-              speed: 600, // Velocità della transizione in millisecondi
-              effect: "slide", // Effetto base (puoi cambiarlo con altri come 'fade', 'cube', 'coverflow', ecc.)
+              speed: 600, // Velocità della transizione
+              effect: "slide", // Effetto della transizione
             });
     
-            console.log("Swiper inizializzato correttamente:", swiperPost);
+            console.log("Swiper inizializzato correttamente per:", swiperContainer);
           } catch (error) {
-            console.error("Errore durante l'inizializzazione di Swiper:", error);
+            console.error("Errore durante l'inizializzazione di Swiper per:", swiperContainer, error);
           }
         } else {
           console.warn("Pulsanti di navigazione non trovati per:", swiperContainer);
         }
       });
-    },    
+    },     
          
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
@@ -3448,8 +3442,8 @@ function serviceWrapper() {
       });
     },
     thumbnailImageAnimation: function () {
-      const thumbnails = document.querySelectorAll(".related-post-category .thumbnail-image");
-      const containers = document.querySelectorAll(".related-post-category");
+      const thumbnails = document.querySelectorAll(".thumbnail-image .categoria");
+      const containers = document.querySelectorAll(".related-post-category .categoria");
     
       containers.forEach((container, index) => {
         const thumbnail = thumbnails[index]; // Associa correttamente il thumbnail al container
@@ -3481,7 +3475,7 @@ function serviceWrapper() {
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
       gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
-      gsap.set(".cta-leggi", { opacity: 0, x: "-20rem" });
+      gsap.set(".btn-read .page", { opacity: 0, x: "-20rem" });
   
       relatedPosts.forEach((post) => {
         // Creiamo un'animazione per ciascun .related-post-category individualmente
@@ -3500,7 +3494,7 @@ function serviceWrapper() {
   
             // Animazione per .cta-leggi all'interno di ogni post
             gsap.to(
-              post.querySelector(".cta-leggi"),
+              post.querySelector(".btn-read .page"),
               {
                 x: "0rem",
                 opacity: 1,
