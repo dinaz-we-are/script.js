@@ -3252,16 +3252,14 @@ function serviceWrapper() {
               speed: 600, // Velocità della transizione
               effect: "slide", // Effetto della transizione
             });
-    
-            console.log("Swiper inizializzato correttamente per:", swiperContainer);
           } catch (error) {
-            console.error("Errore durante l'inizializzazione di Swiper per:", swiperContainer, error);
+            console.error("Errore durante l'inizializzazione di Swiper:", error);
           }
         } else {
           console.warn("Pulsanti di navigazione non trovati per:", swiperContainer);
         }
       });
-    },       
+    },        
          
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
@@ -3448,10 +3446,6 @@ function serviceWrapper() {
         // Seleziona l'immagine della miniatura specifica all'interno del container
         const thumbnail = container.querySelector(".thumbnail-image");
     
-        // Verifica se gli elementi sono correttamente selezionati
-        console.log("Thumbnail:", thumbnail);
-        console.log("Container:", container);
-    
         // Se la miniatura esiste, crea l'animazione
         if (thumbnail) {
           // Creiamo la timeline dell'animazione GSAP
@@ -3474,17 +3468,35 @@ function serviceWrapper() {
           );
     
           // Aggiungiamo gli eventi hover
-          container.addEventListener("mouseenter", () => {
-            console.log("Hover in");
-            tl.play(); // Attiva l'animazione all'hover
-          });
-          container.addEventListener("mouseleave", () => {
-            console.log("Hover out");
-            tl.reverse(); // Reverte l'animazione al termine dell'hover
-          });
+          container.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
+          container.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
         }
       });
     },
+    
+    postEntry: function () {
+      const relatedPosts = document.querySelectorAll(".related-post-category");
+      gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
+    
+      relatedPosts.forEach((post) => {
+        // Creiamo un'animazione per ciascun .related-post-category individualmente
+        ScrollTrigger.create({
+          trigger: post, // Ogni singolo post è il trigger
+          start: "top 80%", // L'animazione parte quando il post è al 80% della viewport
+          toggleActions: "play none none none", // Anima quando entra, reverte quando esce
+          onEnter: () => {
+            // Animazione per il singolo post
+            gsap.to(post, {
+              y: "0%",
+              opacity: 1,
+              duration: 0.5,
+              ease: "power1.inOut",
+            });
+          },
+        });
+      });
+    },
+    
     
     postEntry: function () {
       const relatedPosts = document.querySelectorAll(".related-post-category");
