@@ -2087,11 +2087,6 @@ function burgerAnimation(isHomePage = false) {
       onEnter: () => {
         gsap
           .timeline()
-          .to("#nav", {
-            boxShadow: "0 2px 5px 2px rgba(0, 0, 0, 0.4)",
-            duration: 0.5,
-            ease: "power4.inOut",
-          })
           .to(
             "#cta-nav",
             {
@@ -2124,16 +2119,7 @@ function burgerAnimation(isHomePage = false) {
       },
       onLeaveBack: () => {
         gsap
-          .timeline()
-          .to(
-            "#nav",
-            {
-              boxShadow: "none",
-              duration: 0.5,
-              ease: "power4.inOut",
-            },
-            "<"
-          )
+          .timeline()          
           .to(
             "#cta-nav",
             {
