@@ -254,14 +254,20 @@ function burgerAnimation(isHomePage = false) {
         const currentScrollY = window.scrollY;
         const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
 
-        // If below threshold, don't trigger the animation
+        // Se il menu è visibile, mantieni la navbar visibile
+        if (isMenuVisible()) {
+            gsap.set(stickyElement, { y: 0 });
+            return;
+        }
+
+        // Se lo scroll è sotto la soglia, non avviare l'animazione
         if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
 
         if (scrollDirection !== lastDirection) {
             if (scrollDirection === 1) {
-                showAnim.reverse(); // Hide navbar on scroll down
+                showAnim.reverse(); // Nascondi la navbar se si scorre verso il basso
             } else {
-                showAnim.play(); // Show navbar on scroll up
+                showAnim.play(); // Mostra la navbar se si scorre verso l'alto
             }
             lastDirection = scrollDirection;
         }
@@ -320,6 +326,7 @@ function burgerAnimation(isHomePage = false) {
         subtree: true,
     });
 }
+
   //
   const menuNavigation = {
     animateBurger: function () {
