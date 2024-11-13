@@ -1899,12 +1899,7 @@ function burgerAnimation(isHomePage = false) {
           rotationX: 0,
           duration: 1,
           ease: "back.out(3)",
-        })
-        .to(":root", { 
-          css: {"--linear-grad2": "#e0ff0d"} ,
-          duration: 1,
-          ease: "back.out(3)",
-        },"<")
+        })       
         .to(".svg-letter-i", { 
         	delay: 1,
           rotationX: -270,
@@ -1917,12 +1912,7 @@ function burgerAnimation(isHomePage = false) {
           rotationX: 0,
           duration: 1,
           ease: "back.out(3)",
-        })
-        .to(":root", { 
-          css: {"--linear-grad2": ""} ,
-          duration: 1,
-          ease: "back.out(3)",
-        },"<");
+        });
     
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
