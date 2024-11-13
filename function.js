@@ -3442,34 +3442,37 @@ function serviceWrapper() {
       });
     },
     thumbnailImageAnimation: function () {
-      const thumbnails = document.querySelectorAll(".thumbnail-image .categoria");
+      // Seleziona i container specifici e i thumbnail all'interno del contesto desiderato
       const containers = document.querySelectorAll(".related-post-category .categoria");
+      
+      containers.forEach((container) => {
+        // Seleziona solo la thumbnail-image all'interno di ciascun container
+        const thumbnail = container.querySelector(".thumbnail-image");
     
-      containers.forEach((container, index) => {
-        const thumbnail = thumbnails[index]; // Associa correttamente il thumbnail al container
+        if (thumbnail) { // Verifica se esiste il thumbnail associato
+          // Creiamo la timeline dell'animazione GSAP
+          let tl = gsap.timeline({ paused: true });
     
-        // Creiamo la timeline dell'animazione GSAP
-        let tl = gsap.timeline({ paused: true });
+          // Definiamo l'animazione hover
+          tl.to(thumbnail, {          
+            scale: 1.2, // Scala l'immagine
+            duration: 0.5, // Durata dell'animazione
+            ease: "power2.inOut", // Tipo di easing per una transizione più fluida
+            transformOrigin: "center center", // Imposta l'origine di trasformazione al centro
+          }).to(
+            container,
+            {
+              boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.2)", 
+              duration: 0.5,
+              ease: "power2.inOut",
+            },
+            "<" // Sincronizza le animazioni
+          );
     
-        // Definiamo l'animazione hover
-        tl.to(thumbnail, {          
-          scale: 1.2, // Scala l'immagine
-          duration: 0.5, // Durata dell'animazione
-          ease: "power2.inOut", // Tipo di easing per una transizione più fluida
-          transformOrigin: "center center", // Imposta l'origine di trasformazione al centro
-        }).to(
-          container,
-          {
-            boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.2)", 
-            duration: 0.5,
-            ease: "power2.inOut",
-          },
-          "<" // Sincronizza le animazioni
-        );
-    
-        // Aggiungiamo gli eventi hover
-        thumbnail.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
-        thumbnail.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
+          // Aggiungiamo gli eventi hover
+          container.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
+          container.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
+        }
       });
     },    
     postEntry: function () {
