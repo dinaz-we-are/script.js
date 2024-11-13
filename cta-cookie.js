@@ -14,6 +14,26 @@ const cookieConfig = {
     uncategorized: false,
   },
 };
+document.addEventListener("DOMContentLoaded", () => {
+  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+    essential: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+  };
+
+  // Aggiorna il Google Consent Mode con i consensi salvati
+  gtag("consent", "update", {
+    ad_storage: savedConsents.marketing ? "granted" : "denied",
+    analytics_storage: savedConsents.analytics ? "granted" : "denied",
+    functionality_storage: savedConsents.personalization ? "granted" : "denied",
+  });
+
+  // Se i consensi sono stati concessi, attiva gli script
+  if (savedConsents.analytics || savedConsents.marketing) {
+    activateScripts();
+  }
+});
 
 // Inizializza Google Consent Mode V2 con le impostazioni predefinite
 window.dataLayer = window.dataLayer || [];
@@ -220,19 +240,6 @@ function activateScripts() {
     }
   });
 }
-
-function initializeTracking() {
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
-  if (savedConsents.analytics || savedConsents.marketing) activateScripts();
-}
-
-document.addEventListener("DOMContentLoaded", initializeTracking);
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const toggleCheckboxAnimation = (
