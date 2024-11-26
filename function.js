@@ -1479,8 +1479,6 @@ function burgerAnimation(isHomePage = false) {
     },
   };
   //
- 
-  //
   function initializeGSAPAnimations() {
     const tlTitle = gsap.timeline();
     const tld = gsap.timeline();
@@ -1498,26 +1496,39 @@ function burgerAnimation(isHomePage = false) {
     });
   
     masterTimeline
-      .add(tlSviluppo, 0.2)
       .add(tlTitle, 0)
-      .add(tld, 0.2)
-      .add(tlUmane, 1.6)
-      .add(tlPlus, 2);
+      .add(tld, 0)
+      .add(tlSviluppo, 0.4)
+      .add(tlUmane, 1.4)
+      .add(tlPlus, 1.4);
   
     tlTitle
-      .to(".letter.connect", {
+      .to(".svg-logo", {
         rotateY: 0,
         opacity: 1,
         duration: 0.6,
-        stagger: 0.15,
-        ease: "power2.out",
+        ease: "linear"
       })
-      .to(".svg-logo", {
-        rotationY: "+=450",
-        opacity: 1,
-        duration: 1,
-        ease: "linear",
-      });
+      .to(
+        ".letter.connect",
+        {
+          rotateY: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out"
+        },
+        "-=0.2"
+      )
+      .to(
+        ".letter.umane",
+        {
+          rotateY: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power2.out"
+        },
+        "<"
+      );
   
     tld
       .to(".svg-parentesi.design1, .svg-parentesi.design2", {
@@ -1597,8 +1608,8 @@ function burgerAnimation(isHomePage = false) {
       )
       .to(
         ".letter.small.e",
-        { scale: 1, duration: 1.5, ease: "bounce.out" },
-        "-=0.8"
+        { scale: 0.8, duration: 1, ease: "bounce.out" },
+        "-=0.6"
       );
   
     tlSviluppo
@@ -1619,7 +1630,7 @@ function burgerAnimation(isHomePage = false) {
       .to(
         "#sviluppo-mask",
         {
-          rotation: "-=360",
+          rotation: "+=360",
           transformOrigin: "center center",
           duration: 1,
           ease: "power2.out",
@@ -1627,11 +1638,20 @@ function burgerAnimation(isHomePage = false) {
         "-=0.5"
       )
       .to(
-        ".svg-parentesi.sviluppo1, .svg-parentesi.sviluppo2",
+        ".svg-sviluppo",
         {
-          x: "0%",
-          duration: 0.6,
-          ease: "power1.out",
+          x: 0,
+          duration: 1,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        ".svg-parentesi.sviluppo2",
+        {
+          x: 0,
+          duration: 1,
+          ease: "power2.out",
         },
         "<"
       )
@@ -1640,50 +1660,61 @@ function burgerAnimation(isHomePage = false) {
         {
           rotateX: 0,
           duration: 0.8,
-          stagger: { each: 0.1, from: "end" },
+          stagger: 0.1,
           ease: "back.out(1.7)",
         },
         "<"
       )
-      .to(".letter.small.a", {
-        opacity: 1,
-        duration: 1,
-        ease: "power2.out",
-      });
+      .to(
+        ".letter.small.a",
+        {
+          x: 0,
+          duration: 0.6,
+          ease: "power4.out",
+        },
+        "-=0.8"
+      );
     tlUmane
-      .to(".letter.umane1", {
-        opacity: 1,
-        duration: 1,
+      .to(".btn-cta.herotop", {
+        x: 0,
+        duration: 0.4,
         ease: "power2.out",
       })
-      .to(".letter.umane", {
-        opacity: 1,
+      .to(".tag-title-wrapper", {
+        rotateX: 0,
+        stagger: 0.2,
         duration: 0.8,
-        stagger: 0.1,
         ease: "power2.out",
       })
       .to(
-        ".span3.left, .span3.right",
+        ".letter.punto",
         {
-          rotateZ: 0,
-          y: "0%",
-          x: "0%",
-          opacity: 1,
-          duration: 0.5,
-          ease: "power2.out",
+          x: 0,
+          rotation: "+=720",
+          ease: "linear",
+          duration: 1,
+          color: "#ff006e",
+          transformOrigin: "center center",
         },
         "-=0.5"
       )
       .to(
-        ".letter.punto",
+        "#part1, #part4",
         {
-          opacity: 1,
-          ease: "linear",
+          x: "0%",
+          y: "0%",
+          color: "#ff006e",
           duration: 0.5,
+          ease: "back.out",
         },
-        "-=1"
+        "<"
+      )
+      .to(
+        "#part2, #part3",
+        { x: "0%", y: "0%", duration: 0.5, ease: "back.out" },
+        "<"
       );
-  
+
     tlPlus
       .to("#nav", {
         y: "0rem",
@@ -1699,43 +1730,10 @@ function burgerAnimation(isHomePage = false) {
           ease: "power2.out",
         },
         "<"
-      )
-      .to(".btn-cta.herotop", {
-        x: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      })
-      .to(
-        ".tag-title-wrapper",
-        {
-          rotateX: 0,
-          stagger: 0.2,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .to("#part1", {
-        x: "0%",
-        y: "0%",
-        color: "#ff006e",
-        duration: 0.5,
-        ease: "back.out",
-      })
-      .to("#part2", { x: "0%", y: "0%", duration: 0.5, ease: "back.out" }, "<")
-      .to("#part3", { x: "0%", y: "0%", duration: 0.5, ease: "back.out" }, "<")
-      .to(
-        "#part4",
-        {
-          x: "0%",
-          y: "0%",
-          color: "#ff006e",
-          duration: 0.5,
-          ease: "back.out",
-        },
-        "<"
       );
   }
+  //
+  
     // Animazione freccia
     function animaArrow() {
       const designElement = document.querySelector(".letters-wrapper.design");
@@ -1788,8 +1786,8 @@ function burgerAnimation(isHomePage = false) {
     
           // Calcola la posizione target in percentuale
           const targetX = Math.max(
-            -100,
-            Math.min(100, (mouseX / wrapperWidth) * 200 - 100)
+            -200,
+            Math.min(200, (mouseX / wrapperWidth) * 400 - 200)
           );
     
           // Sposta la sfera verso il mouse in modo fluido
@@ -1921,30 +1919,14 @@ function burgerAnimation(isHomePage = false) {
       });
     
       let umaneAnimation = gsap.timeline({ paused: true });
-      umaneAnimation
-        .to(
-          ".span3.left, .span3.right",
-          {
-            scale: 1.1,
-            duration: 0.33,
-            repeat: 3,
-            yoyo: true,
-            ease: "power2.inOut",
-          },
-          0
-        )
-        .to(
-          umaneElement,
-          {
-            scale: 0.98,
-            duration: 0.33,
-            repeat: 3,
-            yoyo: true,
-            color: "#ff006e",
-            ease: "power2.inOut",
-          },
-          0
-        );
+      umaneAnimation.to(umaneElement, {
+        scale: 0.98,
+        duration: 0.33,
+        repeat: 3,
+        yoyo: true,
+        color: "#ff006e",
+        ease: "power2.inOut",
+      });
     
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
@@ -2016,7 +1998,6 @@ function burgerAnimation(isHomePage = false) {
       designAnimation.play();
       scorriAnimation.play();
     }
-
 
  function initializeScrollFlipAnimations() {
   function attr(defaultVal, attrVal) {
