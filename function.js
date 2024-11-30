@@ -1540,10 +1540,10 @@ function burgerAnimation(isHomePage = false) {
         "<"
       )
       .to(
-        ".svg-cta",
+        ".letter.call",
         {
-          y: "250%",
-          duration: 0.6,
+          rotateY: "90",
+          duration: 0.8,
           stagger: -0.1,
           ease: "power2.out",
         },
@@ -1557,7 +1557,7 @@ function burgerAnimation(isHomePage = false) {
           stagger: 0.1,
           ease: "power2.out",
         },
-        "-=0.6"
+        "-=0.4"
       )
       .to(
         ".letter.umane",
