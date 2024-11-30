@@ -1497,27 +1497,67 @@ function burgerAnimation(isHomePage = false) {
   
     masterTimeline
       .add(tlTitle, 0)
-      .add(tld, 0)
-      .add(tlSviluppo, 0.4)
+      .add(tld, 0.4)
+      .add(tlSviluppo, 0.8)
       .add(tlUmane, 1.4)
       .add(tlPlus, 1.4);
   
     tlTitle
-      .to(".svg-logo", {
-        rotateY: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: "linear"
+      .to("#part1", {
+        x: "-5%",
+        y: "-5%",
+        duration: 0.4,
+        ease: "power2.out",
       })
+      .to(
+        "#part2",
+        {
+          x: "5%",
+          y: "-5%",
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        "#part3",
+        {
+          x: "-5%",
+          y: "5%",
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        "#part4",
+        {
+          x: "5%",
+          y: "5%",
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        ".svg-cta",
+        {
+          y: "250%",
+          duration: 0.6,
+          stagger: -0.1,
+          ease: "power2.out",
+        },
+        "<"
+      )
       .to(
         ".letter.connect",
         {
           rotateY: 0,
           duration: 0.6,
           stagger: 0.1,
-          ease: "power2.out"
+          ease: "power2.out",
         },
-        "-=0.2"
+        "-=0.6"
       )
       .to(
         ".letter.umane",
@@ -1525,7 +1565,7 @@ function burgerAnimation(isHomePage = false) {
           rotateY: 0,
           duration: 0.8,
           stagger: 0.1,
-          ease: "power2.out"
+          ease: "power2.out",
         },
         "<"
       );
@@ -1539,7 +1579,7 @@ function burgerAnimation(isHomePage = false) {
       .to(
         ".svg-sfera",
         {
-          scale: 2.5,
+          scale: 2.3,
           duration: 0.8,
           ease: "power2.out",
         },
@@ -1547,7 +1587,7 @@ function burgerAnimation(isHomePage = false) {
       )
       .to(".letter.i", {
         y: 0,
-        duration: 0.5,
+        duration: 0.6,
         ease: "power2.out",
       })
       .to(
@@ -1555,7 +1595,7 @@ function burgerAnimation(isHomePage = false) {
         {
           scale: 0.9,
           y: "-32%",
-          duration: 0.5,
+          duration: 0.6,
           ease: "power2.out",
         },
         "-=0.4"
@@ -1619,7 +1659,7 @@ function burgerAnimation(isHomePage = false) {
         ease: "power2.inOut",
       })
       .to(
-        ".svg-sviluppo",
+        ".svg-sviluppo, .letter.x",
         {
           scale: 1,
           duration: 0.5,
@@ -1689,32 +1729,26 @@ function burgerAnimation(isHomePage = false) {
       .to(
         ".letter.punto",
         {
-          x: 0,
-          rotation: "+=720",
-          ease: "linear",
+          y: 0,
+          ease: "elastic.out(1,0.5)",
           duration: 1,
           color: "#ff006e",
-          transformOrigin: "center center",
         },
         "-=0.5"
       )
-      .to(
-        "#part1, #part4",
-        {
-          x: "0%",
-          y: "0%",
-          color: "#ff006e",
-          duration: 0.5,
-          ease: "back.out",
-        },
-        "<"
-      )
+      .to("#part1, #part4", {
+        x: "0%",
+        y: "0%",
+        color: "#ff006e",
+        duration: 0.5,
+        ease: "elastic.out(1,0.3)",
+      })
       .to(
         "#part2, #part3",
-        { x: "0%", y: "0%", duration: 0.5, ease: "back.out" },
+        { x: "0%", y: "0%", duration: 0.5, ease: "elastic.out(1,0.3)" },
         "<"
       );
-
+  
     tlPlus
       .to("#nav", {
         y: "0rem",
@@ -1733,7 +1767,6 @@ function burgerAnimation(isHomePage = false) {
       );
   }
   //
-  
     // Animazione freccia
     function animaArrow() {
       const designElement = document.querySelector(".letters-wrapper.design");
@@ -1743,171 +1776,160 @@ function burgerAnimation(isHomePage = false) {
     
       function setupDesktopAnimations() {
         if (window.matchMedia("(min-width: 992px)").matches) {
-          // Hover su Design: Blocca animazione e segui il mouse
           designElement.addEventListener("mouseenter", handleDesignMouseEnter);
-          designElement.addEventListener("mouseleave", handleDesignMouseLeave);
-    
-          // Hover su Sviluppo: Cambia colore e attiva animazioni
           sviluppoElement.addEventListener("mouseenter", handleSviluppoMouseEnter);
-          sviluppoElement.addEventListener("mouseleave", handleSviluppoMouseLeave);
         } else {
-          // Rimuovi i listener per Design
           designElement.removeEventListener("mouseenter", handleDesignMouseEnter);
-          designElement.removeEventListener("mouseleave", handleDesignMouseLeave);
-    
-          // Rimuovi i listener per Sviluppo
           sviluppoElement.removeEventListener(
             "mouseenter",
             handleSviluppoMouseEnter
-          );
-          sviluppoElement.removeEventListener(
-            "mouseleave",
-            handleSviluppoMouseLeave
           );
         }
       }
     
       function handleDesignMouseEnter() {
-        // Pausa l'animazione
         designAnimation.pause();
+        logoAnimation.pause();
     
-        // Cambia colore di #part4
         gsap.to("#part4", {
-          color: "#ff8719",
+          fill: "#ff8719",
           duration: 0.6,
           ease: "power2.out",
         });
     
-        // Aggiungi un listener per il movimento del mouse
-        function handleMouseMove(event) {
+        const handleMouseMove = (event) => {
           const wrapperBounds = designElement.getBoundingClientRect();
-          const mouseX = event.clientX - wrapperBounds.left; // Posizione mouse relativa a designElement
+          const mouseX = event.clientX - wrapperBounds.left;
           const wrapperWidth = wrapperBounds.width;
     
-          // Calcola la posizione target in percentuale
           const targetX = Math.max(
-            -200,
-            Math.min(200, (mouseX / wrapperWidth) * 400 - 200)
+            -400,
+            Math.min(400, (mouseX / wrapperWidth) * 800 - 400)
           );
     
-          // Sposta la sfera verso il mouse in modo fluido
           gsap.to(svgSfera, {
             x: `${targetX}%`,
             duration: 0.3,
             ease: "power2.out",
           });
-        }
+        };
+    
+        const handleMouseLeave = () => {
+          designElement.removeEventListener("mousemove", handleMouseMove);
+    
+          gsap.to("#part4", {
+            fill: "#ff006e",
+            duration: 0.6,
+            ease: "power2.in",
+          });
+    
+          gsap.to(svgSfera, {
+            x: "0%",
+            duration: 0.6,
+            ease: "elastic.out",
+            onComplete: () => {
+              designAnimation.restart();
+              logoAnimation.restart();
+            },
+          });
+    
+          designElement.removeEventListener("mouseleave", handleMouseLeave);
+        };
     
         designElement.addEventListener("mousemove", handleMouseMove);
-    
-        // Rimuovi il listener quando il mouse lascia l'area
-        designElement.addEventListener("mouseleave", () => {
-          designElement.removeEventListener("mousemove", handleMouseMove);
-        });
-      }
-    
-      function handleDesignMouseLeave() {
-        // Ripristina il colore di #part4
-        gsap.to("#part4", {
-          color: "#ff006e",
-          duration: 0.6,
-          ease: "power2.in",
-        });
-    
-        // Ritorna la sfera alla posizione iniziale
-        gsap.to(svgSfera, {
-          x: "0%",
-          duration: 0.6,
-          ease: "elastic.out",
-          onComplete: () => {
-            designAnimation.restart();
-          },
-        });
+        designElement.addEventListener("mouseleave", handleMouseLeave);
       }
     
       function handleSviluppoMouseEnter() {
         // Pausa sviluppoAnimation
         sviluppoAnimation.pause();
+        logoAnimation.pause();
     
         // Cambia colore di #part4
         gsap.to("#part4", {
-          color: "#00aeff",
+          fill: "#00aeff",
           duration: 0.6,
           ease: "power2.out",
         });
     
         // Rotazione continua di #sviluppo-mask
         const sviluppoRotation = gsap.to("#sviluppo-mask", {
-          rotation: "-=360",
+          rotation: "+=360",
           duration: 2,
           repeat: -1,
           transformOrigin: "center center",
           ease: "linear",
         });
     
-        // Animazione periodica su parentesi
+        // Rotazione continua delle parentesi
         const sviluppoParentesi = gsap.to(
           ".svg-parentesi.sviluppo1, .svg-parentesi.sviluppo2",
           {
-            rotationY: "+=360",
+            rotateY: "+=360",
             duration: 2,
             repeat: -1,
-            ease: "power2.inOut",
-            repeatDelay: 0,
+            ease: "linear", // Per una rotazione continua senza pause
+            transformOrigin: "center",
           }
         );
     
-        // Cleanup al mouse leave
-        sviluppoElement.addEventListener("mouseleave", () => {
+        // Funzione per gestire il mouse leave
+        const handleMouseLeave = () => {
+          // Ferma le animazioni delle parentesi e del mask
           sviluppoRotation.kill();
           sviluppoParentesi.kill();
-          handleSviluppoMouseLeave();
-        });
+    
+          // Ripristina il colore di #part4
+          gsap.to("#part4", {
+            fill: "#ff006e",
+            duration: 0.6,
+            ease: "power2.in",
+          });
+    
+          // Ripristina le parentesi alla posizione originale
+          gsap.to(".svg-parentesi.sviluppo1, .svg-parentesi.sviluppo2", {
+            rotateY: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          });
+    
+          // Resetta e riavvia l'animazione continua
+          sviluppoAnimation.restart();
+          logoAnimation.restart();
+    
+          // Rimuovi il listener per il mouse leave
+          sviluppoElement.removeEventListener("mouseleave", handleMouseLeave);
+        };
+    
+        // Aggiungi il listener per il mouse leave
+        sviluppoElement.addEventListener("mouseleave", handleMouseLeave);
       }
     
-      function handleSviluppoMouseLeave() {
-        // Ripristina il colore di #part4
-        gsap.to("#part4", {
-          color: "#ff006e",
-          duration: 0.6,
-          ease: "power2.in",
-        });
-        gsap.to(".svg-parentesi.sviluppo1, .svg-parentesi.sviluppo2", {
-          rotateY: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        });
-    
-        // Resetta e riparte sviluppoAnimation
-        sviluppoAnimation.restart();
-      }
-    
-      // Imposta i listener al caricamento iniziale
       setupDesktopAnimations();
       window.addEventListener("resize", setupDesktopAnimations);
     
-      let designAnimation = gsap.timeline({ repeat: -1 });
-      designAnimation.to(svgSfera, {
-        rotate: "+=360",
-        transformOrigin: "center",
-        duration: 1,
-        ease: "none",
-      });
+      let designAnimation = gsap.timeline({ repeat: -1, paused: true });
       designAnimation
         .to(svgSfera, {
-          x: "100%",
-          duration: 1,
-          ease: "ease.in",
+          rotate: "+=360",
+          transformOrigin: "center",
+          duration: 0.8,
+          ease: "none",
         })
         .to(svgSfera, {
-          x: "-100%",
-          duration: 2,
-          ease: "ease.out",
+          x: "200%",
+          duration: 0.8,
+          ease: "power1.in",
+        })
+        .to(svgSfera, {
+          x: "-200%",
+          duration: 1.6,
+          ease: "power1.out",
         })
         .to(svgSfera, {
           x: "0%",
-          duration: 1,
-          ease: "ease.out",
+          duration: 0.8,
+          ease: "power1.out",
         });
     
       let sviluppoAnimation = gsap.timeline({ repeat: -1, repeatDelay: 2 });
@@ -1927,6 +1949,36 @@ function burgerAnimation(isHomePage = false) {
         color: "#ff006e",
         ease: "power2.inOut",
       });
+    
+      let logoAnimation = gsap.timeline({
+        repeat: -1,
+        paused: true,
+        repeatDelay: 1,
+      });
+      logoAnimation
+        .to("#part4", {
+          fill: "#ff8719",
+          duration: 0.6,
+          ease: "linear",
+        })
+        .to("#part4", {
+          delay: 1,
+          fill: "#ff006e",
+          duration: 0.6,
+          ease: "linear",
+        })
+        .to("#part4", {
+          delay: 1,
+          fill: "#00aeff",
+          duration: 0.6,
+          ease: "linear",
+        })
+        .to("#part4", {
+          delay: 1,
+          fill: "#ff006e",
+          duration: 0.6,
+          ease: "linear",
+        });
     
       let scorriAnimation = gsap.timeline({ repeat: -1 });
       scorriAnimation
@@ -1963,40 +2015,40 @@ function burgerAnimation(isHomePage = false) {
     
       let sviluppoCounter = 0;
     
-      // Callback per il completamento di sviluppoAnimation
       sviluppoAnimation.eventCallback("onRepeat", () => {
         sviluppoCounter++;
     
-        // Attiva umaneAnimation solo ogni 2 cicli completi
         if (sviluppoCounter % 2 === 0) {
-          umaneAnimation.restart(true); // Riavvia umaneAnimation
+          umaneAnimation.restart(true);
         }
       });
     
       ScrollTrigger.create({
         trigger: ".hero",
-        start: "bottom center",
-        end: "bottom top",
+        start: "bottom 80%",
+        end: "bottom 70%",
         scrub: true,
         onEnter: () => {
-          umaneAnimation.pause();
-          sviluppoAnimation.pause();
-          designAnimation.pause();
-          scorriAnimation.pause();
+          umaneAnimation.pause(0);
+          sviluppoAnimation.pause(0);
+          designAnimation.pause(0);
+          scorriAnimation.pause(0);
+          logoAnimation.pause(0);
         },
         onLeaveBack: () => {
           umaneAnimation.play();
           sviluppoAnimation.play();
           designAnimation.play();
           scorriAnimation.play();
+          logoAnimation.play();
         },
       });
     
-      // Avvia tutte le animazioni
       umaneAnimation.play();
       sviluppoAnimation.play();
       designAnimation.play();
       scorriAnimation.play();
+      logoAnimation.play();
     }
 
  function initializeScrollFlipAnimations() {
@@ -2067,7 +2119,7 @@ function burgerAnimation(isHomePage = false) {
     );
   });
 }
-  //fine flip
+ 
   //scrollTrigger
   function createScrollTriggerHero() {
     ScrollTrigger.create({
@@ -2079,9 +2131,8 @@ function burgerAnimation(isHomePage = false) {
           .timeline()
           .to(".brand_header", {
             y: "-10rem",
-            opacity: 0,
             ease: "none",
-            duration: 1,
+            duration: 0.5,
           })
           .to(
             ".div-scorri",
@@ -2099,9 +2150,8 @@ function burgerAnimation(isHomePage = false) {
           .timeline()
           .to(".brand_header", {
             y: 0,
-            opacity: 1,
             ease: "none",
-            duration: 1,
+            duration: 0.5,
           })
           .to(
             ".div-scorri",
@@ -2116,7 +2166,12 @@ function burgerAnimation(isHomePage = false) {
       },
     });
     const navbar = document.querySelector("#nav"); // Seleziona la navbar
-    const heroCta = document.querySelector(".btn-cta.herotop");
+    const heroCta = document.querySelector("#text-line");
+    const lines = [
+      "#text-line1",
+      ".letters-wrapper.design, .letters-wrapper.sviluppo, #text-alle1",
+      "#text-alle2, .letters-wrapper.umane",
+    ];
   
     ScrollTrigger.create({
       trigger: heroCta,
@@ -2127,20 +2182,16 @@ function burgerAnimation(isHomePage = false) {
       onEnter: () => {
         gsap
           .timeline()
+          .to(".spacer-header-sx", {
+            width: "100%",
+            duration: 0.5,
+            ease: "power2.inOut",
+          })
           .to(
-            "#cta-nav",
+            "#logo-home",
             {
-              y: 0,
-              duration: 0.3,
-              ease: "power4.inOut",
-            },
-            "<"
-          )
-          .to(
-            ".header",
-            {
-              height: "0rem",
-              duration: 0.3,
+              scale: 1,
+              duration: 0.5,
               ease: "power4.inOut",
             },
             "<"
@@ -2149,28 +2200,38 @@ function burgerAnimation(isHomePage = false) {
       onLeaveBack: () => {
         gsap
           .timeline()
+          .to(".spacer-header-sx", {
+            width: "auto",
+            duration: 0.5,
+            ease: "power2.inOut",
+          })
           .to(
-            "#cta-nav",
+            "#logo-home",
             {
-              y: "-5rem",
-              duration: 0.3,
-              ease: "power4.inOut",
+              scale: 0,
+              duration: 0.5,
+              ease: "power2.inOut",
             },
             "<"
-          )
-          .to(
-            ".header",
-            {
-              height: "",
-              duration: 0.3,
-              ease: "power4.inOut",
-            },
-            "-=0.2"
           );
       },
     });
+    lines.forEach((line) => {
+      gsap.to(line, {
+        scrollTrigger: {
+          trigger: line,
+          start: () => `top ${navbar.offsetHeight}px`,
+          end: "bottom top",
+          scrub: true,
+        },
+        y: "200%",
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+    });
     ScrollTrigger.refresh();
-  }  
+  }
+  
   //
 //CECO
 const cecoStretegy = {
