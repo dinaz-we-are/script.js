@@ -1,5 +1,7 @@
 "use strict";
-
+export function initializeCookies() {
+  //Elimina la funzione sopra e parentesi di chiusura per usare lo script al di fuori del bundle
+  
 // Configurazione di base
 const cookieConfig = {
   mode: "opt-in",
@@ -511,4 +513,5 @@ function closeCookiePreferences() {
       },
     });
   }
+}
 }

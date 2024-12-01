@@ -21,13 +21,10 @@ if (typeof window !== "undefined") {
   window.MotionPathPlugin = MotionPathPlugin;
 }
 
-import "./scripts/cta-cookie.min.js";
+import { initializeCookies } from "./scripts/cta-cookie.min.js";
 
-// Eventuale codice di inizializzazione per il file dei cookie
+// Inizializza i cookie solo dopo che GSAP è pronto
 document.addEventListener("DOMContentLoaded", () => {
-  if (typeof cookieManager !== "undefined") {
-    console.log("Modulo cookieManager caricato con successo.");
-  } else {
-    console.error("Errore: il modulo cookieManager non è stato caricato.");
-  }
+  console.log("GSAP e i plugin sono stati caricati. Inizializzo i cookie...");
+  initializeCookies();
 });
