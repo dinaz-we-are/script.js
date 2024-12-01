@@ -21,10 +21,25 @@ if (typeof window !== "undefined") {
   window.MotionPathPlugin = MotionPathPlugin;
 }
 
-import { initializeCookies } from "./scripts/cta-cookie.min.js";
+(async () => {
+  try {
+    // Importa entrambi i moduli in parallelo
+    const [cookieModule, functionModule] = await Promise.all([
+      import("./scripts/cta-cookie.min.js"),
+      import("./scripts/function.min.js"),
+    ]);
 
-// Inizializza i cookie solo dopo che GSAP è pronto
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("GSAP e i plugin sono stati caricati. Inizializzo i cookie...");
-  initializeCookies();
-});
+    // Inizializza i cookie immediatamente
+    cookieModule.initializeCookies();
+
+    // Aggiungi l'event listener per inizializzare le funzioni principali
+    document.addEventListener("DOMContentLoaded", () => {
+      functionModule.initializeMainFunctions();
+      console.log("Funzioni principali inizializzate dopo DOMContentLoaded.");
+    });
+
+    console.log("Modulo cookie inizializzato con successo.");
+  } catch (error) {
+    console.error("Errore nel caricamento dei moduli:", error);
+  }
+})();
