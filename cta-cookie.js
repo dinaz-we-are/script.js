@@ -470,7 +470,7 @@ function animateBanner() {
         y: "0rem",
         display: "flex",
         duration: 1,
-        delay: 3,
+        delay: 1.4,
         ease: "power2.inOut",
       }
     );
