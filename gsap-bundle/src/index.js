@@ -21,3 +21,13 @@ if (typeof window !== "undefined") {
   window.MotionPathPlugin = MotionPathPlugin;
 }
 
+import "./scripts/cta-cookie.min.js";
+
+// Eventuale codice di inizializzazione per il file dei cookie
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof cookieManager !== "undefined") {
+    console.log("Modulo cookieManager caricato con successo.");
+  } else {
+    console.error("Errore: il modulo cookieManager non è stato caricato.");
+  }
+});
