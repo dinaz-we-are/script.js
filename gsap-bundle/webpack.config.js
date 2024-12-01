@@ -1,7 +1,8 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // Importa il plugin
 
 module.exports = {
-  mode: 'production',  
+  mode: 'production',
   entry: './src/index.js',  // Punto di ingresso
   output: {
     filename: 'gsap-bundle.js',  // Nome del file di output
@@ -24,7 +25,12 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CleanWebpackPlugin(), // Pulisce la directory `dist` prima della build
+  ],
   optimization: {
     minimize: true,  // Abilita la minificazione per la produzione
+    splitChunks: false, // Disabilita il code splitting
   },
 };
+
