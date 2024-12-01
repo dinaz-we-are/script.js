@@ -21,4 +21,27 @@ if (typeof window !== "undefined") {
   window.MotionPathPlugin = MotionPathPlugin;
 }
 
+async function loadAdditionalScripts() {
+  try {
+    // Importa gli script dei cookie e delle funzioni
+    const [cookieModule, functionModule] = await Promise.all([
+      import("./scripts/cta-cookie.min.js"),
+      import("./scripts/function.min.js"),
+    ]);
 
+    // Inizializza i moduli
+    if (cookieModule.initializeCookies) {
+      cookieModule.initializeCookies();
+      console.log("Modulo cookie inizializzato.");
+    }
+
+    if (functionModule.initializeMainFunctions) {
+      functionModule.initializeMainFunctions();
+      console.log("Modulo delle funzioni inizializzato.");
+    }
+  } catch (error) {
+    console.error("Errore durante il caricamento degli script aggiuntivi:", error);
+  }
+}
+
+loadAdditionalScripts();
