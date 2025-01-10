@@ -227,7 +227,8 @@ function burgerAnimation(isHomePage = false) {
   }
   //
   function navbarRepo(isHomePage = false) {
-    const stickyElement = document.querySelector("#nav");
+    const stickyElement = [document.querySelector("#nav"), document.querySelector(".background-nav")];
+    const elementsToAnimate = stickyElement.filter(el => el !== null);
     const pathWrapper = isHomePage ? document.querySelector("#navbar-repo") : null;
     const menuWrapper = document.querySelector(".menu-wrapper");
     let navbarScrollTrigger = null;
@@ -236,7 +237,7 @@ function burgerAnimation(isHomePage = false) {
     const scrollThreshold = 16; // Define 1rem equivalent in pixels
 
     const showAnim = gsap
-        .from(stickyElement, {
+        .from(elementsToAnimate, {
             yPercent: -100,
             paused: true,
             duration: 0.25,
@@ -254,7 +255,7 @@ function burgerAnimation(isHomePage = false) {
 
         // Se il menu è visibile, mantieni la navbar visibile
         if (isMenuVisible()) {
-            gsap.set(stickyElement, { y: 0 });
+            gsap.set(elementsToAnimate, { y: 0 });
             return;
         }
 
@@ -294,7 +295,7 @@ function burgerAnimation(isHomePage = false) {
                 onEnter: addScrollListener,
                 onLeaveBack: () => {
                     removeScrollListener();
-                    gsap.set(stickyElement, { y: 0 });
+                    gsap.set(elementsToAnimate, { y: 0 });
                 },
             });
         } else {

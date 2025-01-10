@@ -1,5 +1,6 @@
 // Importa GSAP
 import { gsap } from "gsap";
+import barba from "@barba/core"; // Importa Barba.js
 
 // Importa tutti i plugin di GSAP che ti servono
 import { Flip } from "gsap/Flip";
@@ -14,6 +15,7 @@ gsap.registerPlugin(Flip, ScrollTrigger, Observer, ScrollToPlugin, MotionPathPlu
 // Esportazione globale di GSAP e di tutti i plugin
 if (typeof window !== "undefined") {
   window.gsap = gsap;
+  window.barba = barba;
   window.Flip = Flip;
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
