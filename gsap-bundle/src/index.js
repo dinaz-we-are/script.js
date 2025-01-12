@@ -1,6 +1,7 @@
 // Importa GSAP
 import { gsap } from "gsap";
 import barba from "@barba/core"; // Importa Barba.js
+import Lenis from 'lenis'
 
 // Importa tutti i plugin di GSAP che ti servono
 import { Flip } from "gsap/Flip";
@@ -16,6 +17,7 @@ gsap.registerPlugin(Flip, ScrollTrigger, Observer, ScrollToPlugin, MotionPathPlu
 if (typeof window !== "undefined") {
   window.gsap = gsap;
   window.barba = barba;
+  window.Lenis = Lenis;
   window.Flip = Flip;
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
