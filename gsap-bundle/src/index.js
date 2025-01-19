@@ -2,6 +2,8 @@
 import { gsap } from "gsap";
 import barba from "@barba/core"; // Importa Barba.js
 import Lenis from 'lenis'
+import SplitType from 'split-type';
+
 
 // Importa tutti i plugin di GSAP che ti servono
 import { Flip } from "gsap/Flip";
@@ -18,6 +20,7 @@ if (typeof window !== "undefined") {
   window.gsap = gsap;
   window.barba = barba;
   window.Lenis = Lenis;
+  window.SplitType = SplitType;
   window.Flip = Flip;
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
