@@ -1,5 +1,6 @@
 node_modules/
 dist/
+!dist/bundle.js  # ✅ Mantiene solo bundle.js
 npm-debug.log
 .DS_Store
 *.log
