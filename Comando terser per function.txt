@@ -6,3 +6,4 @@ terser function.js --compress --mangle reserved="['gsap','ScrollTrigger','Flip',
 
 //-- comando terser per script cookie
  terser cta-cookie.js -o cta-cookie.min.js --compress --mangle --keep-fnames
+

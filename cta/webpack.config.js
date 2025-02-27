@@ -3,7 +3,9 @@ const path = require("path");
 module.exports = {
   entry: [
     "./src/cta-map.js",
-    "./src/cta-core.js"
+    "./src/cta-core.js",
+    "./src/functions.js",
+    "./src/cta-form.js",   
   ],
   output: {
     filename: "bundle.js",
