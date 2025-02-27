@@ -744,43 +744,61 @@ window.MultiStepForm = window.MultiStepForm || (() => {
     }
   
     function updateProgress(formElement) {
-        if (!formElement) return; // 🔹 Esci se il form non esiste
-      
-        const progressElement = formElement.querySelector("[data-form='progress']");
-        if (!progressElement) return;
-      
-        // ✅ Seleziona la barra di avanzamento principale
-        const progressIndicator = progressElement.querySelector("[data-form='progress-indicator']");
-      
-        // ✅ Seleziona gli elementi con la percentuale (possono essere ovunque)
-        const progressTextElements = document.querySelectorAll("[data-form='progress-percent']");
-      
-        const totalSteps = steps.length;
-        const currentPercentage = Math.round(((currentStepIndex + 1) / totalSteps) * 100);
-      
-      
-        // ✅ Aggiorna la barra di avanzamento (se esiste)
-        if (progressIndicator) {
-          progressIndicator.style.width = `${currentPercentage}%`;
+        if (!formElement) {
+          console.warn("⚠️ Nessun form passato a updateProgress()");
+          return;
         }
       
-        // ✅ Aggiorna il testo della percentuale (se esiste)
-        progressTextElements.forEach((element) => {
-          element.textContent = `${currentPercentage}`;
-        });
+        const progressElement = formElement.querySelector("[data-form='progress']");
+        if (!progressElement) {
+          console.warn("⚠️ Nessun progressElement trovato nel form:", formElement);
+          return;
+        }
       
-        // ✅ Gestione classica degli indicatori standard
+        // ✅ Seleziona gli indicatori standard
         const progressIndicators = progressElement.querySelectorAll("[data-form='progress-indicator']");
         progressIndicators.forEach((indicator, index) => {
           indicator.classList.toggle("current", index === currentStepIndex);
         });
       
-        // ✅ Gestione dei custom-progress-indicator
+        // ✅ Seleziona gli indicatori personalizzati
         const customIndicators = formElement.querySelectorAll("[data-form='custom-progress-indicator']");
         customIndicators.forEach((indicator, index) => {
           indicator.classList.toggle("current", index === currentStepIndex);
         });
-      }      
+      
+        console.log(`✅ updateProgress() eseguito per il form: ${formElement.getAttribute("data-form-name")}`);
+      }
+      
+      function updateProgressBar(formElement) {
+        if (!formElement) {
+          console.warn("⚠️ Nessun form passato a updateProgressBar()");
+          return;
+        }
+      
+        const progressContainer = formElement.querySelector("[data-form='progress']");
+        const progressIndicator = formElement.querySelector("[data-form='progress-indicator']");
+        const progressTextElements = formElement.querySelectorAll("[data-form='progress-percent']");
+      
+        if (!progressContainer || !progressIndicator) {
+          console.warn(`⚠️ Nessuna barra di progresso trovata per ${formElement.getAttribute("data-form-name")}`);
+          return;
+        }
+      
+        const totalSteps = steps.length;
+        const progressPercentage = Math.round(((currentStepIndex + 1) / totalSteps) * 100);
+      
+        // ✅ Aggiorna la barra di avanzamento (se esiste)
+        progressIndicator.style.width = `${progressPercentage}%`;
+      
+        // ✅ Aggiorna il testo della percentuale (se esiste)
+        progressTextElements.forEach((element) => {
+          element.textContent = `${progressPercentage}`;
+        });
+      
+        console.log(`✅ updateProgressBar() eseguito per il form: ${formElement.getAttribute("data-form-name")}`);
+      }
+            
   
     function updateProgressBar(formElement) {
         if (!formElement) return; // 🔹 Esci se il form non esiste
