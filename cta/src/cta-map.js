@@ -432,7 +432,7 @@ export default CTAMap;
     home: {
       execute: function () {
         // Esegue subito le animazioni di Hero (priorità alta)
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           transitionOnLoadHero();
         } else {
           transitionOnLoadHeroDefault();
@@ -476,7 +476,7 @@ export default CTAMap;
     },
     branding: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         animationPageEnterDesign();
@@ -497,7 +497,7 @@ export default CTAMap;
     },
     webDesign: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         animationPageEnterWebDesign();
@@ -519,7 +519,7 @@ export default CTAMap;
     },
     marketing: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         animationPageEnterMarketing();
@@ -541,7 +541,7 @@ export default CTAMap;
     },
     womenEmpowerment: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         animationPageEnterWomen();
@@ -561,7 +561,7 @@ export default CTAMap;
     },
     about: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         animationPageEnterAbout();
@@ -581,7 +581,7 @@ export default CTAMap;
     },
     contatti: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         MultiStepForm.init();
@@ -595,7 +595,7 @@ export default CTAMap;
     },
     essential: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -609,7 +609,7 @@ export default CTAMap;
     },
     professional: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -623,7 +623,7 @@ export default CTAMap;
     },
     custom: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -637,7 +637,7 @@ export default CTAMap;
     },
     Proposito: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         window.linkManager.init();
@@ -657,7 +657,7 @@ export default CTAMap;
     },
     privacy: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
         toggleFaq();
@@ -729,7 +729,7 @@ export default CTAMap;
     },
     loginPage: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -743,7 +743,7 @@ export default CTAMap;
     },
     registrazione: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -757,7 +757,7 @@ export default CTAMap;
     },
     resetPassword: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -770,7 +770,7 @@ export default CTAMap;
     },
     updatePassword: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         MultiStepForm.init();
@@ -784,7 +784,7 @@ export default CTAMap;
     },
     verify: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
       },
@@ -795,7 +795,7 @@ export default CTAMap;
     },
     userPendingApproval: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
       },
@@ -806,7 +806,7 @@ export default CTAMap;
     },
     dashboard: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         DashboardManager.init();
@@ -819,7 +819,7 @@ export default CTAMap;
     },
     assessment: {
       execute: function () {
-        if (!isBarbaTransition) {
+        if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
         AssessmentManager.init();
