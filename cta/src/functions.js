@@ -1216,7 +1216,7 @@ const transitionElementsObj = {
   };
 
 //BARBA  
-  let isBarbaTransition = false;
+window.isBarbaTransition = false;
 
 function initBarbaWithGSAP() {
   if (typeof barba === "undefined" || typeof gsap === "undefined") {
@@ -1236,7 +1236,7 @@ function initBarbaWithGSAP() {
             trigger.getAttribute("data-custom") === "button",
         },
         leave(data) {
-          isBarbaTransition = true;
+        window.isBarbaTransition = true; 
           const done = this.async();
           gsap.set(transitionElementsObj.transitionWrapper, {
             display: "block",
@@ -1391,7 +1391,7 @@ function initBarbaWithGSAP() {
             trigger.getAttribute("data-custom") === "lateral",
         },
         leave(data) {
-          isBarbaTransition = true;
+            window.isBarbaTransition = true; 
           const done = this.async();
           gsap.set(transitionElementsObj.transitionWrapper, {
             display: "block",
@@ -1548,7 +1548,7 @@ function initBarbaWithGSAP() {
             trigger.getAttribute("data-custom") === "menu",
         },
         leave(data) {
-          isBarbaTransition = true;
+            window.isBarbaTransition = true; 
           const done = this.async();
           gsap
             .timeline()
@@ -1661,7 +1661,7 @@ function initBarbaWithGSAP() {
       {
         name: "popstate-transition",
         leave(data) {
-          isBarbaTransition = true;
+            window.isBarbaTransition = true; 
           const done = this.async();
           gsap.set(".transition-wrapper", {
             display: "block",
@@ -1820,7 +1820,8 @@ function initBarbaWithGSAP() {
     },
     hooks: {
       after() {
-        isBarbaTransition = false;
+        window.isBarbaTransition = false;
+
       },
     },
     preventRunning: true,
