@@ -744,29 +744,25 @@ window.MultiStepForm = window.MultiStepForm || (() => {
     }
   
     function updateProgress(formElement) {
-        if (!formElement) {
-          console.warn("⚠️ Nessun form passato a updateProgress()");
+        if (!formElement) {        
           return;
         }
       
         // ✅ Seleziona gli indicatori personalizzati
         const customIndicators = formElement.querySelectorAll("[data-form='custom-progress-indicator']");
       
-        if (customIndicators.length === 0) {
-          console.warn("⚠️ Nessun custom-progress-indicator trovato, ignorando updateProgress.");
+        if (customIndicators.length === 0) {         
           return;
         }
       
         customIndicators.forEach((indicator, index) => {
           indicator.classList.toggle("current", index === currentStepIndex);
-        });
-      
-        console.log(`✅ updateProgress() COMPLETATO per il form.`);
+        });      
+        
       }
       
       function updateProgressBar(formElement) {
-        if (!formElement) {
-          console.warn("⚠️ Nessun form passato a updateProgressBar()");
+        if (!formElement) {          
           return;
         }
       
@@ -775,8 +771,7 @@ window.MultiStepForm = window.MultiStepForm || (() => {
         const progressIndicator = formElement.querySelector("[data-form='progress-indicator']");
         const progressTextElements = formElement.querySelectorAll("[data-form='progress-percent']");
       
-        if (!progressContainer || !progressIndicator) {
-          console.warn("⚠️ Nessuna barra di progresso trovata, ignorando updateProgressBar.");
+        if (!progressContainer || !progressIndicator) {          
           return;
         }
       
@@ -789,9 +784,8 @@ window.MultiStepForm = window.MultiStepForm || (() => {
         // ✅ Aggiorna il testo della percentuale (se esiste)
         progressTextElements.forEach((element) => {
           element.textContent = `${progressPercentage}`;
-        });
-      
-        console.log(`✅ updateProgressBar() COMPLETATO.`);
+        });      
+       
       }     
   
     function nextStep() {
