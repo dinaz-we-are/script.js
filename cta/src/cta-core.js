@@ -617,55 +617,64 @@ function cleanUpTriggers() {
   
     initLoginForm: function () {
       const loginForm = document.getElementById("login-form");
-  
+    
       if (!loginForm) {
         return;
       }
-  
+    
       loginForm.removeAttribute("action");
       loginForm.setAttribute("method", "POST");
-  
+    
       loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
         event.stopImmediatePropagation();
-  
+    
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value.trim();
         const loginWrapper = document.getElementById("login-wrapper");
         const successMessage = document.querySelector(".w-form-done");
         const errorMessage = document.querySelector(".w-form-fail");
         const dashboardButton = document.querySelector("[dashboard-link]");
-  
+        const lottieWaiting = document.querySelector(".lottie-waiting");
+    
         // Nascondiamo i messaggi all'inizio
         if (errorMessage) errorMessage.style.display = "none";
         if (successMessage) successMessage.style.display = "none";
-  
+    
+        // Mostriamo il loader Lottie
+        if (lottieWaiting) lottieWaiting.style.display = "block";
+    
         if (!email || !password) {
           if (errorMessage) errorMessage.style.display = "block";
+          if (lottieWaiting) lottieWaiting.style.display = "none"; // Nascondiamo il loader se c'è un errore
           return;
         }
-  
+    
         try {
           const userCredential = await firebase
             .auth()
             .signInWithEmailAndPassword(email, password);
           const user = userCredential.user;
-  
+    
           // Aggiorniamo i link e aspettiamo il completamento
           await FirebaseAppManager.updateDashboardLinks();
-  
+    
           // Mostriamo il messaggio di successo solo dopo aver aggiornato il link
           if (loginWrapper) loginWrapper.style.display = "none";
           if (successMessage) successMessage.style.display = "block";
-  
+    
           // Assicuriamo che il bottone diventi visibile
           if (dashboardButton) dashboardButton.style.display = "block";
         } catch (error) {
           console.error("❌ Errore di login:", error);
           if (errorMessage) errorMessage.style.display = "block";
+        } finally {
+          // Nascondiamo il loader Lottie alla fine della richiesta
+          if (lottieWaiting) lottieWaiting.style.display = "none";
         }
       });
     },
+    
   
     logoutUser: function () {
       firebase
