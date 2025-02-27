@@ -5,6 +5,7 @@ const functions = {
     cleanUpPageListeners,
     handlePageSpecificActions,
     loadResources,
+    loadScript,
     loadCSS,
     updatePageMetaAndInteractions,
     updateOrCreateMeta,
@@ -115,6 +116,24 @@ function cleanUpTriggers() {
     const stylePromises = (pageData.styles || []).map((href) => loadCSS(href));
   
     return Promise.all([...scriptPromises, ...stylePromises]);
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (!document.querySelector(`script[src="${src}"]`)) {
+        const script = document.createElement("script");
+        script.src = src;
+        script.defer = true;
+        script.onload = () => resolve();
+        script.onerror = (error) => {
+          console.error(` Errore nel caricamento dello script: ${src}`);
+          reject(error);
+        };
+        document.head.appendChild(script);
+      } else {
+        resolve();
+      }
+    });
   }
   
   // Funzione per caricare un file CSS dinamicamente
