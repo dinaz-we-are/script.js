@@ -5,7 +5,8 @@ module.exports = {
     "./src/cta-map.js",
     "./src/cta-core.js",
     "./src/functions.js",
-    "./src/cta-form.js",   
+    "./src/cta-form.js",
+    "./src/cta-cookie.js",     
   ],
   output: {
     filename: "bundle.js",

@@ -1,3 +1,5 @@
+export default { cookieManager: window.cookieManager, uiManager: window.uiManager };
+
 "use strict";
 
 // Configurazione di base
@@ -57,7 +59,7 @@ gtag("consent", "default", {
 });
 
 // Modulo per la gestione dei cookie
-const cookieManager = {
+window.cookieManager = window.cookieManager || {
   setCookie: (name, value, days) => {
     let expires = "";
     if (days) {
@@ -99,7 +101,7 @@ const cookieManager = {
 };
 
 // Funzione per resettare tutti i cookie e chiudere il banner delle preferenze
-const resetCookies = () => {
+window.resetCookies = () => {
   cookieManager.clearAllCookies();
   cookieManager.clearTrackingCookies();
   closeCookiePreferences();
@@ -113,7 +115,7 @@ if (resetButton) {
 }
 
 // Modulo per la gestione della UI
-const uiManager = {
+window.uiManager = window.uiManager ||{
   showBanner: () => {
     const banner = document.querySelector("#banner-cookie");
     if (banner) animateBanner();
@@ -133,7 +135,7 @@ const uiManager = {
 };
 
 // Mostra il banner se l'utente non ha dato il consenso
-if (!cookieManager.getCookie("cta")) uiManager.showBanner();
+if (!cookieManager.getCookie("cta")) window.uiManager.showBanner();
 
 // Modulo per la gestione del consenso
 const consentManager = {
@@ -249,6 +251,7 @@ const closeButton = document.querySelector("#banner-close");
 if (closeButton) closeButton.addEventListener("click", uiManager.closeBannerWithoutConsent);
 
 // Modulo per l'integrazione con Google Tag Manager
+
 const gtmManager = {
   fireGTMEvent: (eventName) => {
     if (window.dataLayer) {
@@ -271,6 +274,7 @@ const gtmManager = {
     }
   },
 };
+window.gtmManager = window.gtmManager || gtmManager;
 
 function activateScripts() {
   document.querySelectorAll('script[cta="activate"]').forEach((script) => {
