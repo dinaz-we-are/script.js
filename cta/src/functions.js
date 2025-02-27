@@ -2316,8 +2316,7 @@ function scrollToTopInstant() {
           rotateZ: 180,
         });
       },
-      onComplete: () => {
-        gsap.set(".cover-wrapper", { display: "none" });
+      onComplete: () => {        
         mm.add("(min-width: 992px)", () => {
           gsap.set(header.burgerBlock, {
             scale: 0,
@@ -2399,7 +2398,8 @@ function scrollToTopInstant() {
           opacity: 0,
         },
         "<"
-      );
+      )
+      .set(".cover-wrapper", { display: "none" });
   
     tlTitle
       .to(".sphere", {
