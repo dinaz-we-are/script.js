@@ -193,6 +193,12 @@ export default CTAMap;
       scripts: [],
       styles: [],
     },
+    "67c1d32756c59e9d2516b8bb": {
+      name: "landing",
+      jsonKey: "",
+      scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
+      styles: [],
+    },
   };
   window.jsonPageMap = {
     "665f0ffe1215c488346c8ab3": {
@@ -239,18 +245,12 @@ export default CTAMap;
               "position": 6,
               "name": "CTA Studio: Il nostro Studio, la nostra visione | CALL TO ACTION",
               "item": "https://www.ctastudio.it/about"
-            },
-            {
-              "@type": "ListItem",
-              "position": 7,
-              "name": "CTA Studio: Portfolio - Showcase di chi ci ha scelto",
-              "item": "https://www.ctastudio.it/portfolio"
-            },
+            },           
        {
               "@type": "ListItem",
-              "position": 8,
+              "position": 7,
               "name": "PROPOSITO - il Web Magazine per ispirare, crescere e realizzare",
-              "item": "www.ctastudio.it/proposito/home"
+              "item": "https://www.ctastudio.it/proposito/home"
             },
           ]
         }
@@ -376,31 +376,6 @@ export default CTAMap;
         }
       }`,
     },
-    // Continuare con lo stesso schema per tutte le altre chiavi
-    "674715fcde4d87ee1fb16708": {
-      active: false, // Temporaneamente disattivata
-      json: `{
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
-              "item": "https://www.ctastudio.it"
-            },
-            {
-              "@type": "ListItem",
-              "position": 7,
-              "name": "CTA Studio: Portfolio - Showcase di chi ci ha scelto",
-              "item": "https://www.ctastudio.it/portfolio"
-            }
-          ]
-        }
-      }`,
-    },
     "66d584f1d3fbec73d80a4bb7": {
       active: true,
       json: `{
@@ -417,9 +392,9 @@ export default CTAMap;
             },
             {
               "@type": "ListItem",
-              "position": 8,
+              "position": 7,
               "name": "PROPOSITO - il Web Magazine per ispirare, crescere e realizzare",
-              "item": "www.ctastudio.it/proposito/home"
+              "item": "https://www.ctastudio.it/proposito/home"
             }
           ]
         }
@@ -826,6 +801,51 @@ export default CTAMap;
         MultiStepForm.init();
         window.AppAssessmentForms.init();
         toggleFaq();
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    landing: {
+      execute: function () {
+        // Esegue subito le animazioni di Hero (priorità alta)
+        if (!window.isBarbaTransition) {
+          transitionOnLoadHero();
+        } else {
+          transitionOnLoadHeroDefault();
+        }
+        window.menuNavigation.animateUSPLinks();
+        // Controllo breakpoint per Desktop/Mobile
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          window.menuNavigation.handleLinkMenuHover();
+          requestIdleCallback(() => {
+            ctaStickyTransition.reset();
+          });
+        } else {
+          // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
+          requestIdleCallback(() => {
+            showcasePanelsScrollMobile();
+            showcaseTextContentMobile();
+          });
+        }
+        // Funzioni con priorità bassa vengono caricate con requestIdleCallback
+        requestIdleCallback(() => {
+          createScrollTriggerScrollWrapper();
+          createScrollTriggerHero();
+          ctaAnimations();
+          serviceWrapper();
+        });
+        // Funzioni meno prioritarie legate a sezioni successive dello scroll
+        setTimeout(() => {
+          info();
+          window.linkManager.init();
+          propositoAnimation.btnReadAnimation();
+          propositoAnimation.btnCategoryAnimation();
+          propositoAnimation.initializeSwiper();
+          propositoHomePage();
+          studioAnimations();
+        }, 500);
       },
       cleanup: function () {
         cleanUpTriggers();

@@ -1,0 +1,213 @@
+
+html.lenis {
+    height: auto;
+  }
+  
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  
+  @media (max-width: 991px) {
+    html.lenis {
+      scroll-behavior: smooth;
+    }
+  }
+  
+  html.no-scroll {
+    overflow: hidden !important;
+    width: 100%;
+  }
+  
+  .scrollable {
+    overflow: auto;
+    overflow-x: hidden; 
+    -webkit-overflow-scrolling: touch; 
+  }
+  
+  /* Animazioni CTA */
+  .btn-cta, .horizontal-scroll-container {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  }
+  
+  #nav-burger,
+  #nav-logo {
+    transform: translateY(-5rem); /* Sposta verso l'alto */
+  }
+  
+  /* Navbar e animazioni 3D */
+  .brand-navbar,
+  .brand-trans-svg,
+  .brand-trans-svg-menu,
+  .brand-transition, .propo-transition
+   {
+    backface-visibility: hidden; 
+    will-change: transform;
+  transform: translate3d(0, 0, 0);
+  }
+  
+  
+  .sphere, .square, .arrow {
+   backface-visibility: hidden; 
+    will-change: transform;
+  transform: translate3d(0, 0, 0);
+  }
+  
+  .transition-wrapper,
+  #nav-burger,
+  #nav-logo,
+  #color-scuro,
+  #color-destination,
+  #color-transition,
+  #colore-punto-brand-scuro,
+  #brand-trans-c, #brand-trans-t, #brand-trans-a,
+  #brand-trans-freccia, #brand-trans-punto,
+  .color-background-transition,
+  #colore-punto-brand-logoNav,
+  #brand-trans-c-menu, #brand-trans-t-menu, #brand-trans-a-menu,
+  #colore-punto-brand-menu, #brand-trans-freccia-menu, #brand-trans-punto-menu,
+  #colore-punto-brand-chiaro-menu,
+  .color-background-menu,
+  .transition-wrapper-menu,
+  .burger-wrapper,
+  .burger-close,
+  .line-top,
+  .line-middle,
+  .line-bottom,
+  .menu-wrapper,
+  .menu-container,
+  .menu-wrapper-row,
+  .line-menu-wrapper,
+  .text-menu,
+   #Design-mask-group, #cerchio-design, #quadrato-design, .svg-design-page, .svg-design-page-container
+   {
+    will-change: transform;
+  }
+  
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #ff006e; 
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #feffec; 
+  width: 8px; 
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background: #ff006e; 
+  }
+  
+  html {
+    scrollbar-width: none;  
+    -ms-overflow-style: none;  
+  }
+  
+  html::-webkit-scrollbar {
+    display: none;  
+  }
+  
+  
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cover-wrapper {
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    inset: 0%;
+    will-change: transform;
+  }
+  .cover-wrapper:where(.w-variant-115e0d04-4a6b-0ff6-aa05-713c5314f29c) {
+    display: none;
+  }
+  
+  .cover-wrapper-background {
+    z-index: 2;
+    background-color: var(--soft-white-change);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0% 0% 0% auto;
+    will-change: transform;
+  }
+  
+  .cover-wrapper-background.clear {
+    z-index: 3;
+    background-color: var(--background-first);
+    top: 0%;
+    bottom: auto;
+    left: 0%;
+    transform: scale(0);
+    will-change: transform;
+  }
+
+  .brand-transition-wrapper {
+    z-index: 5;
+    width: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+
+  .brand-transition {
+    z-index: 5;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 0;
+    line-height: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .logotype-transition {
+    display: flex;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 991px) {
+    .brand-transition-wrapper {
+      width: 40%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+  
+    .brand-transition-wrapper {
+      width: 50%;
+      top: 47%;
+    }
+    .brand-transition {
+        top: 40%;
+      }
+
+}
+
+@media screen and (max-width: 479px) {
+    .brand-transition-wrapper {
+      width: 60%;
+    }
+    .logotype-transition {       
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;      
+      }
+}
