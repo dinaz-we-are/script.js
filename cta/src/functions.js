@@ -1160,7 +1160,7 @@ const transitionElementsObj = {
   };
 
   window.linkManager = window.linkManager ||{
-    excludePatterns: ["/proposito-blog-posts/", "/categorie/", "/tags/"],
+    excludePatterns: ["/proposito-blog-posts/", "/categorie/", "/tags/", "/web-studio/"],
   
     init: function () {
       if (!document.querySelectorAll("a[href]")) {
@@ -1815,6 +1815,7 @@ function initBarbaWithGSAP() {
         "/proposito-blog-posts/",
         "/categorie/",
         "/tags/",
+        "/web-studio/",
       ];
       return excludePatterns.some((pattern) => href.includes(pattern));
     },
