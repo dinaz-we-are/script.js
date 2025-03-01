@@ -604,8 +604,7 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
-        }
-        toggleFaq();
+        }       
       },
       cleanup: function () {
         cleanUpTriggers();
