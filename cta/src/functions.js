@@ -1868,10 +1868,7 @@ function scrollToTopInstant() {
     const coverTL = gsap.timeline();
     const tlPlus = gsap.timeline();
     const masterTimeline = gsap.timeline({
-      onStart: () => blockScroll(),
-      onComplete: () => {
-        gsap.set(".cover-wrapper", { display: "none" });
-      },
+      onStart: () => blockScroll(),     
     });
   
     masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
@@ -1935,18 +1932,12 @@ function scrollToTopInstant() {
         ".cover-wrapper-background",
         {
           y: "100vh",
-          duration: 1.4,
+          duration: 1.2,
           ease: "power2.inOut",
         },
         "-=1"
       )
-      .set(
-        "#cover-wrapper-background",
-        {
-          opacity: 0,
-        },
-        "<"
-      );
+      .set(".cover-wrapper", { display: "none" });
   
     tlPlus
       .to(headerElements, {
@@ -2388,18 +2379,11 @@ function scrollToTopInstant() {
         ".cover-wrapper-background",
         {
           y: "100vh",
-          duration: 1.4,
+          duration: 1.2,
           ease: "power2.inOut",
         },
         "-=1"
-      )
-      .set(
-        "#cover-wrapper-background",
-        {
-          opacity: 0,
-        },
-        "<"
-      )
+      )  
       .set(".cover-wrapper", { display: "none" });
   
     tlTitle
