@@ -26,10 +26,7 @@ const CTAMap = {
     pageSpecificFunctionsMap: window.pageSpecificFunctionsMap,
     jsonPageMap: window.jsonPageMap,
     pageFunctions: window.pageFunctions,
-
-    safeRequestIdleCallback: window.requestIdleCallback || function (cb) {
-      setTimeout(cb, 50);
-  }
+    safeRequestIdleCallback: window.safeRequestIdleCallback,
 };
 
 // Manteniamo la compatibilità con `window`
@@ -390,18 +387,18 @@ export default CTAMap;
         // Controllo breakpoint per Desktop/Mobile
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.menuNavigation.handleLinkMenuHover();
-          CTAMap.safeRequestIdleCallback(() => {
+          window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
           });
         } else {
           // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
-          CTAMap.safeRequestIdleCallback(() => {
+          window.safeRequestIdleCallback(() => {
             showcasePanelsScrollMobile();
             showcaseTextContentMobile();
           });
         }
         // Funzioni con priorità bassa vengono caricate con requestIdleCallback
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
           ctaAnimations();
@@ -430,7 +427,7 @@ export default CTAMap;
         }
         animationPageEnterDesign();
         pageServiceScrollTriggerDesign();
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           videoPause();
           logoAnima();
           toggleFaq();
@@ -451,7 +448,7 @@ export default CTAMap;
         }
         animationPageEnterWebDesign();
         pageServiceScrollTriggerWeb();
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           videoPause();
           swiperUI();
           logoAnima();
@@ -473,7 +470,7 @@ export default CTAMap;
         }
         animationPageEnterMarketing();
         pageServiceScrollTriggerSeo();
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           changePrice();
           toggleServiceSection();
           toggleButtonAnimation();
@@ -496,7 +493,7 @@ export default CTAMap;
         animationPageEnterWomen();
         videoPause();
         pageServiceScrollTriggerWomen();
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
@@ -515,7 +512,7 @@ export default CTAMap;
         }
         animationPageEnterAbout();
         startInfiniteMarquee();
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           serviceWrapper();
           ctaAnimations();
           studioAnimations();
@@ -792,18 +789,18 @@ export default CTAMap;
         // Controllo breakpoint per Desktop/Mobile
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.menuNavigation.handleLinkMenuHover();
-          CTAMap.safeRequestIdleCallback(() => {
+          window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
           });
         } else {
           // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
-          CTAMap.safeRequestIdleCallback(() => {
+          window.safeRequestIdleCallback(() => {
             showcasePanelsScrollMobile();
             showcaseTextContentMobile();
           });
         }
         // Funzioni con priorità bassa vengono caricate con requestIdleCallback
-        CTAMap.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
           ctaAnimations();
@@ -826,3 +823,7 @@ export default CTAMap;
       },
     },
   };
+
+  window.safeRequestIdleCallback = window.safeRequestIdleCallback || function (cb) {
+    setTimeout(cb, 50);
+};
