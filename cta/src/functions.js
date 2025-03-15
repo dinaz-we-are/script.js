@@ -53,26 +53,26 @@ const functions = {
 
 
   //Oggetti e Array Transition
-const transitionElementsObj = {
-    transitionWrapper: document.querySelector(".transition-wrapper") || null,
-    colorScuro: document.querySelector("#color-scuro") || null,
-    colorTransition: document.querySelector("#color-transition") || null,
-    brandScuro: document.querySelector("#colore-punto-brand-scuro") || null,
+  const transitionElementsObj = {
+    transitionWrapper: document.querySelector(".transition-wrapper") || null, // Mantienilo per classi
+    colorScuro: document.getElementById("color-scuro") || null,
+    colorTransition: document.getElementById("color-transition") || null,
+    brandScuro: document.getElementById("colore-punto-brand-scuro") || null,
     colorBackground:
-      document.querySelectorAll(".color-background-transition") || null,
+      document.querySelectorAll(".color-background-transition") || null, // Mantienilo per NodeList
     brandLetters: {
-      c: document.querySelector("#brand-trans-c") || null,
-      t: document.querySelector("#brand-trans-t") || null,
-      a: document.querySelector("#brand-trans-a") || null,
+      c: document.getElementById("brand-trans-c") || null,
+      t: document.getElementById("brand-trans-t") || null,
+      a: document.getElementById("brand-trans-a") || null,
     },
     brandSymbols: {
-      puntoTrans: document.querySelector("#colore-punto-brand-trans") || null,
-      freccia: document.querySelector("#brand-trans-freccia") || null,
-      punto: document.querySelector("#brand-trans-punto") || null,
+      puntoTrans: document.getElementById("colore-punto-brand-trans") || null,
+      freccia: document.getElementById("brand-trans-freccia") || null,
+      punto: document.getElementById("brand-trans-punto") || null,
     },
     colorDestinations: {
-      destination: document.querySelector("#color-destination") || null,
-      background: document.querySelector("#color-background-transition") || null,
+      destination: document.getElementById("color-destination") || null,
+      background: document.getElementById("color-background-transition") || null,
     },
   };
   
@@ -101,25 +101,50 @@ const transitionElementsObj = {
     transitionElementsObj.colorDestinations.background,
   ].filter((el) => el);
   //-----------------------------------------
+
+//Oggetti e Array showcase Transition
+
+const showcaseElementsObj = {
+  transitionWrapper: document.getElementById("transition-wrapper-show") || null, // Mantienilo per classi
+  colorTransition: document.getElementById("color-background-tshow") || null,
+  brandLetters: {
+    c: document.getElementById("brand-show-c") || null,
+    t: document.getElementById("brand-show-t") || null,
+    a: document.getElementById("brand-show-a") || null,
+  },
+};
+
+const showElementsLetters = [
+  showcaseElementsObj.brandLetters.c,
+  showcaseElementsObj.brandLetters.t,
+  showcaseElementsObj.brandLetters.a,
+].filter((el) => el);
+
+const showElements = [
+  showcaseElementsObj.transitionWrapper,
+  showcaseElementsObj.colorTransition,
+  showcaseElementsObj.brandLetters.c,
+  showcaseElementsObj.brandLetters.t,
+  showcaseElementsObj.brandLetters.a,
+].filter((el) => el);
+
   
   //Oggetti e Array Menu Transition
   const transitionElementMenuObj = {
-    transitionMenuWrapper:
-      document.querySelector(".transition-wrapper-menu") || null,
-    puntoLogoNav: document.querySelector("#colore-punto-brand-logoNav") || null,
-    puntoChiaroMenu:
-      document.querySelector("#colore-punto-brand-chiaro-menu") || null,
+    transitionMenuWrapper: document.querySelector(".transition-wrapper-menu") || null,
+    puntoLogoNav: document.getElementById("colore-punto-brand-logoNav") || null,
+    puntoChiaroMenu: document.getElementById("colore-punto-brand-chiaro-menu") || null,
     brandLettersMenu: {
-      c: document.querySelector("#brand-trans-c-menu") || null,
-      t: document.querySelector("#brand-trans-t-menu") || null,
-      a: document.querySelector("#brand-trans-a-menu") || null,
+      c: document.getElementById("brand-trans-c-menu") || null,
+      t: document.getElementById("brand-trans-t-menu") || null,
+      a: document.getElementById("brand-trans-a-menu") || null,
     },
     brandSymbolsMenu: {
-      puntoMenu: document.querySelector("#colore-punto-brand-menu") || null,
-      frecciaMenu: document.querySelector("#brand-trans-freccia-menu") || null,
-      puntoTransMenu: document.querySelector("#brand-trans-punto-menu") || null,
+      puntoMenu: document.getElementById("colore-punto-brand-menu") || null,
+      frecciaMenu: document.getElementById("brand-trans-freccia-menu") || null,
+      puntoTransMenu: document.getElementById("brand-trans-punto-menu") || null,
     },
-    backgroundMenu: document.querySelector(".color-background-menu") || null,
+    backgroundMenu: document.querySelector(".color-background-menu") || null, 
   };
   
   const transitionMenuArray = [
@@ -148,9 +173,9 @@ const transitionElementsObj = {
   //-------------------------------------
   //Oggetti e Array Nav e Logo Header
   const header = {
-    burgerBlock: document.querySelector("#nav-burger") || null,
-    logoMenu: document.querySelector("#nav-logo") || null,
-  };
+    burgerBlock: document.getElementById("nav-burger") || null,
+    logoMenu: document.getElementById("nav-logo") || null,
+  };  
   const headerElements = Object.values(header).filter((el) => el);
   //-------------------------------------------------------------------
   //Oggetti e Array Elementi Menu e Burger
@@ -162,16 +187,16 @@ const transitionElementsObj = {
     burgerWrapper: document.querySelector(".burger-wrapper") || null,
     burgerClose: document.querySelector(".burger-close") || null,
     textMenu: document.querySelector(".text-menu") || null,
-    logoNav: document.querySelector("#colore-chiaro-logoNav") || null,
+    logoNav: document.getElementById("colore-chiaro-logoNav") || null, // Ottimizzato con getElementById
     lines: {
       top: document.querySelector(".line-top") || null,
       middle: document.querySelector(".line-middle") || null,
       bottom: document.querySelector(".line-bottom") || null,
     },
-  };
+  };  
   
   const backHomeLink = document.querySelector(".back-home-link") || null;
-  const burger = document.querySelector("#burger") || null;
+  const burger = document.getElementById("burger") || null;
   
   const menuWrapperElements = [
     burgerElements.wrapper,
@@ -197,15 +222,15 @@ const transitionElementsObj = {
   //
 
   const brandSymbolsArray = [
-    document.querySelector("#punto"),
-    document.querySelector("#colore-punto-brand"),
-    document.querySelector("#freccia"),
+    document.getElementById("punto"),
+    document.getElementById("colore-punto-brand"),
+    document.getElementById("freccia"),
   ].filter((el) => el);
   
   const brandLettersArray = [
-    document.querySelector("#c"),
-    document.querySelector("#t"),
-    document.querySelector("#a"),
+    document.getElementById("c"),
+    document.getElementById("t"),
+    document.getElementById("a"),
   ].filter((el) => el);
   
   window.BurgerMenu = window.BurgerMenu || {
@@ -2316,7 +2341,7 @@ function scrollToTopInstant() {
           rotateZ: 180,
         });
       },
-      onComplete: () => {        
+      onComplete: () => {
         mm.add("(min-width: 992px)", () => {
           gsap.set(header.burgerBlock, {
             scale: 0,
@@ -2423,8 +2448,8 @@ function scrollToTopInstant() {
         "#hero-line",
         {
           width: "100%",
-          duration: 1,
-          ease: "power4.Out",
+          duration: 0.8,
+          ease: "power2.Out",
         },
         "<"
       )
@@ -2432,9 +2457,9 @@ function scrollToTopInstant() {
         ".span-design",
         {
           rotateY: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: { amount: -0.2 },
-          ease: "power1.inOut",
+          ease: "power2.out",
         },
         "-=0.8"
       )
@@ -2442,9 +2467,9 @@ function scrollToTopInstant() {
         ".span-emozioni",
         {
           rotateY: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: { amount: 0.2 },
-          ease: "power1.inOut",
+          ease: "power2.out",
         },
         "<"
       )
@@ -2453,10 +2478,10 @@ function scrollToTopInstant() {
         ".arrow",
         {
           x: 0,
-          duration: 1.2,
-          ease: "power4.out",
+          duration: 0.8,
+          ease: "power2.out",
         },
-        "-=1.2"
+        "-=1"
       )
   
       .to(
@@ -2582,8 +2607,8 @@ function scrollToTopInstant() {
         "#hero-line",
         {
           width: "100%",
-          duration: 1,
-          ease: "power4.Out",
+          duration: 0.8,
+          ease: "power2.Out",
         },
         "<"
       )
@@ -2591,9 +2616,9 @@ function scrollToTopInstant() {
         ".span-design",
         {
           rotateY: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: { amount: -0.2 },
-          ease: "power1.inOut",
+          ease: "power2.out",
         },
         "-=0.8"
       )
@@ -2601,20 +2626,21 @@ function scrollToTopInstant() {
         ".span-emozioni",
         {
           rotateY: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: { amount: 0.2 },
-          ease: "power1.inOut",
+          ease: "power2.out",
         },
         "<"
       )
+  
       .to(
         ".arrow",
         {
           x: 0,
-          duration: 1.2,
-          ease: "power4.out",
+          duration: 0.8,
+          ease: "power2.out",
         },
-        "-=1.2"
+        "-=1"
       )
   
       .to(

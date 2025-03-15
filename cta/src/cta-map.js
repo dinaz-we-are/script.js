@@ -25,7 +25,11 @@ const CTAMap = {
     pageSpecificListeners: window.pageSpecificListeners,
     pageSpecificFunctionsMap: window.pageSpecificFunctionsMap,
     jsonPageMap: window.jsonPageMap,
-    pageFunctions: window.pageFunctions
+    pageFunctions: window.pageFunctions,
+
+    safeRequestIdleCallback: window.requestIdleCallback || function (cb) {
+      setTimeout(cb, 50);
+  }
 };
 
 // Manteniamo la compatibilità con `window`
@@ -386,18 +390,18 @@ export default CTAMap;
         // Controllo breakpoint per Desktop/Mobile
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.menuNavigation.handleLinkMenuHover();
-          requestIdleCallback(() => {
+          CTAMap.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
           });
         } else {
           // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
-          requestIdleCallback(() => {
+          CTAMap.safeRequestIdleCallback(() => {
             showcasePanelsScrollMobile();
             showcaseTextContentMobile();
           });
         }
         // Funzioni con priorità bassa vengono caricate con requestIdleCallback
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
           ctaAnimations();
@@ -426,7 +430,7 @@ export default CTAMap;
         }
         animationPageEnterDesign();
         pageServiceScrollTriggerDesign();
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           videoPause();
           logoAnima();
           toggleFaq();
@@ -447,7 +451,7 @@ export default CTAMap;
         }
         animationPageEnterWebDesign();
         pageServiceScrollTriggerWeb();
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           videoPause();
           swiperUI();
           logoAnima();
@@ -469,7 +473,7 @@ export default CTAMap;
         }
         animationPageEnterMarketing();
         pageServiceScrollTriggerSeo();
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           changePrice();
           toggleServiceSection();
           toggleButtonAnimation();
@@ -492,7 +496,7 @@ export default CTAMap;
         animationPageEnterWomen();
         videoPause();
         pageServiceScrollTriggerWomen();
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
@@ -511,7 +515,7 @@ export default CTAMap;
         }
         animationPageEnterAbout();
         startInfiniteMarquee();
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           serviceWrapper();
           ctaAnimations();
           studioAnimations();
@@ -788,18 +792,18 @@ export default CTAMap;
         // Controllo breakpoint per Desktop/Mobile
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.menuNavigation.handleLinkMenuHover();
-          requestIdleCallback(() => {
+          CTAMap.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
           });
         } else {
           // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
-          requestIdleCallback(() => {
+          CTAMap.safeRequestIdleCallback(() => {
             showcasePanelsScrollMobile();
             showcaseTextContentMobile();
           });
         }
         // Funzioni con priorità bassa vengono caricate con requestIdleCallback
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
           ctaAnimations();

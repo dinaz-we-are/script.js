@@ -1490,7 +1490,7 @@ function burgerAnimation(isHomePage = false) {
     const masterTimeline = gsap.timeline({
       onComplete: () => {
         console.log("Tutte le animazioni sono completate");
-        requestIdleCallback(() => {
+        CTAMap.safeRequestIdleCallback(() => {
           setTimeout(() => animaArrow(), 500);
         });
       },
