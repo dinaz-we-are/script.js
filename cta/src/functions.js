@@ -42,6 +42,11 @@ const functions = {
     startMarquee,
     startInfiniteMarquee,
     changePrice,
+    initSliderCTA,
+    setupGenericButtons,
+    setupVerticalShowcaseButtons,
+    setupShowcaseButtons,
+    showcaseTransition,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -738,71 +743,123 @@ const showElements = [
   
     initializeHoverAnimations: function () {
       const boxes = document.querySelectorAll(".link-wrapper-menu");
-      boxes.forEach((box, index) => {
-        const hoverTimeline = gsap.timeline({ paused: true });
-        const touchTimeline = gsap.timeline({ paused: true });
   
-        const color = box.querySelector(".link-hover");
-        const freccia = box.querySelectorAll(".arrow-link-navabar");
-        const link = box.querySelector(".link-heading");
-        const subLink = box.querySelector(".sublink");
+      if (!boxes.length) return;
   
-        // Crea animazioni per hover e touch
-        this.createTimeline(hoverTimeline, { color, freccia, link, subLink });
-        this.createTimeline(touchTimeline, { color, freccia, link, subLink });
+      const mm = gsap.matchMedia();
   
-        // Aggiungi timeline all'oggetto per accesso esterno
-        this.timelines[`box-${index}`] = { hoverTimeline, touchTimeline };
+      // 🔹 Desktop (≥992px) → Rimane invariato con effetto direzionale
+      mm.add("(min-width: 992px)", () => {
+        boxes.forEach((box, index) => {
+          const hoverTimeline = gsap.timeline({ paused: true });
   
-        // Gestisci gli eventi hover
-        box.addEventListener("mouseenter", () => hoverTimeline.play());
-        box.addEventListener("mouseleave", () => {
-          hoverTimeline.reverse();
-          // Aggiungi un clearProps dopo la fine dell'animazione
-          hoverTimeline.eventCallback("onReverseComplete", () => {
-            setTimeout(() => {
+          const color = box.querySelector(".link-hover");
+          const freccia = box.querySelectorAll(".arrow-link-navabar");
+          const link = box.querySelector(".link-heading");
+          const subLink = box.querySelector(".sublink");
+  
+          function getMouseDirection(e, element) {
+            let { height, top } = element.getBoundingClientRect();
+            let mouseY = e.clientY - top;
+            return mouseY < height / 2 ? "top" : "bottom";
+          }
+  
+          box.addEventListener("mouseenter", (e) => {
+            let direction = getMouseDirection(e, box);
+            let startY = direction === "top" ? "-100%" : "100%";
+            gsap.set(color, { y: startY });
+  
+            gsap.to(color, { y: 0, duration: 0.3, ease: "power2.out" });
+  
+            hoverTimeline.restart();
+          });
+  
+          box.addEventListener("mouseleave", (e) => {
+            let direction = getMouseDirection(e, box);
+            let endY = direction === "top" ? "-100%" : "100%";
+  
+            gsap.to(color, {
+              y: endY,
+              duration: 0.35,
+              ease: "power2.in",
+              onComplete: () => {
+                gsap.set(color, { clearProps: "y" });
+              },
+            });
+  
+            hoverTimeline.reverse();
+  
+            hoverTimeline.eventCallback("onReverseComplete", () => {
+              setTimeout(() => {
+                gsap.set([color, freccia, link, subLink], { clearProps: "all" });
+              }, 100);
+            });
+          });
+  
+          this.createTimeline(hoverTimeline, { color, freccia, link, subLink });
+          this.timelines[`box-${index}`] = { hoverTimeline };
+        });
+      });
+  
+      // 🔹 Mobile (≤991px) → Il div colorato sale come su desktop (senza direzione del mouse)
+      mm.add("(max-width: 991px)", () => {
+        boxes.forEach((box, index) => {
+          const touchTimeline = gsap.timeline({ paused: true });
+  
+          const color = box.querySelector(".link-hover");
+          const freccia = box.querySelectorAll(".arrow-link-navabar");
+          const link = box.querySelector(".link-heading");
+          const subLink = box.querySelector(".sublink");
+  
+          // Creazione della timeline per il touch (senza direzione)
+          touchTimeline
+            .to(color, { y: 0, duration: 0.3, ease: "power2.inOut" })
+            .to(
+              freccia,
+              {
+                x: "100%",
+                color: "#feffec",
+                duration: 0.3,
+                ease: "power2.inOut",
+              },
+              "<"
+            )
+            .to(
+              [link, subLink],
+              { color: "#feffec", duration: 0.3, ease: "power2.inOut" },
+              "<"
+            );
+  
+          box.addEventListener("touchstart", () => touchTimeline.play(), {
+            passive: true,
+          });
+  
+          box.addEventListener("touchend", () => {
+            touchTimeline.reverse();
+            touchTimeline.eventCallback("onReverseComplete", () => {
               gsap.set([color, freccia, link, subLink], { clearProps: "all" });
-            }, 100);
+            });
           });
-        });
   
-        // Gestisci gli eventi touch
-        box.addEventListener("touchstart", () => touchTimeline.play(), {
-          passive: true,
-        });
-        box.addEventListener("touchend", () => {
-          touchTimeline.reverse();
-          // Aggiungi un clearProps dopo la fine dell'animazione
-          touchTimeline.eventCallback("onReverseComplete", () => {
-            gsap.set([color, freccia, link, subLink], { clearProps: "all" });
-          });
+          this.timelines[`box-${index}`] = { touchTimeline };
         });
       });
     },
   
     createTimeline: function (timeline, { color, freccia, link, subLink }) {
       timeline
-        .to(color, {
-          y: 0,
+        .to(freccia, {
+          x: "100%",
+          color: "#feffec",
           duration: 0.3,
-          ease: "power2.inOut",
+          ease: "power2.out",
         })
-        .to(
-          freccia,
-          {
-            x: "100%",
-            color: "#feffec",
-            duration: 0.3,
-            ease: "power2.inOut",
-          },
-          "<"
-        )
         .to(
           [link, subLink],
           {
             color: "#feffec",
-            duration: 0.3,
-            ease: "power2.inOut",
+            duration: 0.2,
+            ease: "power2.out",
           },
           "<"
         );
@@ -1113,18 +1170,16 @@ const showElements = [
             gsap.to(dropdownMenu, {
               height: 0,
               duration: 0.3,
-              ease: "power2.out",
+              ease: "power2.in",
             });
             trigger.classList.remove("active");
             dropdownMenu.classList.remove("open");
           } else {
-            gsap.set(dropdownMenu, { height: "auto" });
-            const height = dropdownMenu.offsetHeight;
-            gsap.fromTo(
-              dropdownMenu,
-              { height: 0 },
-              { height: height, duration: 0.3, ease: "power2.out" }
-            );
+            gsap.to(dropdownMenu, {
+              height: "auto", // 🔥 Animiamo direttamente "auto"
+              duration: 0.4,
+              ease: "power2.0ut",
+            });
             trigger.classList.add("active");
             dropdownMenu.classList.add("open");
           }
@@ -1821,6 +1876,158 @@ function initBarbaWithGSAP() {
                 opacity: 0,
               },
               "<"
+            );
+        },
+        after(data) {
+          updatePageMetaAndInteractions(data.next.html);
+          initializeMainFunctions();
+          lenisInstance.update();
+          scrollToTopInstant();
+          lenisInstance.stop();
+          if (!cookieManager.getCookie("cta")) {
+            uiManager.showBanner();
+          }
+        },
+      },
+      {
+        name: "showcase-transition",
+        from: {
+          custom: ({ trigger }) =>
+            trigger instanceof HTMLElement &&
+            trigger.getAttribute("data-custom") === "showcase",
+        },
+        leave(data) {
+          isBarbaTransition = true;
+          const done = this.async();
+          gsap.set(showcaseElementsObj.transitionWrapper, {
+            display: "block",
+          });
+
+          gsap
+            .timeline({
+              onComplete: () => {
+                done();
+              },
+            })
+            .call(() => {
+              BurgerMenu.disableBurgerClick();
+            })
+            .to(header.burgerBlock, {
+              scale: 1,
+              duration: 0.4,
+              ease: "expo.out",
+            })
+            .to(
+              showcaseElementsObj.transitionWrapper,
+              {
+                y: "0vh",
+                duration: 0.8,
+                ease: "power3.inOut",
+              },
+              0
+            );
+        },
+        afterLeave(data) {
+          // Controlla se stai uscendo dalla home
+          if (data.current.namespace === "home") {
+            ScrollTrigger.getAll().forEach((trigger) => {
+              if (
+                trigger.vars.id &&
+                (trigger.vars.id.startsWith("hero-trigger") ||
+                  trigger.vars.id.startsWith("scrollTrigger-"))
+              ) {
+                trigger.kill();
+              }
+            });
+          }
+        },
+        enter(data) {
+          gsap.set(".showcase-page-general", {
+            y: "100vh",
+          });
+          const done = this.async();
+          const pageTl = gsap.timeline({
+            onComplete: () => {
+              lenisInstance.start();
+              BurgerMenu.enableBurgerClick();
+              gsap.set(showElements, { clearProps: "all" });
+            },
+          });
+          pageTl
+            .call(() => {
+              done();
+              BurgerMenu.disableBurgerClick();
+            })
+            .to(showElementsLetters, {
+              y: "-100vh",
+              duration: 0.8,
+              stagger: 0.2,
+              ease: "power2.inOut",
+            })
+            .to(
+              ".showcase-page-general",
+              {
+                y: "0vh",
+                duration: 0.6,
+                ease: "power2.inOut",
+              },
+              "-=0.4"
+            )
+            .to(
+              showcaseElementsObj.colorTransition,
+              {
+                y: "-100vh",
+                duration: 0.6,
+                ease: "power2.inOut",
+              },
+              "<"
+            )
+            .to(
+              ".line-title-section-show",
+              {
+                width: "100%",
+                duration: 0.8,
+                ease: "power2.out",
+              },
+              "-=0.3"
+            )
+            .to(
+              ".letter-show",
+              {
+                y: 0,
+                duration: 0.6,
+                stagger: { amount: 0.2 },
+                ease: "power2.out",
+              },
+              "<"
+            )
+            .to(
+              "#p-text-first, #p-text-second, #p-date",
+              {
+                y: 0,
+                duration: 0.6,
+                stagger: 0.2,
+                ease: "power2.out",
+              },
+              "<"
+            )
+            .to(
+              ".text-btn-show-link",
+              {
+                y: 0,
+                duration: 0.4,
+                ease: "power2.out",
+              },
+              "-=0.6"
+            )
+            .to(
+              ".btn-showcase-link",
+              {
+                scale: 1,
+                duration: 0.4,
+                ease: "power2.out",
+              },
+              "-=0.2"
             );
         },
         after(data) {
@@ -2699,6 +2906,156 @@ function scrollToTopInstant() {
       }
     );
   }
+
+  function showcaseTransition() {    
+    const coverTL = gsap.timeline();
+    const tlPlus = gsap.timeline();
+    const masterTimeline = gsap.timeline({
+      onStart: () => blockScroll(),
+    });
+  
+    masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
+  
+    coverTL
+      .to(".cover-wrapper-background.clear", {
+        scale: 1,
+        transformOrigin: "bottom center",
+        duration: 1,
+        ease: "power4.inOut",
+      })
+      .to(
+        "#colore-scuro",
+        {
+          y: "-100vh",
+          duration: 1.2,
+          ease: "power2.inOut",
+        },
+        "<"
+      )
+      .to(
+        "#colore-punto-brand-chiaro",
+        {
+          scale: 0,
+          transformOrigin: "center center",
+          duration: 0.4,
+          ease: "power4.out",
+        },
+        "-=0.8"
+      )
+      .to(
+        ".logotype-transition",
+        {
+          rotateX: -90,
+          duration: 0.4,
+          transformOrigin: "top",
+          ease: "power1.inOut",
+        },
+        "-=0.4"
+      )
+      .to(
+        brandLettersArray,
+        {
+          y: "100vh",
+          duration: 0.6,
+          ease: "power1.inOut",
+          stagger: 0.2,
+        },
+        "-=0.4"
+      )
+      .to(
+        brandSymbolsArray,
+        {
+          y: "100vh",
+          duration: 0.6,
+          ease: "power1.inOut",
+        },
+        "<"
+      )
+      .to(
+        ".cover-wrapper-background",
+        {
+          y: "100vh",
+          duration: 1.2,
+          ease: "power2.inOut",
+        },
+        "-=1"
+      )
+      .set(
+        "#cover-wrapper-background",
+        {
+          opacity: 0,
+        },
+        "<"
+      )
+      .set(".cover-wrapper", { display: "none" })
+      .to(".line-title-section-show", {
+        width: "100%",
+        duration: 0.8,
+        ease: "power2.out",
+      },"-=0.6")
+      .to(
+        ".letter-show",
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: { amount: 0.2 },
+          ease: "power2.out",
+        },
+        "-=0.4"
+      )
+      .to(
+        [".panel-text.department", ".panel-text.kind-job", ".panel-date"],
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.2,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        ".text-btn-show-link",
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "-=0.4"
+      )
+      .to(
+        ".btn-showcase-link",
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      )
+      .to(
+        headerElements,
+        {
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      );
+      
+  
+    tlPlus
+      .to(headerElements, {
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+      .call(() => {
+        unblockScroll();
+      });
+  }
   
   //
 
@@ -2791,9 +3148,9 @@ function scrollToTopInstant() {
         y: 0,
         ease: "none",
         scrollTrigger: {
-          trigger: this.transitionZoneTrigger,
-          start: "top bottom",
-          end: "bottom bottom",
+          trigger: this.transitionIndex,
+          start: "bottom bottom",
+          end: "bottom 60%",
           scrub: true,
         },
       });
@@ -3067,7 +3424,7 @@ function scrollToTopInstant() {
     showcaseTextContent() {
       if (!this.panelPrimo) {
         console.warn(
-          "showcaseTextContent: Il trigger principale non è stato trovato."
+          "⚠️ showcaseTextContent: Il trigger principale non è stato trovato."
         );
         return;
       }
@@ -3100,46 +3457,60 @@ function scrollToTopInstant() {
   
       textTriggers.forEach(({ element, trigger, start, end }) => {
         if (!element || !trigger) {
-          console.warn(`showcaseTextContent: Elemento o trigger non trovati.`);
+          console.warn(`⚠️ showcaseTextContent: Elemento o trigger non trovati.`);
           return;
         }
   
         const titleChars = element.querySelectorAll(".panel-title .char");
         const descriptionContainer = element.querySelector(".panel-desscript");
+        const button = element.querySelector(".btn-showcase-link");
+        const buttonHover = element.querySelector(".btn-showcase-link-hover");
+  
+        if (!titleChars.length || !descriptionContainer || !button) {
+          console.warn(
+            `⚠️ showcaseTextContent: Elementi mancanti in ${element.id}`
+          );
+          return;
+        }
   
         // Imposta lo stato iniziale con gsap.set()
         gsap.set(titleChars, { y: "100%", opacity: 0 });
-        gsap.set(descriptionContainer, { y: "-200%" });
+        gsap.set(descriptionContainer, { y: -200 });
+        gsap.set(button, { scale: 0 });
+        gsap.set(buttonHover, { opacity: 0 });
   
-        // Crea il trigger e gestisce le animazioni con una timeline
+        // 🔹 Creazione dello ScrollTrigger
         ScrollTrigger.create({
           trigger: trigger,
           containerAnimation: this.horizontalScrollTL,
           start: start,
           end: end,
+          scrub: true,
           onEnter: () => {
-            const tl = gsap.timeline();
-  
-            tl.to(titleChars, {
-              y: 0,
-              opacity: 1,
-              stagger: { amount: 0.5 },
-              duration: 0.4,
-              ease: "power2.out",
-            }).to(
-              descriptionContainer,
-              {
+            gsap
+              .timeline()
+              .to(titleChars, {
                 y: 0,
-                duration: 0.6,
+                opacity: 1,
+                stagger: { amount: 0.5 },
+                duration: 0.4,
                 ease: "power2.out",
-              },
-              "<" // Sovrapposizione leggera per fluidità
-            );
+              })
+              .to(
+                descriptionContainer,
+                { y: 0, duration: 0.6, ease: "power2.out" },
+                "<"
+              )
+              .to(
+                button,
+                { scale: 1, duration: 0.4, ease: "power2.out" },
+                "-=0.2"
+              )
+              .to(buttonHover, { opacity: 1 });
           },
           onLeaveBack: () => {
-            const tlBack = gsap.timeline();
-  
-            tlBack
+            gsap
+              .timeline()
               .to(titleChars, {
                 y: "100%",
                 opacity: 0,
@@ -3148,17 +3519,16 @@ function scrollToTopInstant() {
               })
               .to(
                 descriptionContainer,
-                {
-                  y: "-200%",
-                  duration: 0.2,
-                  ease: "power2.in",
-                },
+                { y: -200, duration: 0.2, ease: "power2.in" },
                 "<"
-              );
+              )
+              .to(button, { scale: 0, duration: 0.2, ease: "power2.out" })
+              .to(buttonHover, { opacity: 0 });
           },
         });
       });
     },
+  
     definition() {
       if (!this.panelPrimo) {
         console.warn("Il trigger principale non è stato trovato");
@@ -3219,9 +3589,13 @@ function scrollToTopInstant() {
       panels.forEach((panel) => {
         const panelItemV = panel.querySelector(".panel-item-v");
         const itemVTitle = panel.querySelector(".item-v-title");
-        gsap.set(itemVTitle, { y: "100%" });
+        const button = panel.querySelector(".btn-showcase-link");
   
-        panel.addEventListener("mouseenter", () => {
+        gsap.set(itemVTitle, { y: "100%" });
+        gsap.set(button, { scale: 0 });
+  
+        // Funzioni per gestire gli eventi
+        const handleMouseEnter = () => {
           gsap.to(panel, {
             opacity: 1,
             duration: 0.3,
@@ -3243,9 +3617,17 @@ function scrollToTopInstant() {
               ease: "power2.out",
             });
           }
-        });
   
-        panel.addEventListener("mouseleave", () => {
+          if (button) {
+            gsap.to(button, {
+              scale: 1,
+              duration: 0.5,
+              ease: "power2.out",
+            });
+          }
+        };
+  
+        const handleMouseLeave = () => {
           gsap.to(panel, {
             opacity: 0,
             duration: 0.3,
@@ -3267,10 +3649,255 @@ function scrollToTopInstant() {
               ease: "power2.in",
             });
           }
-        });
+  
+          if (button) {
+            gsap.to(button, {
+              scale: 0,
+              duration: 0.5,
+              ease: "power2.out",
+            });
+          }
+        };
+  
+        // Aggiunge i listener agli eventi hover
+        panel.addEventListener("mouseenter", handleMouseEnter);
+        panel.addEventListener("mouseleave", handleMouseLeave);
+  
+        // Registra i listener dentro window.pageSpecificListeners
+        window.pageSpecificListeners.push(
+          { element: panel, event: "mouseenter", handler: handleMouseEnter },
+          { element: panel, event: "mouseleave", handler: handleMouseLeave }
+        );
       });
     },
   };
+
+  function setupShowcaseButtons() {
+    const mm = gsap.matchMedia();
+  
+    // 🔹 Modalità DESKTOP: Gestisce solo hover (≥992px)
+    mm.add("(min-width: 992px)", () => {
+      const buttonImagePairs = [
+        { buttonId: "show-btn-primo", imgId: "spacer-img-primo" },
+        { buttonId: "show-btn-secondo", imgId: "spacer-img-secondo" },
+        { buttonId: "show-btn-terzo", imgId: "spacer-img-terzo" },
+      ];
+  
+      buttonImagePairs.forEach(({ buttonId, imgId }) => {
+        const button = document.getElementById(buttonId);
+        const imgPanel = document.getElementById(imgId);
+  
+        if (!button || !imgPanel) {
+          console.warn(
+            `setupShowcaseButtons: Elementi mancanti per ${buttonId} e ${imgId}`
+          );
+          return;
+        }
+  
+        const hoverDiv = button.querySelector(".btn-showcase-link-hover");
+        const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+  
+        if (!hoverDiv || !arrowHover || !arrowDefault) {
+          console.warn(
+            `setupShowcaseButtons: Elementi interni mancanti per ${buttonId}`
+          );
+          return;
+        }
+  
+        let enterTl = gsap.timeline({ paused: true });
+        let leaveTl = gsap.timeline({ paused: true });
+        let hoverTimeout;
+        let isHovered = false;
+        let isInside = false;
+  
+        // 🔹 Timeline per l'hover IN
+        enterTl
+          .set(hoverDiv, { opacity: 1 })
+          .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(
+            arrowHover,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.15"
+          )
+          .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+        // 🔹 Timeline per l'hover OUT (forzato sempre)
+        leaveTl
+          .to([hoverDiv, arrowHover], {
+            scale: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          })
+          .to(
+            arrowDefault,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.15"
+          )
+          .set(hoverDiv, { opacity: 0 });
+  
+        const handleMouseEnter = () => {
+          clearTimeout(hoverTimeout);
+          isInside = true;
+  
+          if (!isHovered) {
+            enterTl.restart();
+            isHovered = true;
+          }
+        };
+  
+        const handleMouseLeave = () => {
+          isInside = false;
+          hoverTimeout = setTimeout(() => {
+            if (!isInside) {
+              leaveTl.restart();
+              isHovered = false;
+            }
+          }, 50);
+        };
+  
+        // 🔹 Eventi solo per DESKTOP (hover)
+        button.addEventListener("mouseenter", handleMouseEnter);
+        imgPanel.addEventListener("mouseenter", handleMouseEnter);
+        button.addEventListener("mouseleave", handleMouseLeave);
+        imgPanel.addEventListener("mouseleave", handleMouseLeave);
+  
+        window.pageSpecificListeners.push(
+          { element: button, event: "mouseenter", handler: handleMouseEnter },
+          { element: imgPanel, event: "mouseenter", handler: handleMouseEnter },
+          { element: button, event: "mouseleave", handler: handleMouseLeave },
+          { element: imgPanel, event: "mouseleave", handler: handleMouseLeave }
+        );
+      });
+    });
+  
+    // 🔹 Modalità MOBILE: Disabilita hover, usa solo touch (≤991px)
+    mm.add("(max-width: 991px)", () => {
+      const panelIds = ["show-btn-primo", "show-btn-secondo", "show-btn-terzo"];
+  
+      panelIds.forEach((panelId) => {
+        const button = document.getElementById(panelId);
+        if (!button) return;
+  
+        const arrowDefault = button.querySelector(".freccia-cta-arrow");
+        const arrowAbs = button.querySelector(".freccia-cta-arrow-mobile");
+  
+        if (!arrowDefault || !arrowAbs) return;
+  
+        // 🔹 Timeline per il tocco
+        const touchTl = gsap.timeline({ paused: true });
+        touchTl
+          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        const handleTouchStart = () => {
+          touchTl.restart();
+        };
+  
+        const handleTouchEnd = () => {
+          touchTl.reverse();
+        };
+  
+        // 🔹 Eventi solo per MOBILE (touch)
+        button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
+  
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
+      });
+    });
+  }
+  
+  function setupVerticalShowcaseButtons() {
+    const panels = document.querySelectorAll(".panel-item-hov");
+  
+    if (!panels.length) return;
+  
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      // 🔹 Modalità DESKTOP: Gestisce Hover SOLO sul button
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-showcase-link");
+        const hoverDiv = button?.querySelector(".btn-showcase-link-hover");
+        const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+  
+        if (!button || !hoverDiv || !arrowHover || !arrowDefault) return;
+  
+        // Timeline per l'hover IN
+        const enterTl = gsap.timeline({ paused: true });
+        enterTl
+          .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(
+            arrowHover,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.2"
+          )
+          .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+        // Timeline per l'hover OUT
+        const leaveTl = gsap.timeline({ paused: true });
+        leaveTl
+          .to([hoverDiv, arrowHover], {
+            scale: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          })
+          .to(
+            arrowDefault,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.2"
+          );
+  
+        // Funzioni per gestire gli eventi
+        const handleMouseEnter = () => enterTl.restart();
+        const handleMouseLeave = () => leaveTl.restart();
+  
+        // Aggiunge i listener SOLO al button
+        button.addEventListener("mouseenter", handleMouseEnter);
+        button.addEventListener("mouseleave", handleMouseLeave);
+  
+        // Registra i listener dentro window.pageSpecificListeners
+        window.pageSpecificListeners.push(
+          { element: button, event: "mouseenter", handler: handleMouseEnter },
+          { element: button, event: "mouseleave", handler: handleMouseLeave }
+        );
+      });
+    });
+  
+    mm.add("(max-width: 991px)", () => {
+      // 🔹 Modalità MOBILE: Attiva Touch su button e panel
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-showcase-link");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+  
+        if (!button || !arrowDefault || !arrowAbs) return;
+  
+        // Timeline per il touch
+        const touchTl = gsap.timeline({ paused: true });
+        touchTl
+          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        // Funzione per gestire il tocco
+        const handleTouchStart = () => touchTl.restart();
+  
+        // Aggiunge il listener al button e al panel-item-hov
+        button.addEventListener("touchstart", handleTouchStart);
+  
+        // Registra i listener dentro window.pageSpecificListeners
+        window.pageSpecificListeners.push({
+          element: button,
+          event: "touchstart",
+          handler: handleTouchStart,
+        });
+      });
+    });
+  }
   
   // Chiama la funzione per inizializzare le animazioni
   function createScrollTriggerScrollWrapper() {
@@ -3396,6 +4023,7 @@ function scrollToTopInstant() {
       const titleChars = panelEl.querySelectorAll(".panel-title .char");
       const descriptionContainer = panelEl.querySelector(".panel-desscript");
       const kindJobText = panelEl.querySelector(".panel-text.kind-job.mb-hyde");
+      const button = panelEl.querySelector(".btn-showcase-link");
   
       if (!titleChars.length || !descriptionContainer || !kindJobText) {
         console.warn(`Elementi mancanti in ${panel}`);
@@ -3405,7 +4033,8 @@ function scrollToTopInstant() {
       // 🔹 Impostiamo i valori iniziali per evitare glitch
       gsap.set(titleChars, { y: "100%", opacity: 0 });
       gsap.set(kindJobText, { y: "100%", opacity: 0 });
-      gsap.set(descriptionContainer, { y: "-200%" });
+      gsap.set(descriptionContainer, { y: -100 });
+      gsap.set(button, { scale: 0 });
   
       // 🔹 Creiamo lo ScrollTrigger basato sul trigger fisico
       ScrollTrigger.create({
@@ -3417,13 +4046,22 @@ function scrollToTopInstant() {
         onEnter: () => {
           gsap
             .timeline()
-            .to(titleChars, {
+            .to(descriptionContainer, {
               y: 0,
-              opacity: 1,
-              stagger: { amount: 0.2 },
-              duration: 0.5,
+              duration: 0.4,
               ease: "power2.out",
             })
+            .to(
+              titleChars,
+              {
+                y: 0,
+                opacity: 1,
+                stagger: { amount: 0.2 },
+                duration: 0.5,
+                ease: "power2.out",
+              },
+              "-=0.2"
+            )
             .to(
               kindJobText,
               {
@@ -3435,10 +4073,10 @@ function scrollToTopInstant() {
               "-=0.3"
             )
             .to(
-              descriptionContainer,
+              button,
               {
-                y: 0,
-                duration: 0.5,
+                scale: 1,
+                duration: 0.3,
                 ease: "power2.out",
               },
               "<"
@@ -3460,15 +4098,22 @@ function scrollToTopInstant() {
               ease: "power2.in",
             })
             .to(descriptionContainer, {
-              y: "-200%",
+              y: -100,
               duration: 0.5,
               ease: "power2.in",
-            });
+            })
+            .to(
+              button,
+              {
+                scale: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "-=0.2"
+            );
         },
       });
     });
-  
-    ScrollTrigger.refresh();
   }
   
   function showcaseTextContentMobile() {
@@ -3476,9 +4121,11 @@ function scrollToTopInstant() {
     const valueWrapper = document.querySelector(".value-wrapper.no-desk");
   
     panelHovs.forEach((panelHov) => {
-      const itemVTitles = panelHov.querySelectorAll(".item-v-title");
+      const itemVTitles = panelHov.querySelector(".item-v-title");
+      const button = panelHov.querySelector(".btn-showcase-link");
   
-      gsap.set(itemVTitles, { y: "100%" });
+      gsap.set(itemVTitles, { y: 100 });
+      gsap.set(button, { scale: 0 });
   
       ScrollTrigger.create({
         trigger: panelHov,
@@ -3489,12 +4136,22 @@ function scrollToTopInstant() {
             duration: 0.4,
             ease: "power2.out",
           });
+          gsap.to(button, {
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
         },
         onLeaveBack: () => {
           gsap.to(itemVTitles, {
-            y: "100%",
+            y: 100,
             duration: 0.4,
             ease: "power2.in",
+          });
+          gsap.to(button, {
+            scale: 0,
+            duration: 0.3,
+            ease: "power2.out",
           });
         },
       });
@@ -5273,6 +5930,79 @@ function scrollToTopInstant() {
     // **Forza un refresh di ScrollTrigger al resize**
     window.addEventListener("resize", () => ScrollTrigger.refresh());
   }
+
+  function setupGenericButtons() {
+    const header = document.getElementById("case-heading");
+    if (!header) {
+      console.warn("setupGenericButtons: Header non trovato.");
+      return;
+    }
+  
+    const button = header.querySelector(".btn-showcase-link");
+    if (!button) {
+      console.warn(
+        "setupGenericButtons: Nessun bottone trovato in #case-heading."
+      );
+      return;
+    }
+  
+    const hoverDiv = button.querySelector(".btn-showcase-link-hover");
+    const arrowHover = hoverDiv
+      ? hoverDiv.querySelector(".freccia-cta-arrow-hover")
+      : null;
+    const arrowDefault = button.querySelector(".freccia-cta-arrow");
+  
+    if (!hoverDiv || !arrowHover || !arrowDefault) {
+      console.warn("setupGenericButtons: Elementi non trovati nel bottone.");
+      return;
+    }
+  
+    // Timeline per l'hover/touch IN
+    const enterTl = gsap.timeline({ paused: true });
+    enterTl
+      .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+      .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.15")
+      .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+    // Timeline per l'hover/touch OUT
+    const leaveTl = gsap.timeline({ paused: true });
+    leaveTl
+      .to([hoverDiv, arrowHover], { scale: 0, duration: 0.3, ease: "power2.out" })
+      .to(
+        arrowDefault,
+        { scale: 1, duration: 0.3, ease: "power2.out" },
+        "-=0.15"
+      );
+  
+    let isHovered = false;
+  
+    const handleEnter = () => {
+      if (!isHovered) {
+        enterTl.restart();
+        isHovered = true;
+      }
+    };
+  
+    const handleLeave = () => {
+      if (isHovered) {
+        leaveTl.restart();
+        isHovered = false;
+      }
+    };
+  
+    // Aggiungiamo eventi per hover (desktop) e touch (mobile)
+    const eventPairs = [
+      { element: button, event: "mouseenter", handler: handleEnter },
+      { element: button, event: "mouseleave", handler: handleLeave },
+      { element: button, event: "touchstart", handler: handleEnter },
+      { element: button, event: "touchend", handler: handleLeave },
+    ];
+  
+    eventPairs.forEach(({ element, event, handler }) => {
+      element.addEventListener(event, handler);
+      window.pageSpecificListeners.push({ element, event, handler });
+    });
+  }
   
   //funzione per l'animazione ingresso Servizio in pagina
   function servicePageWrapper() {
@@ -6120,27 +6850,31 @@ function scrollToTopInstant() {
   }
   
   function swiperUI() {
-    const swiper = new Swiper(".swiper-container", {
+    const swiper = new Swiper(".slider-ui-wrapper", {
       slidesPerView: "auto",
-      spaceBetween: 20,
-      loop: true,
+      spaceBetween: 32,
       centeredSlides: true,
-      autoplay: {
-        delay: 1500,
-        disableOnInteraction: false,
-      },
-      speed: 500,
+      loop: true,
+      initialSlide: 0,
+      speed: 700,
       effect: "slide",
+      grabCursor: true,
+      resistanceRatio: 0.85,
+      threshold: 6,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
       navigation: {
-        nextEl: document.querySelector(".swiper-button-next"),
-        prevEl: document.querySelector(".swiper-button-prev"),
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
       },
       on: {
         init: function () {
           this.update();
           updateOpacityAndParallax(this);
         },
-        slideChange: function () {
+        slideChangeTransitionStart: function () {
           updateOpacityAndParallax(this);
         },
       },
@@ -6148,58 +6882,224 @@ function scrollToTopInstant() {
   
     function updateOpacityAndParallax(swiper) {
       const slides = swiper.slides;
+  
       slides.forEach((slide, index) => {
+        const image = slide.querySelector(".parallax-bg");
+  
+        // Determina se la slide è attiva, precedente o successiva
         if (index === swiper.activeIndex) {
+          // Slide attiva: visibile e ingrandita
           gsap.to(slide, {
             opacity: 1,
-            scale: 1,
-            duration: 0.5,
-            ease: "power3.inOut",
+            scale: 1.1,
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
           });
-          gsap.to(slide.querySelector(".parallax-bg-img"), {
+          gsap.to(image, {
             scale: 1,
-            opacity: 1,
-            duration: 0.5,
-            ease: "power3.inOut",
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        } else if (index === swiper.previousIndex || index === swiper.nextIndex) {
+          // Slide adiacenti: opacità media e leggera riduzione
+          gsap.to(slide, {
+            opacity: 0.3,
+            scale: 0.8,
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
+          });
+          gsap.to(image, {
+            scale: 1.2,
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
           });
         } else {
+          // Slide lontane: riduzione massima
           gsap.to(slide, {
-            opacity: 0.6,
+            opacity: 0.3,
             scale: 0.8,
-            duration: 0.5,
-            ease: "power3.inOut",
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
           });
-          gsap.to(slide.querySelector(".parallax-bg-img"), {
-            scale: 0.9,
-            opacity: 0.6,
-            duration: 0.5,
-            ease: "power3.inOut",
+          gsap.to(image, {
+            scale: 1.2,
+            transformOrigin: "center center",
+            duration: 0.4,
+            ease: "power2.out",
           });
         }
       });
     }
   
-    const swiperContainer = document.querySelector(".swiper-container");
-    swiperContainer.addEventListener("mouseenter", () => swiper.autoplay.stop());
-    swiperContainer.addEventListener("mouseleave", () => swiper.autoplay.start());
+    const sliderWrapper = document.querySelector(".slider-ui-wrapper");
+    const buttons = document.querySelectorAll(
+      ".swiper-button-prev, .swiper-button-next"
+    );
+    const nextButtons = document.querySelectorAll(".swiper-button-next");
   
-    swiperContainer.addEventListener("touchstart", () => swiper.autoplay.stop());
-    swiperContainer.addEventListener("touchend", () => swiper.autoplay.start());
+    if (!sliderWrapper || !buttons.length) return;
   
-    var observer = new IntersectionObserver(
-      function (entries) {
+    let autoTl;
+    let isSliderVisible = false; // Stato della visibilità dello slider
+  
+    function startAutoAnimation() {
+      if (!isSliderVisible) return;
+  
+      nextButtons.forEach((button) => {
+        const track = button.querySelector(".traccia-av-next");
+        if (!track) return;
+  
+        setTimeout(() => {
+          const trackLength = track.getTotalLength();
+          if (trackLength > 0) {
+            gsap.set(track, {
+              strokeDasharray: trackLength,
+              strokeDashoffset: trackLength,
+              opacity: 1,
+            });
+  
+            if (autoTl) autoTl.kill();
+  
+            autoTl = gsap.timeline({ repeat: -1 });
+            autoTl.to(track, {
+              strokeDashoffset: 0,
+              duration: 3,
+              ease: "power2.out",
+              onComplete: () => swiper.slideNext(),
+            });
+          }
+        }, 100);
+      });
+    }
+  
+    function pauseAutoAnimation() {
+      if (autoTl) autoTl.pause();
+    }
+  
+    function resumeAutoAnimation() {
+      if (autoTl && isSliderVisible) autoTl.resume();
+    }
+  
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      buttons.forEach((button) => {
+        const bg = button.querySelector(".btn-sfondo-avanzamento");
+        const border = button.querySelector(".traccia-av");
+  
+        if (!border || !bg) return;
+  
+        gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+        const hoverTl = gsap.timeline({ paused: true });
+        hoverTl
+          .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        button.addEventListener("mouseenter", () => {
+          pauseAutoAnimation();
+          hoverTl.play();
+        });
+        button.addEventListener("mouseleave", () => {
+          resumeAutoAnimation();
+          hoverTl.reverse();
+        });
+  
+        window.pageSpecificListeners.push(
+          {
+            element: button,
+            event: "mouseenter",
+            handler: () => pauseAutoAnimation(),
+          },
+          {
+            element: button,
+            event: "mouseleave",
+            handler: () => resumeAutoAnimation(),
+          },
+          { element: button, event: "mouseenter", handler: () => hoverTl.play() },
+          {
+            element: button,
+            event: "mouseleave",
+            handler: () => hoverTl.reverse(),
+          }
+        );
+      });
+    });
+  
+    mm.add("(max-width: 991px)", () => {
+      buttons.forEach((button) => {
+        const bg = button.querySelector(".btn-sfondo-avanzamento");
+        const border = button.querySelector(".traccia-av");
+  
+        if (!border || !bg) return;
+  
+        gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+        const touchTl = gsap.timeline({ paused: true });
+        touchTl
+          .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        button.addEventListener("touchstart", () => {
+          pauseAutoAnimation();
+          touchTl.play();
+        });
+  
+        button.addEventListener("touchend", () => {
+          resumeAutoAnimation();
+          touchTl.reverse();
+        });
+  
+        window.pageSpecificListeners.push(
+          {
+            element: button,
+            event: "touchstart",
+            handler: () => pauseAutoAnimation(),
+          },
+          {
+            element: button,
+            event: "touchend",
+            handler: () => resumeAutoAnimation(),
+          },
+          { element: button, event: "touchstart", handler: () => touchTl.play() },
+          { element: button, event: "touchend", handler: () => touchTl.reverse() }
+        );
+      });
+    });
+  
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        startAutoAnimation();
+      });
+  
+      window.pageSpecificListeners.push({
+        element: button,
+        event: "click",
+        handler: () => startAutoAnimation(),
+      });
+    });
+  
+    const observer = new IntersectionObserver(
+      (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            swiper.autoplay.start();
+            isSliderVisible = true;
+            startAutoAnimation();
           } else {
-            swiper.autoplay.stop();
+            isSliderVisible = false;
+            pauseAutoAnimation();
           }
         });
       },
       { threshold: 0.5 }
     );
   
-    observer.observe(document.querySelector(".swiper-container"));
+    observer.observe(sliderWrapper);
   }
 
   function calendar() {
@@ -6731,46 +7631,120 @@ function scrollToTopInstant() {
    
 
   window.propositoAnimation = window.propositoAnimation || {
-    initializeSwiper: function () {
-      // Seleziona tutti i contenitori degli slider
-      const swiperContainers = document.querySelectorAll(
-        ".related-articles-wrapper"
-      );
-  
-      swiperContainers.forEach((swiperContainer) => {
-        // Cerca i pulsanti di navigazione dentro lo stesso contenitore di slider
-        const nextButton = swiperContainer
-          .closest(".related-articles-slider")
-          .querySelector(".swiper-button-next");
-        const prevButton = swiperContainer
-          .closest(".related-articles-slider")
-          .querySelector(".swiper-button-prev");
-  
-        if (nextButton && prevButton) {
-          try {
-            // Inizializza lo Swiper per ogni .related-articles-wrapper
-            const swiperPost = new Swiper(swiperContainer, {
-              slidesPerView: "auto",
-              spaceBetween: 32,
-              centeredSlides: false,
-              navigation: {
-                nextEl: nextButton, // Usa il pulsante "next" corretto
-                prevEl: prevButton, // Usa il pulsante "prev" corretto
-              },
-              speed: 600, // Velocità della transizione
-              effect: "slide", // Effetto della transizione
-            });
-          } catch (error) {
-            console.error("Errore durante l'inizializzazione di Swiper:", error);
+    initializeSwiper: function () {      
+        const swiperContainers = document.querySelectorAll(
+          ".related-articles-wrapper"
+        );
+    
+        if (!swiperContainers.length) return;
+    
+        swiperContainers.forEach((swiperContainer) => {
+          const sliderParent = swiperContainer.closest(".related-articles-slider");
+          if (!sliderParent) return;
+    
+          const nextButton = sliderParent.querySelector(".swiper-button-next");
+          const prevButton = sliderParent.querySelector(".swiper-button-prev");
+    
+          if (!nextButton || !prevButton) {
+            console.warn(
+              "⚠️ initializeSwiper: Pulsanti prev/next non trovati per uno slider."
+            );
+            return;
           }
-        } else {
-          console.warn(
-            "Pulsanti di navigazione non trovati per:",
-            swiperContainer
-          );
-        }
-      });
-    },
+    
+          const swiper = new Swiper(swiperContainer, {
+            slidesPerView: "auto",
+            loop: true,
+            spaceBetween: 32,
+            centeredSlides: false,
+            speed: 700,
+            effect: "slide",
+            grabCursor: true,
+            resistanceRatio: 0.85,
+            threshold: 6,
+            navigation: {
+              nextEl: nextButton,
+              prevEl: prevButton,
+            },
+          });
+    
+          const buttons = [nextButton, prevButton];
+    
+          const mm = gsap.matchMedia();
+    
+          mm.add("(min-width: 992px)", () => {
+            buttons.forEach((button) => {
+              const bg = button.querySelector(".btn-sfondo-avanzamento");
+              const border = button.querySelector(".traccia-av");
+    
+              if (!border || !bg) return;
+    
+              gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+    
+              const hoverTl = gsap.timeline({ paused: true });
+              hoverTl
+                .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+                .to(
+                  border,
+                  { opacity: 1, duration: 0.3, ease: "power2.out" },
+                  "-=0.2"
+                );
+    
+              button.addEventListener("mouseenter", () => hoverTl.play());
+              button.addEventListener("mouseleave", () => hoverTl.reverse());
+    
+              window.pageSpecificListeners.push(
+                {
+                  element: button,
+                  event: "mouseenter",
+                  handler: () => hoverTl.play(),
+                },
+                {
+                  element: button,
+                  event: "mouseleave",
+                  handler: () => hoverTl.reverse(),
+                }
+              );
+            });
+          });
+    
+          mm.add("(max-width: 991px)", () => {
+            buttons.forEach((button) => {
+              const bg = button.querySelector(".btn-sfondo-avanzamento");
+              const border = button.querySelector(".traccia-av");
+    
+              if (!border || !bg) return;
+    
+              gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+    
+              const touchTl = gsap.timeline({ paused: true });
+              touchTl
+                .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+                .to(
+                  border,
+                  { opacity: 1, duration: 0.3, ease: "power2.out" },
+                  "-=0.2"
+                );
+    
+              button.addEventListener("touchstart", () => touchTl.play());
+              button.addEventListener("touchend", () => touchTl.reverse());
+    
+              window.pageSpecificListeners.push(
+                {
+                  element: button,
+                  event: "touchstart",
+                  handler: () => touchTl.play(),
+                },
+                {
+                  element: button,
+                  event: "touchend",
+                  handler: () => touchTl.reverse(),
+                }
+              );
+            });
+          });
+        });
+      },
   
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
@@ -7041,3 +8015,187 @@ function scrollToTopInstant() {
       this.postEntry();
     },
   };
+
+  function initSliderCTA() {
+    const swiper = new Swiper(".slider-cta-wrapper", {
+      loop: true,
+      speed: 700,
+      effect: "slide",
+      grabCursor: true,
+      resistanceRatio: 0.85,
+      threshold: 6,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+  
+    const sliderWrapper = document.querySelector(".slider-cta-wrapper");
+    const buttons = document.querySelectorAll(
+      ".swiper-button-prev, .swiper-button-next"
+    );
+    const nextButtons = document.querySelectorAll(".swiper-button-next");
+  
+    if (!sliderWrapper || !buttons.length) return;
+  
+    let autoTl;
+    let isSliderVisible = false; // Stato della visibilità dello slider
+  
+    function startAutoAnimation() {
+      if (!isSliderVisible) return;
+  
+      nextButtons.forEach((button) => {
+        const track = button.querySelector(".traccia-av-next");
+        if (!track) return;
+  
+        setTimeout(() => {
+          const trackLength = track.getTotalLength();
+          if (trackLength > 0) {
+            gsap.set(track, {
+              strokeDasharray: trackLength,
+              strokeDashoffset: trackLength,
+              opacity: 1,
+            });
+  
+            if (autoTl) autoTl.kill();
+  
+            autoTl = gsap.timeline({ repeat: -1 });
+            autoTl.to(track, {
+              strokeDashoffset: 0,
+              duration: 6,
+              ease: "linear",
+              onComplete: () => swiper.slideNext(),
+            });
+          }
+        }, 100);
+      });
+    }
+  
+    function pauseAutoAnimation() {
+      if (autoTl) autoTl.pause();
+    }
+  
+    function resumeAutoAnimation() {
+      if (autoTl && isSliderVisible) autoTl.resume();
+    }
+  
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      buttons.forEach((button) => {
+        const bg = button.querySelector(".btn-sfondo-avanzamento");
+        const border = button.querySelector(".traccia-av");
+  
+        if (!border || !bg) return;
+  
+        gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+        const hoverTl = gsap.timeline({ paused: true });
+        hoverTl
+          .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        button.addEventListener("mouseenter", () => {
+          pauseAutoAnimation();
+          hoverTl.play();
+        });
+        button.addEventListener("mouseleave", () => {
+          resumeAutoAnimation();
+          hoverTl.reverse();
+        });
+  
+        window.pageSpecificListeners.push(
+          {
+            element: button,
+            event: "mouseenter",
+            handler: () => pauseAutoAnimation(),
+          },
+          {
+            element: button,
+            event: "mouseleave",
+            handler: () => resumeAutoAnimation(),
+          },
+          { element: button, event: "mouseenter", handler: () => hoverTl.play() },
+          {
+            element: button,
+            event: "mouseleave",
+            handler: () => hoverTl.reverse(),
+          }
+        );
+      });
+    });
+  
+    mm.add("(max-width: 991px)", () => {
+      buttons.forEach((button) => {
+        const bg = button.querySelector(".btn-sfondo-avanzamento");
+        const border = button.querySelector(".traccia-av");
+  
+        if (!border || !bg) return;
+  
+        gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+        const touchTl = gsap.timeline({ paused: true });
+        touchTl
+          .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        button.addEventListener("touchstart", () => {
+          pauseAutoAnimation();
+          touchTl.play();
+        });
+  
+        button.addEventListener("touchend", () => {
+          resumeAutoAnimation();
+          touchTl.reverse();
+        });
+  
+        window.pageSpecificListeners.push(
+          {
+            element: button,
+            event: "touchstart",
+            handler: () => pauseAutoAnimation(),
+          },
+          {
+            element: button,
+            event: "touchend",
+            handler: () => resumeAutoAnimation(),
+          },
+          { element: button, event: "touchstart", handler: () => touchTl.play() },
+          { element: button, event: "touchend", handler: () => touchTl.reverse() }
+        );
+      });
+    });
+  
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        startAutoAnimation();
+      });
+  
+      window.pageSpecificListeners.push({
+        element: button,
+        event: "click",
+        handler: () => startAutoAnimation(),
+      });
+    });
+  
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            isSliderVisible = true;
+            startAutoAnimation();
+          } else {
+            isSliderVisible = false;
+            pauseAutoAnimation();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+  
+    observer.observe(sliderWrapper);
+  }

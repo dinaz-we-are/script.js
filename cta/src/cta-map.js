@@ -200,6 +200,42 @@ export default CTAMap;
       scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
       styles: [],
     },
+    "67c7f9c8a98df18e2f28db62": {
+      name: "gazzetta",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
+    "67cc5b0b3748d7a57404ad00": {
+      name: "soltufo",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
+    "67d6fad0a3893fbe1ba0b5ef": {
+      name: "catheclisma",
+      jsonKey: "",
+      scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
+      styles: [],
+    },
+    "665f0ffe1215c488346c8ab5": {
+      name: "falletta",
+      jsonKey: "",
+      scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
+      styles: [],
+    },
+    "67d7f564b0d1e409254555c9": {
+      name: "amotea",
+      jsonKey: "",
+      scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
+      styles: [],
+    },
+    "67d7f850e11eca0af3bd939b": {
+      name: "lavoce",
+      jsonKey: "",
+      scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
+      styles: [],
+    },
   };
   window.jsonPageMap = {
     "665f0ffe1215c488346c8ab3": {
@@ -816,6 +852,82 @@ export default CTAMap;
           propositoHomePage();
           studioAnimations();
         }, 500);
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    gazzetta:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericButtons();
+        startMarquee();
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    lavoce:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericButtons();
+        initSliderCTA();        
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+   catheclisma:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericButtons();
+        initSliderCTA();        
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    soltufo:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }                     
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    falletta:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericButtons();
+        initSliderCTA();        
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    amotea:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericButtons();
+        initSliderCTA();        
       },
       cleanup: function () {
         cleanUpTriggers();
