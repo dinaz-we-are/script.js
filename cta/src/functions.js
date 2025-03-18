@@ -3673,10 +3673,14 @@ function scrollToTopInstant() {
   };
 
   function setupShowcaseButtons() {
+    console.log("🔹 setupShowcaseButtons: Inizializzazione...");
+  
     const mm = gsap.matchMedia();
   
     // 🔹 Modalità DESKTOP: Gestisce solo hover (≥992px)
     mm.add("(min-width: 992px)", () => {
+      console.log("🖥 setupShowcaseButtons: Modalità DESKTOP attivata");
+  
       const buttonImagePairs = [
         { buttonId: "show-btn-primo", imgId: "spacer-img-primo" },
         { buttonId: "show-btn-secondo", imgId: "spacer-img-secondo" },
@@ -3688,22 +3692,22 @@ function scrollToTopInstant() {
         const imgPanel = document.getElementById(imgId);
   
         if (!button || !imgPanel) {
-          console.warn(
-            `setupShowcaseButtons: Elementi mancanti per ${buttonId} e ${imgId}`
-          );
+          console.warn(`❌ setupShowcaseButtons: Elementi mancanti → ${buttonId} | ${imgId}`);
           return;
         }
+  
+        console.log(`✅ setupShowcaseButtons: Elementi trovati → ${buttonId} | ${imgId}`);
   
         const hoverDiv = button.querySelector(".btn-showcase-link-hover");
         const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
   
         if (!hoverDiv || !arrowHover || !arrowDefault) {
-          console.warn(
-            `setupShowcaseButtons: Elementi interni mancanti per ${buttonId}`
-          );
+          console.warn(`⚠️ setupShowcaseButtons: Elementi interni mancanti in ${buttonId}`);
           return;
         }
+  
+        console.log(`🎯 setupShowcaseButtons: Elementi interni corretti per ${buttonId}`);
   
         let enterTl = gsap.timeline({ paused: true });
         let leaveTl = gsap.timeline({ paused: true });
@@ -3711,36 +3715,21 @@ function scrollToTopInstant() {
         let isHovered = false;
         let isInside = false;
   
-        // 🔹 Timeline per l'hover IN
         enterTl
-          .set(hoverDiv, { opacity: 1 })
           .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
-          .to(
-            arrowHover,
-            { scale: 1, duration: 0.3, ease: "power2.out" },
-            "-=0.15"
-          )
+          .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.15")
           .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
   
-        // 🔹 Timeline per l'hover OUT (forzato sempre)
         leaveTl
-          .to([hoverDiv, arrowHover], {
-            scale: 0,
-            duration: 0.3,
-            ease: "power2.out",
-          })
-          .to(
-            arrowDefault,
-            { scale: 1, duration: 0.3, ease: "power2.out" },
-            "-=0.15"
-          )
-          .set(hoverDiv, { opacity: 0 });
+          .to([hoverDiv, arrowHover], { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowDefault, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.15");
   
         const handleMouseEnter = () => {
           clearTimeout(hoverTimeout);
           isInside = true;
   
           if (!isHovered) {
+            console.log(`🟢 setupShowcaseButtons: Hover su ${buttonId}`);
             enterTl.restart();
             isHovered = true;
           }
@@ -3750,111 +3739,114 @@ function scrollToTopInstant() {
           isInside = false;
           hoverTimeout = setTimeout(() => {
             if (!isInside) {
+              console.log(`🔴 setupShowcaseButtons: Mouse lasciato da ${buttonId}`);
               leaveTl.restart();
               isHovered = false;
             }
           }, 50);
         };
   
-        // 🔹 Eventi solo per DESKTOP (hover)
         button.addEventListener("mouseenter", handleMouseEnter);
         imgPanel.addEventListener("mouseenter", handleMouseEnter);
         button.addEventListener("mouseleave", handleMouseLeave);
         imgPanel.addEventListener("mouseleave", handleMouseLeave);
-  
-        window.pageSpecificListeners.push(
-          { element: button, event: "mouseenter", handler: handleMouseEnter },
-          { element: imgPanel, event: "mouseenter", handler: handleMouseEnter },
-          { element: button, event: "mouseleave", handler: handleMouseLeave },
-          { element: imgPanel, event: "mouseleave", handler: handleMouseLeave }
-        );
       });
     });
   
     // 🔹 Modalità MOBILE: Disabilita hover, usa solo touch (≤991px)
     mm.add("(max-width: 991px)", () => {
+      console.log("📱 setupShowcaseButtons: Modalità MOBILE attivata");
+  
       const panelIds = ["show-btn-primo", "show-btn-secondo", "show-btn-terzo"];
   
       panelIds.forEach((panelId) => {
         const button = document.getElementById(panelId);
-        if (!button) return;
+        if (!button) {
+          console.warn(`❌ setupShowcaseButtons: Pulsante mancante → ${panelId}`);
+          return;
+        }
   
         const arrowDefault = button.querySelector(".freccia-cta-arrow");
         const arrowAbs = button.querySelector(".freccia-cta-arrow-mobile");
   
-        if (!arrowDefault || !arrowAbs) return;
+        if (!arrowDefault || !arrowAbs) {
+          console.warn(`⚠️ setupShowcaseButtons: Elementi interni mancanti in ${panelId}`);
+          return;
+        }
   
-        // 🔹 Timeline per il tocco
+        console.log(`✅ setupShowcaseButtons: Elementi mobili trovati per ${panelId}`);
+  
         const touchTl = gsap.timeline({ paused: true });
         touchTl
           .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
           .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        const handleTouchStart = () => {
+        button.addEventListener("touchstart", () => {
+          console.log(`🟢 setupShowcaseButtons: Touch su ${panelId}`);
           touchTl.restart();
-        };
+        });
   
-        const handleTouchEnd = () => {
+        button.addEventListener("touchend", () => {
+          console.log(`🔴 setupShowcaseButtons: Touch terminato su ${panelId}`);
           touchTl.reverse();
-        };
-  
-        // 🔹 Eventi solo per MOBILE (touch)
-        button.addEventListener("touchstart", handleTouchStart);
-        button.addEventListener("touchend", handleTouchEnd);
-  
-        window.pageSpecificListeners.push(
-          { element: button, event: "touchstart", handler: handleTouchStart },
-          { element: button, event: "touchend", handler: handleTouchEnd }
-        );
+        });
       });
     });
+  
+    console.log("✅ setupShowcaseButtons: Inizializzazione completata.");
   }
   
+  
   function setupVerticalShowcaseButtons() {
+    console.log("🔹 setupVerticalShowcaseButtons: Inizializzazione...");
+  
     const panels = document.querySelectorAll(".panel-item-hov");
   
-    if (!panels.length) return;
+    if (!panels.length) {
+      console.warn("❌ setupVerticalShowcaseButtons: Nessun pannello trovato.");
+      return;
+    }
+  
+    console.log(`✅ setupVerticalShowcaseButtons: ${panels.length} pannelli trovati.`);
   
     const mm = gsap.matchMedia();
   
     mm.add("(min-width: 992px)", () => {
-      // 🔹 Modalità DESKTOP: Gestisce Hover SOLO sul button
+      console.log("🖥 setupVerticalShowcaseButtons: Modalità DESKTOP attivata");
+  
       panels.forEach((panel) => {
         const button = panel.querySelector(".btn-showcase-link");
         const hoverDiv = button?.querySelector(".btn-showcase-link-hover");
         const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
   
-        if (!button || !hoverDiv || !arrowHover || !arrowDefault) return;
+        if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+          console.warn("⚠️ setupVerticalShowcaseButtons: Elementi interni mancanti.");
+          return;
+        }
   
-        // Timeline per l'hover IN
+        console.log(`✅ setupVerticalShowcaseButtons: Elementi trovati per un pannello`);
+  
         const enterTl = gsap.timeline({ paused: true });
         enterTl
           .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
-          .to(
-            arrowHover,
-            { scale: 1, duration: 0.3, ease: "power2.out" },
-            "-=0.2"
-          )
+          .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2")
           .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
   
-        // Timeline per l'hover OUT
         const leaveTl = gsap.timeline({ paused: true });
         leaveTl
-          .to([hoverDiv, arrowHover], {
-            scale: 0,
-            duration: 0.3,
-            ease: "power2.out",
-          })
-          .to(
-            arrowDefault,
-            { scale: 1, duration: 0.3, ease: "power2.out" },
-            "-=0.2"
-          );
+          .to([hoverDiv, arrowHover], { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowDefault, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
         // Funzioni per gestire gli eventi
-        const handleMouseEnter = () => enterTl.restart();
-        const handleMouseLeave = () => leaveTl.restart();
+        const handleMouseEnter = () => {
+          console.log(`🟢 Hover su ${button.textContent.trim()}`);
+          enterTl.restart();
+        };
+        const handleMouseLeave = () => {
+          console.log(`🔴 Mouse lasciato da ${button.textContent.trim()}`);
+          leaveTl.restart();
+        };
   
         // Aggiunge i listener SOLO al button
         button.addEventListener("mouseenter", handleMouseEnter);
@@ -3869,35 +3861,54 @@ function scrollToTopInstant() {
     });
   
     mm.add("(max-width: 991px)", () => {
-      // 🔹 Modalità MOBILE: Attiva Touch su button e panel
+      console.log("📱 setupVerticalShowcaseButtons: Modalità MOBILE attivata");
+  
       panels.forEach((panel) => {
         const button = panel.querySelector(".btn-showcase-link");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
         const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
   
-        if (!button || !arrowDefault || !arrowAbs) return;
+        if (!button) {
+          console.warn("❌ setupVerticalShowcaseButtons: Button mancante nel pannello.");
+          return;
+        }
+        if (!arrowDefault || !arrowAbs) {
+          console.warn("⚠️ setupVerticalShowcaseButtons: Elementi interni mancanti nel button.");
+          return;
+        }
   
-        // Timeline per il touch
+        console.log(`✅ setupVerticalShowcaseButtons: Elementi mobili trovati per ${button.textContent.trim()}`);
+  
         const touchTl = gsap.timeline({ paused: true });
         touchTl
           .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
           .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        // Funzione per gestire il tocco
-        const handleTouchStart = () => touchTl.restart();
+        const handleTouchStart = () => {
+          console.log(`🟢 Touch su ${button.textContent.trim()}`);
+          touchTl.restart();
+        };
   
-        // Aggiunge il listener al button e al panel-item-hov
+        const handleTouchEnd = () => {
+          console.log(`🔴 Touch terminato su ${button.textContent.trim()}`);
+          touchTl.reverse();
+        };
+  
+        // Aggiunge il listener al button
         button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
   
         // Registra i listener dentro window.pageSpecificListeners
-        window.pageSpecificListeners.push({
-          element: button,
-          event: "touchstart",
-          handler: handleTouchStart,
-        });
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
       });
     });
+  
+    console.log("✅ setupVerticalShowcaseButtons: Inizializzazione completata.");
   }
+  
   
   // Chiama la funzione per inizializzare le animazioni
   function createScrollTriggerScrollWrapper() {

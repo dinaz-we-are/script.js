@@ -218,7 +218,7 @@ export default CTAMap;
       scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
       styles: [],
     },
-    "665f0ffe1215c488346c8ab5": {
+    "67cec17bd767578bfa128b0f": {
       name: "falletta",
       jsonKey: "",
       scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
