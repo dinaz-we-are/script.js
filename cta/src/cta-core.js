@@ -344,7 +344,6 @@ function cleanUpTriggers() {
     );
   }
 
-
   window.lenisInstance = window.lenisInstance || {
     instance: null,
     isStopped: false,
