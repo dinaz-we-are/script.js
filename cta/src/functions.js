@@ -15,8 +15,7 @@ const functions = {
     createScrollTriggerScrollWrapper,
     showcasePanelsScrollMobile,
     showcaseTextContentMobile,
-    propositoHomePage,
-    swiperHome,
+    propositoHomePage,   
     createScrollTriggerHero,
     pageServiceScrollTriggerDesign,
     pageServiceScrollTriggerWeb,
@@ -2988,7 +2987,8 @@ function scrollToTopInstant() {
         "<"
       )
       .set(".cover-wrapper", { display: "none" })
-      .to(".line-title-section-show", {
+      .to(".line-title-section-show", 
+        {
         width: "100%",
         duration: 0.8,
         ease: "power2.out",
@@ -4372,86 +4372,6 @@ function scrollToTopInstant() {
         "-=0.2"
       );
     });
-  }
-
-  function swiperHome() {
-    var swiper = new Swiper(".swiper-container-home", {
-      slidesPerView: "auto",
-      spaceBetween: 0,
-      loop: true,
-      centeredSlides: true,
-      autoplay: {
-        delay: 500,
-        disableOnInteraction: false,
-      },
-      speed: 500,
-      on: {
-        init: function () {
-          this.update();
-          updateOpacityAndParallax(this);
-        },
-        slideChange: function () {
-          updateOpacityAndParallax(this);
-        },
-      },
-    });
-  
-    function updateOpacityAndParallax(swiper) {
-      const slides = swiper.slides;
-      slides.forEach((slide, index) => {
-        slide.style.opacity = index === swiper.activeIndex ? 1 : 0.6;
-      });
-      // Applica animazioni GSAP
-      gsap.to(slides[swiper.activeIndex].querySelector(".parallax-bg-img"), {
-        scale: 1.1,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power3.inOut",
-      });
-      // Animazioni parallax per slide precedenti e successive
-      if (slides[swiper.activeIndex - 1]) {
-        gsap.to(
-          slides[swiper.activeIndex - 1].querySelector(".parallax-bg-img"),
-          {
-            scale: 0.5,
-            opacity: 0.6,
-            duration: 0.5,
-            ease: "power3.inOut",
-          }
-        );
-      }
-      if (slides[swiper.activeIndex + 1]) {
-        gsap.to(
-          slides[swiper.activeIndex + 1].querySelector(".parallax-bg-img"),
-          {
-            scale: 0.5,
-            opacity: 0.6,
-            duration: 0.5,
-            ease: "power3.inOut",
-          }
-        );
-      }
-    }
-    const swiperContainer = document.querySelector(".swiper-container-home");
-    swiperContainer.addEventListener("mouseenter", () => swiper.autoplay.stop());
-    swiperContainer.addEventListener("mouseleave", () => swiper.autoplay.start());
-  
-    swiperContainer.addEventListener("touchstart", () => swiper.autoplay.stop());
-    swiperContainer.addEventListener("touchend", () => swiper.autoplay.start());
-  
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            swiper.autoplay.start();
-          } else {
-            swiper.autoplay.stop();
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(document.querySelector(".swiper-container-home"));
   }
 
   //
