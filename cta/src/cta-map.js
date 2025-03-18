@@ -442,6 +442,8 @@ export default CTAMap;
         });
         // Funzioni meno prioritarie legate a sezioni successive dello scroll
         setTimeout(() => {
+          setupShowcaseButtons();
+          setupVerticalShowcaseButtons();
           info();
           window.linkManager.init();
           propositoAnimation.btnReadAnimation();
@@ -844,6 +846,8 @@ export default CTAMap;
         });
         // Funzioni meno prioritarie legate a sezioni successive dello scroll
         setTimeout(() => {
+          setupShowcaseButtons();
+          setupVerticalShowcaseButtons();
           info();
           window.linkManager.init();
           propositoAnimation.btnReadAnimation();
