@@ -884,7 +884,7 @@ export default CTAMap;
         cleanUpPageListeners();
       },
     },
-   catheclisma:{
+    catheclisma:{
       execute: function () {
         if (!window.isBarbaTransition) {
           showcaseTransition();
