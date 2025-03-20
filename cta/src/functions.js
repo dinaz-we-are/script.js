@@ -46,6 +46,8 @@ const functions = {
     setupVerticalShowcaseButtons,
     setupShowcaseButtons,
     showcaseTransition,
+    genericPageTitleAnimations,
+    setupGenericCloseButtons,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -3712,7 +3714,8 @@ function scrollToTopInstant() {
         let isInside = false;
   
         // 🔹 Timeline per l'hover IN
-        enterTl          
+        enterTl
+          .set(hoverDiv, { opacity: 1 })
           .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(
             arrowHover,
@@ -3732,7 +3735,8 @@ function scrollToTopInstant() {
             arrowDefault,
             { scale: 1, duration: 0.3, ease: "power2.out" },
             "-=0.15"
-          );
+          )
+          .set(hoverDiv, { opacity: 0 });
   
         const handleMouseEnter = () => {
           clearTimeout(hoverTimeout);
@@ -3808,25 +3812,34 @@ function scrollToTopInstant() {
     });
   }
   
+  
   function setupVerticalShowcaseButtons() {
     const panels = document.querySelectorAll(".panel-item-hov");
   
-    if (!panels.length) return;
+    if (!panels.length) {
+      console.warn("❌ setupVerticalShowcaseButtons: Nessun pannello trovato.");
+      return;
+    }
   
     const mm = gsap.matchMedia();
   
     mm.add("(min-width: 992px)", () => {
-      // 🔹 Modalità DESKTOP: Gestisce Hover SOLO sul button
+  
       panels.forEach((panel) => {
         const button = panel.querySelector(".btn-showcase-link");
         const hoverDiv = button?.querySelector(".btn-showcase-link-hover");
         const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
   
-        if (!button || !hoverDiv || !arrowHover || !arrowDefault) return;
+        if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+          return;
+        }
   
-        // Timeline per l'hover IN
-        const enterTl = gsap.timeline({ paused: true });
+        let enterTl = gsap.timeline({ paused: true });
+        let leaveTl = gsap.timeline({ paused: true });
+        let isHovered = false;
+  
+        // 🔹 Timeline per l'hover IN
         enterTl
           .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(
@@ -3836,8 +3849,7 @@ function scrollToTopInstant() {
           )
           .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
   
-        // Timeline per l'hover OUT
-        const leaveTl = gsap.timeline({ paused: true });
+        // 🔹 Timeline per l'hover OUT
         leaveTl
           .to([hoverDiv, arrowHover], {
             scale: 0,
@@ -3850,15 +3862,25 @@ function scrollToTopInstant() {
             "-=0.2"
           );
   
-        // Funzioni per gestire gli eventi
-        const handleMouseEnter = () => enterTl.restart();
-        const handleMouseLeave = () => leaveTl.restart();
+        const handleMouseEnter = () => {
+          if (!isHovered) {
+            enterTl.restart();
+            isHovered = true;
+          }
+        };
+  
+        const handleMouseLeave = () => {
+          if (isHovered) {
+            leaveTl.restart();
+            isHovered = false;
+          }
+        };
   
         // Aggiunge i listener SOLO al button
         button.addEventListener("mouseenter", handleMouseEnter);
         button.addEventListener("mouseleave", handleMouseLeave);
   
-        // Registra i listener dentro window.pageSpecificListeners
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
         window.pageSpecificListeners.push(
           { element: button, event: "mouseenter", handler: handleMouseEnter },
           { element: button, event: "mouseleave", handler: handleMouseLeave }
@@ -3867,32 +3889,49 @@ function scrollToTopInstant() {
     });
   
     mm.add("(max-width: 991px)", () => {
-      // 🔹 Modalità MOBILE: Attiva Touch su button e panel
+  
       panels.forEach((panel) => {
         const button = panel.querySelector(".btn-showcase-link");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
         const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
   
-        if (!button || !arrowDefault || !arrowAbs) return;
+        if (!button || !arrowDefault || !arrowAbs) {
+          return;
+        }
   
-        // Timeline per il touch
-        const touchTl = gsap.timeline({ paused: true });
+        let touchTl = gsap.timeline({ paused: true });
+        let isTouched = false;
+  
+        // 🔹 Timeline per il tocco
         touchTl
           .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
           .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        // Funzione per gestire il tocco
-        const handleTouchStart = () => touchTl.restart();
+        const handleTouchStart = () => {
+          if (!isTouched) {
+            touchTl.restart();
+            isTouched = true;
+          }
+        };
   
-        // Aggiunge il listener al button e al panel-item-hov
+        const handleTouchEnd = () => {
+          if (isTouched) {
+            setTimeout(() => {
+              touchTl.reverse();
+              isTouched = false;
+            }, 0); 
+          }
+        };
+  
+        // Aggiunge il listener al button
         button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
   
-        // Registra i listener dentro window.pageSpecificListeners
-        window.pageSpecificListeners.push({
-          element: button,
-          event: "touchstart",
-          handler: handleTouchStart,
-        });
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
       });
     });
   }
@@ -5904,12 +5943,95 @@ function scrollToTopInstant() {
   
     const handleLeave = () => {
       if (isHovered) {
-        leaveTl.restart();
-        isHovered = false;
+        setTimeout(() => {
+          leaveTl.restart();
+          isHovered = false;
+        }, 0);
       }
     };
   
     // Aggiungiamo eventi per hover (desktop) e touch (mobile)
+    const eventPairs = [
+      { element: button, event: "mouseenter", handler: handleEnter },
+      { element: button, event: "mouseleave", handler: handleLeave },
+      { element: button, event: "touchstart", handler: handleEnter },
+      { element: button, event: "touchend", handler: handleLeave },
+    ];
+  
+    eventPairs.forEach(({ element, event, handler }) => {
+      element.addEventListener(event, handler);
+      window.pageSpecificListeners.push({ element, event, handler });
+    });
+  }
+
+  function setupGenericCloseButtons() {
+    const container = document.getElementById("closing-showcase");
+    if (!container) {
+      console.warn("❌ Close Button: Container non trovato.");
+      return;
+    }
+  
+    const button = container.querySelector(".btn-showcase-close");
+    if (!button) {
+      console.warn("❌ Close Button: Nessun bottone trovato");
+      return;
+    }
+  
+    const hoverDiv = button.querySelector(".close-showcase-link-hover");
+    const arrowHover = hoverDiv?.querySelector(".close-cta-arrow-hover");
+    const arrowDefault = button.querySelector(".close-cta-arrow");
+  
+    if (!hoverDiv || !arrowHover || !arrowDefault) {
+      console.warn("⚠️ Close Button: Elementi non trovati nel bottone.");
+      return;
+    }
+  
+    // 🔹 Attiva l'animazione quando l'utente scrolla di 50vh
+    ScrollTrigger.create({
+      trigger: document.documentElement,
+      start: "top+=50vh top",
+      once: true,
+      onEnter: () => {
+        gsap.to(button, { scale: 1, duration: 0.6, ease: "power2.out" });
+      },
+    });
+  
+    // 🔹 Timeline per l'hover/touch IN
+    const enterTl = gsap.timeline({ paused: true });
+    enterTl
+      .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+      .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.15")
+      .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+    // 🔹 Timeline per l'hover/touch OUT
+    const leaveTl = gsap.timeline({ paused: true });
+    leaveTl
+      .to([hoverDiv, arrowHover], { scale: 0, duration: 0.3, ease: "power2.out" })
+      .to(
+        arrowDefault,
+        { scale: 1, duration: 0.3, ease: "power2.out" },
+        "-=0.15"
+      );
+  
+    let isHovered = false;
+  
+    const handleEnter = () => {
+      if (!isHovered) {
+        enterTl.restart();
+        isHovered = true;
+      }
+    };
+  
+    const handleLeave = () => {
+      if (isHovered) {
+        setTimeout(() => {
+          leaveTl.restart();
+          isHovered = false;
+        }, 0);
+      }
+    };
+  
+    // 🔹 Aggiungiamo eventi per hover (desktop) e touch (mobile)
     const eventPairs = [
       { element: button, event: "mouseenter", handler: handleEnter },
       { element: button, event: "mouseleave", handler: handleLeave },
@@ -7204,6 +7326,7 @@ function scrollToTopInstant() {
     const trigger = studio.querySelector(".studio-img-container");
     const lineWrap = wrapper.querySelectorAll(".section-spacer-divider");
     const teamWrap = wrapper.querySelectorAll(".team-item-wrapper");
+    const noi = wrapper.querySelector(".noi");
   
     // Split per le animazioni di testo
     const splitStudio = new SplitType(".miss-vis-text", {
@@ -7220,6 +7343,21 @@ function scrollToTopInstant() {
       types: "words",
       tagName: "span",
     });
+  
+    if (noi) {
+      const noiCover = noi.querySelector(".noi-cover");
+      gsap.to(noiCover, {
+        y: "50vh",
+        duration: 0.8,
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: noi,
+          start: "top center",
+          end: "top 50%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
   
     // Animazioni per lineWrap (titoli e linee)
     lineWrap.forEach((lineWrap) => {
@@ -7550,120 +7688,135 @@ function scrollToTopInstant() {
    
 
   window.propositoAnimation = window.propositoAnimation || {
-    initializeSwiper: function () {      
-        const swiperContainers = document.querySelectorAll(
-          ".related-articles-wrapper"
-        );
-    
-        if (!swiperContainers.length) return;
-    
-        swiperContainers.forEach((swiperContainer) => {
-          const sliderParent = swiperContainer.closest(".related-articles-slider");
-          if (!sliderParent) return;
-    
-          const nextButton = sliderParent.querySelector(".swiper-button-next");
-          const prevButton = sliderParent.querySelector(".swiper-button-prev");
-    
-          if (!nextButton || !prevButton) {
-            console.warn(
-              "⚠️ initializeSwiper: Pulsanti prev/next non trovati per uno slider."
+    initializeSwiper: function () {
+      const swiperContainers = document.querySelectorAll(
+        ".related-articles-wrapper"
+      );
+  
+      if (!swiperContainers.length) {
+        return;
+      }
+  
+      swiperContainers.forEach((swiperContainer) => {
+        const sliderParent = swiperContainer.closest(".related-articles-slider");
+        if (!sliderParent) {
+          return;
+        }
+  
+        const nextButton = sliderParent.querySelector(".swiper-button-next");
+        const prevButton = sliderParent.querySelector(".swiper-button-prev");
+  
+        if (!nextButton || !prevButton) {
+          console.warn(
+            "⚠️ initializeSwiper: Pulsanti prev/next non trovati per uno slider."
+          );
+          return;
+        }
+  
+        const slides = swiperContainer.querySelectorAll(".swiper-slide");
+        const totalSlides = slides.length;
+  
+        // 🔹 Numero minimo di slide visibili contemporaneamente
+        const minVisibleSlides = 6; // Cambia in base alla configurazione su desktop
+  
+        // 🔹 Il loop si attiva solo se ci sono più slide di quelle visibili
+        const enableLoop = totalSlides > minVisibleSlides;
+       
+  
+        const swiper = new Swiper(swiperContainer, {
+          slidesPerView: "auto", 
+          slidesPerGroup: 1, 
+          loop: enableLoop, 
+          spaceBetween: 32,
+          centeredSlides: false,
+          speed: 700,
+          effect: "slide",
+          grabCursor: true,
+          resistanceRatio: 0.85,
+          threshold: 6,
+          navigation: {
+            nextEl: nextButton,
+            prevEl: prevButton,
+          },
+        });
+  
+        const buttons = [nextButton, prevButton];
+  
+        const mm = gsap.matchMedia();
+  
+        mm.add("(min-width: 992px)", () => {
+          buttons.forEach((button) => {
+            const bg = button.querySelector(".btn-sfondo-avanzamento");
+            const border = button.querySelector(".traccia-av");
+  
+            if (!border || !bg) return;
+  
+            gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+            const hoverTl = gsap.timeline({ paused: true });
+            hoverTl
+              .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+              .to(
+                border,
+                { opacity: 1, duration: 0.3, ease: "power2.out" },
+                "-=0.2"
+              );
+  
+            button.addEventListener("mouseenter", () => hoverTl.play());
+            button.addEventListener("mouseleave", () => hoverTl.reverse());
+  
+            window.pageSpecificListeners.push(
+              {
+                element: button,
+                event: "mouseenter",
+                handler: () => hoverTl.play(),
+              },
+              {
+                element: button,
+                event: "mouseleave",
+                handler: () => hoverTl.reverse(),
+              }
             );
-            return;
-          }
-    
-          const swiper = new Swiper(swiperContainer, {
-            slidesPerView: "auto",
-            loop: true,
-            spaceBetween: 32,
-            centeredSlides: false,
-            speed: 700,
-            effect: "slide",
-            grabCursor: true,
-            resistanceRatio: 0.85,
-            threshold: 6,
-            navigation: {
-              nextEl: nextButton,
-              prevEl: prevButton,
-            },
-          });
-    
-          const buttons = [nextButton, prevButton];
-    
-          const mm = gsap.matchMedia();
-    
-          mm.add("(min-width: 992px)", () => {
-            buttons.forEach((button) => {
-              const bg = button.querySelector(".btn-sfondo-avanzamento");
-              const border = button.querySelector(".traccia-av");
-    
-              if (!border || !bg) return;
-    
-              gsap.set(bg, { scale: 0, transformOrigin: "center left" });
-    
-              const hoverTl = gsap.timeline({ paused: true });
-              hoverTl
-                .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
-                .to(
-                  border,
-                  { opacity: 1, duration: 0.3, ease: "power2.out" },
-                  "-=0.2"
-                );
-    
-              button.addEventListener("mouseenter", () => hoverTl.play());
-              button.addEventListener("mouseleave", () => hoverTl.reverse());
-    
-              window.pageSpecificListeners.push(
-                {
-                  element: button,
-                  event: "mouseenter",
-                  handler: () => hoverTl.play(),
-                },
-                {
-                  element: button,
-                  event: "mouseleave",
-                  handler: () => hoverTl.reverse(),
-                }
-              );
-            });
-          });
-    
-          mm.add("(max-width: 991px)", () => {
-            buttons.forEach((button) => {
-              const bg = button.querySelector(".btn-sfondo-avanzamento");
-              const border = button.querySelector(".traccia-av");
-    
-              if (!border || !bg) return;
-    
-              gsap.set(bg, { scale: 0, transformOrigin: "center left" });
-    
-              const touchTl = gsap.timeline({ paused: true });
-              touchTl
-                .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
-                .to(
-                  border,
-                  { opacity: 1, duration: 0.3, ease: "power2.out" },
-                  "-=0.2"
-                );
-    
-              button.addEventListener("touchstart", () => touchTl.play());
-              button.addEventListener("touchend", () => touchTl.reverse());
-    
-              window.pageSpecificListeners.push(
-                {
-                  element: button,
-                  event: "touchstart",
-                  handler: () => touchTl.play(),
-                },
-                {
-                  element: button,
-                  event: "touchend",
-                  handler: () => touchTl.reverse(),
-                }
-              );
-            });
           });
         });
-      },
+  
+        mm.add("(max-width: 991px)", () => {
+          buttons.forEach((button) => {
+            const bg = button.querySelector(".btn-sfondo-avanzamento");
+            const border = button.querySelector(".traccia-av");
+  
+            if (!border || !bg) return;
+  
+            gsap.set(bg, { scale: 0, transformOrigin: "center left" });
+  
+            const touchTl = gsap.timeline({ paused: true });
+            touchTl
+              .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
+              .to(
+                border,
+                { opacity: 1, duration: 0.3, ease: "power2.out" },
+                "-=0.2"
+              );
+  
+            button.addEventListener("touchstart", () => touchTl.play());
+            button.addEventListener("touchend", () => touchTl.reverse());
+  
+            window.pageSpecificListeners.push(
+              {
+                element: button,
+                event: "touchstart",
+                handler: () => touchTl.play(),
+              },
+              {
+                element: button,
+                event: "touchend",
+                handler: () => touchTl.reverse(),
+              }
+            );
+          });
+        });
+      });   
+    },
   
     categoryLabel: function () {
       const categoryLabels = document.querySelectorAll(".category-label");
@@ -8117,4 +8270,44 @@ function scrollToTopInstant() {
     );
   
     observer.observe(sliderWrapper);
+  }
+
+  function genericPageTitleAnimations() {
+    const splitH = new SplitType(".sub-global-heading", {
+      types: "words",
+      tagName: "span",
+    });
+    gsap.set(splitH.words, { y: -100 });
+    const containers = document.querySelectorAll(".div-heading-global-services");
+    containers.forEach((container) => {
+      const splitWords = container.querySelectorAll(".sub-global-heading .word");
+      const lineTitle = container.querySelector(".line-title-section");
+      gsap.set(lineTitle, { scaleX: 0, transformOrigin: "center left" });
+  
+      ScrollTrigger.create({
+        trigger: container,
+        start: "top 70%",
+        scrub: 1,
+        toggleActions: "play none none none",
+        onEnter: () => {
+          gsap
+            .timeline()
+            .to(lineTitle, {
+              scaleX: 1,
+              duration: 0.6,
+              ease: "power2.out",
+            })
+            .to(
+              splitWords,
+              {
+                y: 0,
+                duration: 0.4,
+                stagger: 0.1,
+                ease: "power2.out",
+              },
+              "-=0.4"
+            );
+        },
+      });
+    });
   }

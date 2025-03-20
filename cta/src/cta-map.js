@@ -236,6 +236,12 @@ export default CTAMap;
       scripts: ["https://cdn.jsdelivr.net/npm/swiper@11.0.0/swiper-bundle.min.js"],
       styles: [],
     },
+    "67db09fa49d1825ccef118aa": {
+      name: "converse",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
   };
   window.jsonPageMap = {
     "665f0ffe1215c488346c8ab3": {
@@ -444,6 +450,7 @@ export default CTAMap;
         setTimeout(() => {
           setupShowcaseButtons();
           setupVerticalShowcaseButtons();
+          genericPageTitleAnimations();
           info();
           window.linkManager.init();
           propositoAnimation.btnReadAnimation();
@@ -550,10 +557,11 @@ export default CTAMap;
         }
         animationPageEnterAbout();
         startInfiniteMarquee();
-        window.safeRequestIdleCallback(() => {
+        window.safeRequestIdleCallback(() => {        
+          studioAnimations();
+          genericPageTitleAnimations();
           serviceWrapper();
           ctaAnimations();
-          studioAnimations();
           pageServiceScrollTriggerAbout();
           info();
         });
@@ -848,6 +856,7 @@ export default CTAMap;
         setTimeout(() => {
           setupShowcaseButtons();
           setupVerticalShowcaseButtons();
+          genericPageTitleAnimations();
           info();
           window.linkManager.init();
           propositoAnimation.btnReadAnimation();
@@ -868,6 +877,7 @@ export default CTAMap;
           showcaseTransition();
         }
         setupGenericButtons();
+        setupGenericCloseButtons();
         startMarquee();
       },
       cleanup: function () {
@@ -881,6 +891,7 @@ export default CTAMap;
           showcaseTransition();
         }
         setupGenericButtons();
+        setupGenericCloseButtons();
         initSliderCTA();        
       },
       cleanup: function () {
@@ -894,6 +905,7 @@ export default CTAMap;
           showcaseTransition();
         }
         setupGenericButtons();
+        setupGenericCloseButtons();
         initSliderCTA();        
       },
       cleanup: function () {
@@ -905,7 +917,8 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           showcaseTransition();
-        }                     
+        }        
+        setupGenericCloseButtons();             
       },
       cleanup: function () {
         cleanUpTriggers();
@@ -918,6 +931,7 @@ export default CTAMap;
           showcaseTransition();
         }
         setupGenericButtons();
+        setupGenericCloseButtons();
         initSliderCTA();        
       },
       cleanup: function () {
@@ -931,7 +945,20 @@ export default CTAMap;
           showcaseTransition();
         }
         setupGenericButtons();
+        setupGenericCloseButtons();
         initSliderCTA();        
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    converse:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericCloseButtons();                     
       },
       cleanup: function () {
         cleanUpTriggers();
