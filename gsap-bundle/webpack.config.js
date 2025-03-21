@@ -1,5 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // Importa il plugin
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   mode: 'production',
@@ -23,10 +24,15 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'], // 👉 necessario per import CSS come quello di Swiper
+      },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(), // Pulisce la directory `dist` prima della build
+    new BundleAnalyzerPlugin()
   ],
   optimization: {
     minimize: true,  // Abilita la minificazione per la produzione
