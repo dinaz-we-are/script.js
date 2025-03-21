@@ -2655,7 +2655,7 @@ function scrollToTopInstant() {
       .to(
         "#hero-line",
         {
-          width: "100%",
+          scaleX: 1,
           duration: 0.8,
           ease: "power2.Out",
         },
@@ -2814,7 +2814,7 @@ function scrollToTopInstant() {
       .to(
         "#hero-line",
         {
-          width: "100%",
+          scaleX: 1,
           duration: 0.8,
           ease: "power2.Out",
         },
@@ -5897,10 +5897,7 @@ function scrollToTopInstant() {
     }
   
     const button = header.querySelector(".btn-showcase-link");
-    if (!button) {
-      console.warn(
-        "setupGenericButtons: Nessun bottone trovato in #case-heading."
-      );
+    if (!button) {     
       return;
     }
   
@@ -7571,10 +7568,12 @@ function scrollToTopInstant() {
 
   function startMarquee() {
     const wrapper = document.querySelector(".gsap-marquee-wrapper");
-    const items = gsap.utils.toArray(".gsap-marquee-content .item");
+    if (!wrapper) return;
   
-    // Verifica se il wrapper e gli item esistono
-    if (!wrapper || !items.length) return;
+    const items = gsap.utils.toArray(
+      wrapper.querySelectorAll(".gsap-marquee-content.item")
+    );
+    if (!items.length) return;
   
     // Imposta la velocità del loop
     const speed = 70; // Più alto = più lento
@@ -7606,8 +7605,8 @@ function scrollToTopInstant() {
     ScrollTrigger.create({
       trigger: wrapper, // Usa il wrapper stesso come trigger
       start: "top 90%", // Attiva quando entra nella visuale
-      end: "bottom top", // Si ferma quando esce dalla visuale
-      onEnter: () => loop.resume(), // Riprende il loop
+      end: "bottom top",
+      onEnter: () => loop.play(), // Riprende il loop
       onLeave: () => loop.pause(), // Mette in pausa
       onEnterBack: () => loop.resume(), // Riprende se torni indietro
       onLeaveBack: () => loop.pause(), // Pausa se esce dallo schermo
@@ -7630,11 +7629,14 @@ function scrollToTopInstant() {
   
   function startInfiniteMarquee() {
     const wrapper = document.querySelector(".gsap-marquee-wrapper");
-    const items = gsap.utils.toArray(".gsap-marquee-content .item");
-    const triggerSection = document.querySelector(".premessa");
+    if (!wrapper) return;
   
-    // Verifica se gli elementi esistono
-    if (!wrapper || !items.length || !triggerSection) return;
+    const items = gsap.utils.toArray(
+      wrapper.querySelectorAll(".gsap-marquee-content.item")
+    );
+    if (!items.length) return;
+  
+    const triggerSection = document.querySelector(".premessa");
   
     // Imposta la velocità del loop
     const speed = 60;
