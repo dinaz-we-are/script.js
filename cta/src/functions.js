@@ -2142,77 +2142,77 @@ function scrollToTopInstant() {
     masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
   
     coverTL
-      .to(".cover-wrapper-background.clear", {
-        scale: 1,
-        transformOrigin: "bottom center",
-        duration: 1,
-        ease: "power4.inOut",
-      })
-      .to(
-        "#colore-scuro",
-        {
-          y: "-100vh",
-          duration: 1.2,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .to(
-        "#colore-punto-brand-chiaro",
-        {
-          scale: 0,
-          transformOrigin: "center center",
-          duration: 0.4,
-          ease: "power4.out",
-        },
-        "-=0.8"
-      )
-      .to(
-        ".logotype-transition",
-        {
-          rotateX: -90,
-          duration: 0.4,
-          transformOrigin: "top",
-          ease: "power1.inOut",
-        },
-        "-=0.4"
-      )
-      .to(
-        brandLettersArray,
-        {
-          y: "100vh",
-          duration: 0.6,
-          ease: "power1.inOut",
-          stagger: 0.2,
-        },
-        "-=0.4"
-      )
-      .to(
-        brandSymbolsArray,
-        {
-          y: "100vh",
-          duration: 0.6,
-          ease: "power1.inOut",
-        },
-        "<"
-      )
-      .to(
-        ".cover-wrapper-background",
-        {
-          y: "100vh",
-          duration: 1.2,
-          ease: "power2.inOut",
-        },
-        "-=1"
-      )
-      .set(
-        "#cover-wrapper-background",
-        {
-          opacity: 0,
-        },
-        "<"
-      )
-      .set(".cover-wrapper", { display: "none" });
+    .to(".cover-wrapper-background.clear", {
+      scale: 1,
+      transformOrigin: "bottom center",
+      duration: 1,
+      ease: "power3.inOut",
+    })
+    .to(
+      "#colore-scuro",
+      {
+        y: "-100vh",
+        duration: 1.4,
+        ease: "power2.inOut",
+      },
+      "<"
+    )
+    .to(
+      "#colore-punto-brand-chiaro",
+      {
+        scale: 0,
+        transformOrigin: "center center",
+        duration: 0.4,
+        ease: "power4.out",
+      },
+      "-=1"
+    )
+    .to(
+      ".logotype-transition",
+      {
+        rotateX: -90,
+        duration: 0.4,
+        transformOrigin: "top",
+        ease: "power1.inOut",
+      },
+      "-=0.4"
+    )
+    .to(
+      brandLettersArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+        stagger: 0.2,
+      },
+      "-=0.5"
+    )
+    .to(
+      brandSymbolsArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+      },
+      "<"
+    )
+    .to(
+      ".cover-wrapper-background",
+      {
+        y: "100vh",
+        duration: 1.2,
+        ease: "power2.inOut",
+      },
+      "-=1"
+    )
+    .set(
+      "#cover-wrapper-background",
+      {
+        opacity: 0,
+      },
+      "<"
+    )
+    .set(".cover-wrapper", { display: "none" });
       
   
     tlPlus
@@ -2594,80 +2594,80 @@ function scrollToTopInstant() {
       },
     });
   
-    masterTimeline.add(coverTL, 0).add(tlTitle, 1.2).add(tlPlus, 1.4);
+    masterTimeline.add(coverTL, 0).add(tlTitle, 1.1).add(tlPlus, 1.4);
   
     coverTL
-      .to(".cover-wrapper-background.clear", {
-        scale: 1,
-        transformOrigin: "bottom center",
-        duration: 1,
-        ease: "power4.inOut",
-      })
-      .to(
-        "#colore-scuro",
-        {
-          y: "-100vh",
-          duration: 1.2,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .to(
-        "#colore-punto-brand-chiaro",
-        {
-          scale: 0,
-          transformOrigin: "center center",
-          duration: 0.4,
-          ease: "power4.out",
-        },
-        "-=0.8"
-      )
-      .to(
-        ".logotype-transition",
-        {
-          rotateX: -90,
-          duration: 0.4,
-          transformOrigin: "top",
-          ease: "power1.inOut",
-        },
-        "-=0.4"
-      )
-      .to(
-        brandLettersArray,
-        {
-          y: "100vh",
-          duration: 0.6,
-          ease: "power1.inOut",
-          stagger: 0.2,
-        },
-        "-=0.4"
-      )
-      .to(
-        brandSymbolsArray,
-        {
-          y: "100vh",
-          duration: 0.6,
-          ease: "power1.inOut",
-        },
-        "<"
-      )
-      .to(
-        ".cover-wrapper-background",
-        {
-          y: "100vh",
-          duration: 1.2,
-          ease: "power2.inOut",
-        },
-        "-=1"
-      )
-      .set(
-        "#cover-wrapper-background",
-        {
-          opacity: 0,
-        },
-        "<"
-      )
-      .set(".cover-wrapper", { display: "none" });
+    .to(".cover-wrapper-background.clear", {
+      scale: 1,
+      transformOrigin: "bottom center",
+      duration: 1,
+      ease: "power3.inOut",
+    })
+    .to(
+      "#colore-scuro",
+      {
+        y: "-100vh",
+        duration: 1.4,
+        ease: "power2.inOut",
+      },
+      "<"
+    )
+    .to(
+      "#colore-punto-brand-chiaro",
+      {
+        scale: 0,
+        transformOrigin: "center center",
+        duration: 0.4,
+        ease: "power4.out",
+      },
+      "-=1"
+    )
+    .to(
+      ".logotype-transition",
+      {
+        rotateX: -90,
+        duration: 0.4,
+        transformOrigin: "top",
+        ease: "power1.inOut",
+      },
+      "-=0.4"
+    )
+    .to(
+      brandLettersArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+        stagger: 0.2,
+      },
+      "-=0.5"
+    )
+    .to(
+      brandSymbolsArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+      },
+      "<"
+    )
+    .to(
+      ".cover-wrapper-background",
+      {
+        y: "100vh",
+        duration: 1.2,
+        ease: "power2.inOut",
+      },
+      "-=1"
+    )
+    .set(
+      "#cover-wrapper-background",
+      {
+        opacity: 0,
+      },
+      "<"
+    )
+    .set(".cover-wrapper", { display: "none" });
   
     tlTitle
       .to(".sphere", {
@@ -6060,15 +6060,21 @@ function scrollToTopInstant() {
       }
     };
   
-    const backHandler = function (e) {
+    const backHandler = (e) => {
       e.preventDefault();
-      if (document.referrer) {
-        window.history.back();
+  
+      const referrer = document.referrer;
+      const hasHistory = window.history.length > 1;
+  
+      // 🔹 Se c'è una pagina precedente nella sessione
+      if (referrer && hasHistory) {
+        window.history.back(); // oppure: barba.go(referrer);
       } else {
-        window.location.href = "/";
+        // 🔹 Nessuna storia disponibile → fallback
+        barba.go("/"); // oppure window.location.href = "/";
       }
     };
-  
+
     button.addEventListener("click", backHandler);
   
     // 🔹 Aggiungiamo eventi per hover (desktop) e touch (mobile)
