@@ -1943,10 +1943,45 @@ function initBarbaWithGSAP() {
           }
         },
         enter(data) {
+          const done = this.async();
+          const nextNamespace = data?.next?.namespace;
+
+          if (nextNamespace === "contatti") {
+            const pageTlcontatti = gsap.timeline({
+              onComplete: () => {
+                lenisInstance.start();
+                BurgerMenu.enableBurgerClick();
+                gsap.set(showElements, { clearProps: "all" });
+              },
+            });
+
+            pageTlcontatti
+              .call(() => {
+                done();
+                BurgerMenu.disableBurgerClick();
+              })
+              .to(showElementsLetters, {
+                y: "-100vh",
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.inOut",
+              })
+              .to(
+                showcaseElementsObj.colorTransition,
+                {
+                  y: "-100vh",
+                  duration: 0.6,
+                  ease: "power2.inOut",
+                },
+                "-=0.4"
+              );
+
+            return; 
+          }
           gsap.set(".showcase-page-general", {
             y: "100vh",
           });
-          const done = this.async();
+          
           const pageTl = gsap.timeline({
             onComplete: () => {
               lenisInstance.start();
@@ -5963,14 +5998,12 @@ function scrollToTopInstant() {
 
   function setupGenericCloseButtons() {
     const container = document.getElementById("closing-showcase");
-    if (!container) {
-      console.warn("❌ Close Button: Container non trovato.");
+    if (!container) {      
       return;
     }
   
     const button = container.querySelector(".btn-showcase-close");
-    if (!button) {
-      console.warn("❌ Close Button: Nessun bottone trovato");
+    if (!button) {      
       return;
     }
   
@@ -5978,8 +6011,7 @@ function scrollToTopInstant() {
     const arrowHover = hoverDiv?.querySelector(".close-cta-arrow-hover");
     const arrowDefault = button.querySelector(".close-cta-arrow");
   
-    if (!hoverDiv || !arrowHover || !arrowDefault) {
-      console.warn("⚠️ Close Button: Elementi non trovati nel bottone.");
+    if (!hoverDiv || !arrowHover || !arrowDefault) {    
       return;
     }
   
@@ -6028,12 +6060,24 @@ function scrollToTopInstant() {
       }
     };
   
+    const backHandler = function (e) {
+      e.preventDefault();
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    };
+  
+    button.addEventListener("click", backHandler);
+  
     // 🔹 Aggiungiamo eventi per hover (desktop) e touch (mobile)
     const eventPairs = [
       { element: button, event: "mouseenter", handler: handleEnter },
       { element: button, event: "mouseleave", handler: handleLeave },
       { element: button, event: "touchstart", handler: handleEnter },
       { element: button, event: "touchend", handler: handleLeave },
+      { element: button, event: "click", handler: backHandler }, // ✅ aggiunto qui
     ];
   
     eventPairs.forEach(({ element, event, handler }) => {
@@ -7324,6 +7368,7 @@ function scrollToTopInstant() {
     const lineWrap = wrapper.querySelectorAll(".section-spacer-divider");
     const teamWrap = wrapper.querySelectorAll(".team-item-wrapper");
     const noi = wrapper.querySelector(".noi");
+    const mm = gsap.matchMedia();
   
     // Split per le animazioni di testo
     const splitStudio = new SplitType(".miss-vis-text", {
@@ -7345,13 +7390,13 @@ function scrollToTopInstant() {
       const noiCover = noi.querySelector(".noi-cover");
       gsap.to(noiCover, {
         y: "50vh",
-        duration: 0.8,
+        duration: 0.6,
         ease: "power2.inOut",
         scrollTrigger: {
           trigger: noi,
           start: "top center",
           end: "top 50%",
-          toggleActions: "play none none reverse",
+          toggleActions: "play none none none",
         },
       });
     }
@@ -7424,23 +7469,6 @@ function scrollToTopInstant() {
   
     // Animazione per il testo principale di studio
     const studioText = studio.querySelectorAll(".miss-vis-text .line");
-    gsap.set(studioText, { opacity: 0, y: 100 });
-  
-    gsap.to(studioText, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out",
-      stagger: { amount: 0.1 },
-      scrollTrigger: {
-        trigger: trigger,
-        start: "bottom 70%",
-        end: "bottom 50%",
-        toggleActions: "play none none reverse",
-      },
-    });
-  
-    const mm = gsap.matchMedia();
   
     mm.add(
       {
@@ -7449,6 +7477,23 @@ function scrollToTopInstant() {
       },
       (context) => {
         let { isDesktop, isMobile } = context.conditions;
+        if (isDesktop) {
+          gsap.set(studioText, { opacity: 0, y: 100 });
+  
+          gsap.to(studioText, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out",
+            stagger: { amount: 0.1 },
+            scrollTrigger: {
+              trigger: trigger,
+              start: "bottom 70%",
+              end: "bottom 50%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        }
   
         teamWrap.forEach((teamItem) => {
           const textContainer = teamItem.querySelector(".item-txt-team-wrap");
