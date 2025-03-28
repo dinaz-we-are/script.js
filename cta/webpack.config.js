@@ -6,14 +6,20 @@ module.exports = {
     "./src/cta-core.js",
     "./src/functions.js",
     "./src/cta-form.js",
-    "./src/cta-cookie.js",     
+    "./src/cta-cookie.js",
   ],
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
+    clean: true, // ✅ Pulisce la cartella dist prima del build
   },
-  mode: "production", // ✅ Cambiato a "production" per minificare il codice
-  devtool: false, // ❌ Rimuove i source maps per ottimizzare il peso finale
+  mode: "production", // ✅ Abilita ottimizzazioni automatiche
+  devtool: false, // ✅ Nessuna mappa sorgente per alleggerire il bundle
+  optimization: {
+    sideEffects: true,   // ✅ Consente il tree-shaking, senza rischi
+    usedExports: true,   // ✅ Elimina codice non utilizzato
+    minimize: true,      // ✅ Minifica esplicitamente (già attivo in production)
+  },
   module: {
     rules: [
       {
@@ -22,11 +28,12 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env"]
-          }
-        }
-      }
-    ]
-  }
+            presets: ["@babel/preset-env"],
+          },
+        },
+      },
+    ],
+  },
 };
+
 
