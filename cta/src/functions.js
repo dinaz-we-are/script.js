@@ -2162,7 +2162,7 @@ function scrollToTopInstant() {
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.1,
+        duration: 1,
         ease: "power3.inOut",
       },
       "<"
@@ -2621,7 +2621,7 @@ function scrollToTopInstant() {
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.1,
+        duration: 1,
         ease: "power3.inOut",
       },
       "<"
