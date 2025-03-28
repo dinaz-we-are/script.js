@@ -467,22 +467,18 @@ document.addEventListener("DOMContentLoaded", () => {
 function animateBanner() {
   const banner = document.getElementById("banner-cookie");
   if (banner) {
-    gsap.fromTo(
-      banner,
-      { y: "10rem", display: "none" },
-      {
-        y: "0rem",
-        display: "flex",
-        duration: 1,
-        delay: 1.4,
-        ease: "power2.inOut",
-      }
-    );
+    banner.style.display = "flex"; // Solo impostazione iniziale
+    gsap.to(banner, {
+      y: "0rem",
+      duration: 1,
+      delay: 1.4,
+      ease: "power2.inOut",
+    });
   }
 }
 
 function animateBannerClose() {
-  const banner = document.querySelector("#banner-cookie");
+  const banner = document.getElementById("banner-cookie");
   if (banner) {
     gsap.to(banner, {
       y: "10rem",
