@@ -131,8 +131,39 @@ window.uiManager = window.uiManager ||{
   },
   handlePreferences: () => {
     const preferences = document.querySelector("#cookie-preferences");
-    if (preferences) cookiePreferences();
-  },
+    if (preferences) {
+      cookiePreferences();
+  
+      const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+        essential: true,
+        analytics: false,
+        marketing: false,
+        personalization: false,
+      };
+  
+      toggleCheckboxAnimation(
+        "#cookie-marketing",
+        "marketing",
+        "marketing",
+        "marketing",
+        savedConsents.marketing
+      );
+      toggleCheckboxAnimation(
+        "#cookie-analytics",
+        "analytics",
+        "analytics",
+        "analytics",
+        savedConsents.analytics
+      );
+      toggleCheckboxAnimation(
+        "#cookie-personalization",
+        "personalization",
+        "personalization",
+        "personalization",
+        savedConsents.personalization
+      );
+    }
+  },  
 };
 
 window.addEventListener("load", () => {
@@ -439,34 +470,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Attiva le animazioni e la gestione del cookie per ciascun checkbox
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
-  toggleCheckboxAnimation(
-    "#cookie-marketing",
-    "marketing",
-    "marketing",
-    "marketing",
-    savedConsents.marketing
-  );
-  toggleCheckboxAnimation(
-    "#cookie-analytics",
-    "analytics",
-    "analytics",
-    "analytics",
-    savedConsents.analytics
-  );
-  toggleCheckboxAnimation(
-    "#cookie-personalization",
-    "personalization",
-    "personalization",
-    "personalization",
-    savedConsents.personalization
-  );
+  // Le animazioni dei toggle saranno eseguite solo quando l'utente apre le preferenze
+
 });
 
 function animateBanner() {
