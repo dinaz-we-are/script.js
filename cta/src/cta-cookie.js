@@ -17,29 +17,30 @@ const cookieConfig = {
   },
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
-    essential: true,
-    analytics: false,
-    marketing: false,
-    personalization: false,
-  };
+window.addEventListener("load", () => {
+  window.safeRequestIdleCallback(() => {
+    const savedConsents = JSON.parse(cookieManager.getCookie("cta")) || {
+      essential: true,
+      analytics: false,
+      marketing: false,
+      personalization: false,
+    };
 
-  // Aggiorna il Google Consent Mode con i consensi salvati
-  gtag("consent", "update", {
-    ad_storage: savedConsents.marketing ? "granted" : "denied",
-    analytics_storage: savedConsents.analytics ? "granted" : "denied",
-    functionality_storage: savedConsents.personalization ? "granted" : "denied",
-    ad_personalization: savedConsents.marketing ? "granted" : "denied",
-    ad_user_data: savedConsents.marketing ? "granted" : "denied",
-    security_storage: savedConsents.essential ? "granted" : "denied",
-    personalization_storage: savedConsents.personalization ? "granted" : "denied",
-  });
+    // Aggiorna il Google Consent Mode
+    gtag("consent", "update", {
+      ad_storage: savedConsents.marketing ? "granted" : "denied",
+      analytics_storage: savedConsents.analytics ? "granted" : "denied",
+      functionality_storage: savedConsents.personalization ? "granted" : "denied",
+      ad_personalization: savedConsents.marketing ? "granted" : "denied",
+      ad_user_data: savedConsents.marketing ? "granted" : "denied",
+      security_storage: savedConsents.essential ? "granted" : "denied",
+      personalization_storage: savedConsents.personalization ? "granted" : "denied",
+    });
 
-  // Se i consensi sono stati concessi, attiva gli script
-  if (savedConsents.analytics || savedConsents.marketing) {
-    activateScripts();
-  }
+    // Attiva gli script se serve
+    if (savedConsents.analytics || savedConsents.marketing) {
+      activateScripts();
+    } });
 });
 
 // Inizializza Google Consent Mode V2 con le impostazioni predefinite
@@ -134,10 +135,11 @@ window.uiManager = window.uiManager ||{
   },
 };
 
-// Mostra il banner se l'utente non ha dato il consenso (ritardato per evitare scatti su mobile)
-setTimeout(() => {
-  if (!cookieManager.getCookie("cta")) window.uiManager.showBanner();
-}, 100); // puoi provare anche 100 se su mobile serve più tempo
+window.addEventListener("load", () => {
+  window.safeRequestIdleCallback(() => {
+    if (!cookieManager.getCookie("cta")) window.uiManager.showBanner();
+  });
+});
 
 
 // Modulo per la gestione del consenso
