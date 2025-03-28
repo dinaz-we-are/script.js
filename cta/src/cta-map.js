@@ -463,8 +463,7 @@ export default CTAMap;
             window.linkManager.init();
             propositoAnimation.btnReadAnimation?.();
             propositoAnimation.btnCategoryAnimation?.();
-            propositoAnimation.initializeSwiper?.();
-  
+            propositoAnimation.initializeSwiper?.();  
             propositoHomePage?.();
             studioAnimations?.();
           } catch (err) {

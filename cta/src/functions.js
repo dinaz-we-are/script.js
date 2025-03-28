@@ -2145,14 +2145,14 @@ function scrollToTopInstant() {
     .to(".cover-wrapper-background.clear", {
       scale: 1,
       transformOrigin: "bottom center",
-      duration: 1,
+      duration: 0.8,
       ease: "power3.inOut",
     })
     .to(
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.4,
+        duration: 1.2,
         ease: "power2.inOut",
       },
       "<"
@@ -2162,8 +2162,8 @@ function scrollToTopInstant() {
       {
         scale: 0,
         transformOrigin: "center center",
-        duration: 0.4,
-        ease: "power4.out",
+        duration: 0.2,
+        ease: "none",
       },
       "-=1"
     )
@@ -2279,12 +2279,16 @@ function scrollToTopInstant() {
         },
         "-=0.4"
       )
-      .from(".sub-head-page", {
-        y: "200%",
-        duration: 0.6,
-        stagger: 0.2,
-        ease: "power2.out",
-      })
+      .from(
+        ".sub-head-page",
+        {
+          y: "200%",
+          duration: 0.6,
+          stagger: 0.2,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      )
       .to(
         "#quadrato-design",
         {
@@ -2292,7 +2296,7 @@ function scrollToTopInstant() {
           duration: 0.8,
           ease: "power2.out",
         },
-        "<"
+        "-=0.3"
       )
       .to(
         "#cerchio-design",
@@ -2594,20 +2598,20 @@ function scrollToTopInstant() {
       },
     });
   
-    masterTimeline.add(coverTL, 0).add(tlTitle, 1.1).add(tlPlus, 1.4);
+    masterTimeline.add(coverTL, 0).add(tlTitle, 1).add(tlPlus, 1.4);
   
     coverTL
     .to(".cover-wrapper-background.clear", {
       scale: 1,
       transformOrigin: "bottom center",
-      duration: 1,
+      duration: 0.8,
       ease: "power3.inOut",
     })
     .to(
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.4,
+        duration: 1.2,
         ease: "power2.inOut",
       },
       "<"
@@ -2617,8 +2621,8 @@ function scrollToTopInstant() {
       {
         scale: 0,
         transformOrigin: "center center",
-        duration: 0.4,
-        ease: "power4.out",
+        duration: 0.2,
+        ease: "none",
       },
       "-=1"
     )
@@ -2769,7 +2773,7 @@ function scrollToTopInstant() {
             rotateX: 0,
             duration: 0.4,
             stagger: { amount: 0.2 },
-            ease: "power2.iOut",
+            ease: "power2.out",
           });
         }
   
@@ -2924,7 +2928,7 @@ function scrollToTopInstant() {
             rotateX: 0,
             duration: 0.4,
             stagger: { amount: 0.2 },
-            ease: "power2.iOut",
+            ease: "power2.out",
           });
         }
   
