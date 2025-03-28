@@ -95,23 +95,33 @@ window.uiManager = window.uiManager || {
 
 // Init post-load
 window.addEventListener("load", () => {
-  window.safeRequestIdleCallback(() => {
-    const raw = cookieManager.getCookie("cta");
-    const saved = JSON.parse(raw) || {};
+  const raw = cookieManager.getCookie("cta");
 
-    gtag("consent", "update", {
-      ad_storage: saved.marketing ? "granted" : "denied",
-      analytics_storage: saved.analytics ? "granted" : "denied",
-      functionality_storage: saved.personalization ? "granted" : "denied",
-      ad_personalization: saved.marketing ? "granted" : "denied",
-      ad_user_data: saved.marketing ? "granted" : "denied",
-      security_storage: saved.essential ? "granted" : "denied",
-      personalization_storage: saved.personalization ? "granted" : "denied",
+  if (!raw) {
+    // Nessun consenso ancora dato → mostra banner subito dopo load (idle)
+    window.safeRequestIdleCallback(() => {
+      uiManager.showBanner();
     });
+  } else {
+    // Consenso già dato → aspetta un po' prima di attivare GTM e script
+    setTimeout(() => {
+      window.safeRequestIdleCallback(() => {
+        const saved = JSON.parse(raw) || {};
 
-    if (saved.analytics || saved.marketing) activateScripts();
-    if (!raw) uiManager.showBanner();
-  });
+        gtag("consent", "update", {
+          ad_storage: saved.marketing ? "granted" : "denied",
+          analytics_storage: saved.analytics ? "granted" : "denied",
+          functionality_storage: saved.personalization ? "granted" : "denied",
+          ad_personalization: saved.marketing ? "granted" : "denied",
+          ad_user_data: saved.marketing ? "granted" : "denied",
+          security_storage: saved.essential ? "granted" : "denied",
+          personalization_storage: saved.personalization ? "granted" : "denied",
+        });
+
+        if (saved.analytics || saved.marketing) activateScripts();
+      });
+    }, 4000); // aumentare/diminuire leggermente, ma 4s è un buon equilibrio
+  }
 });
 
 // Consent Manager
