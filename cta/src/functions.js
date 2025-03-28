@@ -2141,31 +2141,31 @@ function scrollToTopInstant() {
   
     masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
   
-    coverTL
-    .to(".cover-wrapper-background.clear", {
-      scale: 1,
-      transformOrigin: "bottom center",
-      duration: 0.8,
-      ease: "power3.inOut",
+   coverTL
+    .to("#colore-punto-brand-chiaro", {
+      scale: 0,
+      transformOrigin: "center center",
+      duration: 0.2,
+      ease: "none",
     })
+    .to(
+      ".cover-wrapper-background.clear",
+      {
+        scale: 1,
+        transformOrigin: "bottom center",
+        duration: 0.8,
+        ease: "power3.inOut",
+      },
+      "-=0.2"
+    )
     .to(
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.2,
-        ease: "power2.inOut",
+        duration: 1.1,
+        ease: "power3.inOut",
       },
       "<"
-    )
-    .to(
-      "#colore-punto-brand-chiaro",
-      {
-        scale: 0,
-        transformOrigin: "center center",
-        duration: 0.2,
-        ease: "none",
-      },
-      "-=1"
     )
     .to(
       ".logotype-transition",
@@ -2175,7 +2175,7 @@ function scrollToTopInstant() {
         transformOrigin: "top",
         ease: "power1.inOut",
       },
-      "-=0.4"
+      "-=0.8"
     )
     .to(
       brandLettersArray,
@@ -2200,10 +2200,10 @@ function scrollToTopInstant() {
       ".cover-wrapper-background",
       {
         y: "100vh",
-        duration: 1.2,
-        ease: "power2.inOut",
+        duration: 1,
+        ease: "power3.inOut",
       },
-      "-=1"
+      "-=0.8"
     )
     .set(
       "#cover-wrapper-background",
@@ -2601,30 +2601,30 @@ function scrollToTopInstant() {
     masterTimeline.add(coverTL, 0).add(tlTitle, 1).add(tlPlus, 1.4);
   
     coverTL
-    .to(".cover-wrapper-background.clear", {
-      scale: 1,
-      transformOrigin: "bottom center",
-      duration: 0.8,
-      ease: "power3.inOut",
+    .to("#colore-punto-brand-chiaro", {
+      scale: 0,
+      transformOrigin: "center center",
+      duration: 0.2,
+      ease: "none",
     })
+    .to(
+      ".cover-wrapper-background.clear",
+      {
+        scale: 1,
+        transformOrigin: "bottom center",
+        duration: 0.8,
+        ease: "power3.inOut",
+      },
+      "-=0.2"
+    )
     .to(
       "#colore-scuro",
       {
         y: "-100vh",
-        duration: 1.2,
-        ease: "power2.inOut",
+        duration: 1.1,
+        ease: "power3.inOut",
       },
       "<"
-    )
-    .to(
-      "#colore-punto-brand-chiaro",
-      {
-        scale: 0,
-        transformOrigin: "center center",
-        duration: 0.2,
-        ease: "none",
-      },
-      "-=1"
     )
     .to(
       ".logotype-transition",
@@ -2634,7 +2634,7 @@ function scrollToTopInstant() {
         transformOrigin: "top",
         ease: "power1.inOut",
       },
-      "-=0.4"
+      "-=0.8"
     )
     .to(
       brandLettersArray,
@@ -2659,10 +2659,10 @@ function scrollToTopInstant() {
       ".cover-wrapper-background",
       {
         y: "100vh",
-        duration: 1.2,
-        ease: "power2.inOut",
+        duration: 1,
+        ease: "power3.inOut",
       },
-      "-=1"
+      "-=0.8"
     )
     .set(
       "#cover-wrapper-background",

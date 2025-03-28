@@ -134,8 +134,11 @@ window.uiManager = window.uiManager ||{
   },
 };
 
-// Mostra il banner se l'utente non ha dato il consenso
-if (!cookieManager.getCookie("cta")) window.uiManager.showBanner();
+// Mostra il banner se l'utente non ha dato il consenso (ritardato per evitare scatti su mobile)
+setTimeout(() => {
+  if (!cookieManager.getCookie("cta")) window.uiManager.showBanner();
+}, 100); // puoi provare anche 100 se su mobile serve più tempo
+
 
 // Modulo per la gestione del consenso
 const consentManager = {
@@ -467,12 +470,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function animateBanner() {
   const banner = document.getElementById("banner-cookie");
   if (banner) {
-    banner.style.display = "flex"; // Solo impostazione iniziale
+    gsap.set(banner, {
+      display: "flex"
+    });
+
     gsap.to(banner, {
       y: "0rem",
       duration: 1,
       delay: 1.4,
-      ease: "power2.inOut",
+      ease: "power2.inOut"
     });
   }
 }

@@ -133,7 +133,9 @@ const uiManager = {
 };
 
 // Mostra il banner se l'utente non ha dato il consenso
-if (!cookieManager.getCookie("cta")) uiManager.showBanner();
+setTimeout(() => {
+  if (!cookieManager.getCookie("cta")) uiManager.showBanner();
+}, 100);
 
 // Modulo per la gestione del consenso
 const consentManager = {
