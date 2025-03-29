@@ -430,10 +430,10 @@ export default CTAMap;
         }
         window.menuNavigation.animateUSPLinks();
   
-        if (window.matchMedia("(min-width: 992px)").matches) {
-          window.menuNavigation.handleLinkMenuHover();
+        if (window.matchMedia("(min-width: 992px)").matches) {          
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
+            window.menuNavigation.handleLinkMenuHover();
           });
         } else {
           window.safeRequestIdleCallback(() => {
@@ -453,7 +453,7 @@ export default CTAMap;
           serviceWrapper();
         });
         // 🔹 PRIORITÀ BASSA - differita dopo load + verifica swiper
-        window.safeRequestIdleCallback(async () => {
+        setTimeout(async () => {
           await loadScript(
             "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
           ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
@@ -469,7 +469,7 @@ export default CTAMap;
           } catch (err) {
             console.error("❌ Errore esecuzione funzioni differite:", err);
           }
-        });
+        }, 2500);
       },
   
       cleanup: function () {
@@ -837,47 +837,55 @@ export default CTAMap;
     },
     landing: {
       execute: function () {
-        // Esegue subito le animazioni di Hero (priorità alta)
         if (!window.isBarbaTransition) {
           transitionOnLoadHero();
         } else {
           transitionOnLoadHeroDefault();
         }
         window.menuNavigation.animateUSPLinks();
-        // Controllo breakpoint per Desktop/Mobile
-        if (window.matchMedia("(min-width: 992px)").matches) {
-          window.menuNavigation.handleLinkMenuHover();
+  
+        if (window.matchMedia("(min-width: 992px)").matches) {          
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
+            window.menuNavigation.handleLinkMenuHover();
           });
         } else {
-          // Ritardiamo showcaseTextContentMobile() per migliorare le performance mobile
           window.safeRequestIdleCallback(() => {
             showcasePanelsScrollMobile();
             showcaseTextContentMobile();
           });
         }
-        // Funzioni con priorità bassa vengono caricate con requestIdleCallback
+  
+        // 🔹 PRIORITÀ MEDIA - idle
         window.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
-          ctaAnimations();
-          serviceWrapper();
-        });
-        // Funzioni meno prioritarie legate a sezioni successive dello scroll
-        setTimeout(() => {
           setupShowcaseButtons();
           setupVerticalShowcaseButtons();
           genericPageTitleAnimations();
-          info();
-          window.linkManager.init();
-          propositoAnimation.btnReadAnimation();
-          propositoAnimation.btnCategoryAnimation();
-          propositoAnimation.initializeSwiper();
-          propositoHomePage();
-          studioAnimations();
-        }, 500);
+          ctaAnimations();
+          serviceWrapper();
+        });
+        // 🔹 PRIORITÀ BASSA - differita dopo load + verifica swiper
+        setTimeout(async () => {
+          await loadScript(
+            "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+          ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
+  
+          try {
+            info();
+            window.linkManager.init();
+            propositoAnimation.btnReadAnimation?.();
+            propositoAnimation.btnCategoryAnimation?.();
+            propositoAnimation.initializeSwiper?.();  
+            propositoHomePage?.();
+            studioAnimations?.();
+          } catch (err) {
+            console.error("❌ Errore esecuzione funzioni differite:", err);
+          }
+        }, 2500);
       },
+  
       cleanup: function () {
         cleanUpTriggers();
         cleanUpPageListeners();
