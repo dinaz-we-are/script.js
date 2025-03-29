@@ -2208,7 +2208,7 @@ function scrollToTopInstant() {
     .set(
       "#cover-wrapper-background",
       {
-        opacity: 0,
+        visibility: "hidden",
       },
       "<"
     )
@@ -2666,7 +2666,7 @@ function scrollToTopInstant() {
       .set(
         "#cover-wrapper-background",
         {
-          opacity: 0,
+          visibility: "hidden",
         },
         "<"
       )
