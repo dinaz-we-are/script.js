@@ -2185,7 +2185,7 @@ function scrollToTopInstant() {
         ease: "power1.inOut",
         stagger: 0.2,
       },
-      "-=0.5"
+      "-=0.4"
     )
     .to(
       brandSymbolsArray,
@@ -2643,7 +2643,7 @@ function scrollToTopInstant() {
           ease: "power1.inOut",
           stagger: 0.2,
         },
-        "-=0.5"
+        "-=0.4"
       )
       .to(
         brandSymbolsArray,
