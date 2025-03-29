@@ -2133,6 +2133,7 @@ function scrollToTopInstant() {
 
   //ANIMAZIONI di ingresso
   function defaultEnterTransition() {
+    requestAnimationFrame(() => {
     const coverTL = gsap.timeline();
     const tlPlus = gsap.timeline();
     const masterTimeline = gsap.timeline({
@@ -2141,12 +2142,12 @@ function scrollToTopInstant() {
   
     masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
   
-   coverTL
+    coverTL
     .to("#colore-punto-brand-chiaro", {
       scale: 0,
       transformOrigin: "center center",
-      duration: 0.2,
-      ease: "none",
+      duration: 0.4,
+      ease: "power2.out",
     })
     .to(
       ".cover-wrapper-background.clear",
@@ -2156,7 +2157,7 @@ function scrollToTopInstant() {
         duration: 0.8,
         ease: "power3.inOut",
       },
-      "-=0.2"
+      "-=0.4"
     )
     .to(
       "#colore-scuro",
@@ -2223,7 +2224,7 @@ function scrollToTopInstant() {
       })
       .call(() => {
         unblockScroll();
-      });
+      });});
   }
   
   function defaultSimpleTransition() {
@@ -2570,226 +2571,228 @@ function scrollToTopInstant() {
   }
 
   function transitionOnLoadHero() {
-    const mm = gsap.matchMedia();
-    const tlTitle = gsap.timeline();
-    const coverTL = gsap.timeline();
-    const tlPlus = gsap.timeline();
-    const masterTimeline = gsap.timeline({
-      onStart: () => {
-        blockScroll();
-        gsap.set(".arrow", { x: -window.innerWidth });
-        gsap.set(".sphere", {
-          x: -window.innerWidth,
-          y: -window.innerHeight * 0.5,
-        });
-        gsap.set(".square", {
-          x: window.innerWidth,
-          y: -window.innerHeight * 0.5,
-          rotateZ: 180,
-        });
-      },
-      onComplete: () => {
-        mm.add("(min-width: 992px)", () => {
-          gsap.set(header.burgerBlock, {
-            scale: 0,
-            y: 0,
+    requestAnimationFrame(() => {
+      const mm = gsap.matchMedia();
+      const tlTitle = gsap.timeline();
+      const coverTL = gsap.timeline();
+      const tlPlus = gsap.timeline();
+      const masterTimeline = gsap.timeline({
+        onStart: () => {
+          blockScroll();
+          gsap.set(".arrow", { x: -window.innerWidth });
+          gsap.set(".sphere", {
+            x: -window.innerWidth,
+            y: -window.innerHeight * 0.5,
           });
-        });
-      },
-    });
-  
-    masterTimeline.add(coverTL, 0).add(tlTitle, 1).add(tlPlus, 1.4);
-  
-    coverTL
-    .to("#colore-punto-brand-chiaro", {
-      scale: 0,
-      transformOrigin: "center center",
-      duration: 0.2,
-      ease: "none",
-    })
-    .to(
-      ".cover-wrapper-background.clear",
-      {
-        scale: 1,
-        transformOrigin: "bottom center",
-        duration: 0.8,
-        ease: "power3.inOut",
-      },
-      "-=0.2"
-    )
-    .to(
-      "#colore-scuro",
-      {
-        y: "-100vh",
-        duration: 1,
-        ease: "power3.inOut",
-      },
-      "<"
-    )
-    .to(
-      ".logotype-transition",
-      {
-        rotateX: -90,
-        duration: 0.4,
-        transformOrigin: "top",
-        ease: "power1.inOut",
-      },
-      "-=0.8"
-    )
-    .to(
-      brandLettersArray,
-      {
-        y: "100vh",
-        duration: 0.6,
-        ease: "power1.inOut",
-        stagger: 0.2,
-      },
-      "-=0.5"
-    )
-    .to(
-      brandSymbolsArray,
-      {
-        y: "100vh",
-        duration: 0.6,
-        ease: "power1.inOut",
-      },
-      "<"
-    )
-    .to(
-      ".cover-wrapper-background",
-      {
-        y: "100vh",
-        duration: 1,
-        ease: "power3.inOut",
-      },
-      "-=0.8"
-    )
-    .set(
-      "#cover-wrapper-background",
-      {
-        opacity: 0,
-      },
-      "<"
-    )
-    .set(".cover-wrapper", { display: "none" });
-  
-    tlTitle
-      .to(".sphere", {
-        x: 0,
-        y: 0,
-        duration: 1.4,
-        ease: "power4.out",
-      })
-      .to(
-        ".square",
-        {
-          x: 0,
-          y: 0,
-          rotation: 0,
-          duration: 1.4,
-          ease: "power4.out",
+          gsap.set(".square", {
+            x: window.innerWidth,
+            y: -window.innerHeight * 0.5,
+            rotateZ: 180,
+          });
         },
-        "<"
-      )
-      .to(
-        "#hero-line",
-        {
-          scaleX: 1,
-          duration: 0.8,
-          ease: "power2.Out",
+        onComplete: () => {
+          mm.add("(min-width: 992px)", () => {
+            gsap.set(header.burgerBlock, {
+              scale: 0,
+              y: 0,
+            });
+          });
         },
-        "<"
-      )
-      .to(
-        ".span-design",
-        {
-          rotateY: 0,
-          duration: 0.6,
-          stagger: { amount: -0.2 },
-          ease: "power2.out",
-        },
-        "-=0.8"
-      )
-      .to(
-        ".span-emozioni",
-        {
-          rotateY: 0,
-          duration: 0.6,
-          stagger: { amount: 0.2 },
-          ease: "power2.out",
-        },
-        "<"
-      )
-  
-      .to(
-        ".arrow",
-        {
-          x: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=1"
-      )
-  
-      .to(
-        ".span-p",
-        {
-          y: 0,
-          duration: 0.5,
-          stagger: { amount: 0.2 },
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .to(
-        ".span-p2",
-        {
-          y: 0,
-          duration: 0.5,
-          stagger: { amount: 0.2 },
-          ease: "power2.out",
-        },
-        "<"
-      );
-  
-    tlPlus
-      .call(() => {
-        unblockScroll();
-      })
-      .to(header.logoMenu, {
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
       });
   
-    mm.add(
-      {
-        isDesktop: "(min-width: 992px)", // Breakpoint per desktop
-        isMobile: "(max-width: 991px)", // Breakpoint per mobile
-      },
-      (context) => {
-        if (context.conditions.isDesktop) {
-          tlPlus.to(".link-menu-desk", {
-            rotateX: 0,
+      masterTimeline.add(coverTL, 0).add(tlTitle, 1).add(tlPlus, 1.4);
+  
+      coverTL
+        .to("#colore-punto-brand-chiaro", {
+          scale: 0,
+          transformOrigin: "center center",
+          duration: 0.4,
+          ease: "power2.out",
+        })
+        .to(
+          ".cover-wrapper-background.clear",
+          {
+            scale: 1,
+            transformOrigin: "bottom center",
+            duration: 0.8,
+            ease: "power3.inOut",
+          },
+          "-=0.4"
+        )
+        .to(
+          "#colore-scuro",
+          {
+            y: "-100vh",
+            duration: 1,
+            ease: "power3.inOut",
+          },
+          "<"
+        )
+        .to(
+          ".logotype-transition",
+          {
+            rotateX: -90,
             duration: 0.4,
+            transformOrigin: "top",
+            ease: "power1.inOut",
+          },
+          "-=0.8"
+        )
+        .to(
+          brandLettersArray,
+          {
+            y: "100vh",
+            duration: 0.6,
+            ease: "power1.inOut",
+            stagger: 0.2,
+          },
+          "-=0.5"
+        )
+        .to(
+          brandSymbolsArray,
+          {
+            y: "100vh",
+            duration: 0.6,
+            ease: "power1.inOut",
+          },
+          "<"
+        )
+        .to(
+          ".cover-wrapper-background",
+          {
+            y: "100vh",
+            duration: 1,
+            ease: "power3.inOut",
+          },
+          "-=0.8"
+        )
+        .set(
+          "#cover-wrapper-background",
+          {
+            opacity: 0,
+          },
+          "<"
+        )
+        .set(".cover-wrapper", { display: "none" });
+  
+      tlTitle
+        .to(".sphere", {
+          x: 0,
+          y: 0,
+          duration: 1.4,
+          ease: "power4.out",
+        })
+        .to(
+          ".square",
+          {
+            x: 0,
+            y: 0,
+            rotation: 0,
+            duration: 1.4,
+            ease: "power4.out",
+          },
+          "<"
+        )
+        .to(
+          "#hero-line",
+          {
+            scaleX: 1,
+            duration: 0.8,
+            ease: "power2.Out",
+          },
+          "<"
+        )
+        .to(
+          ".span-design",
+          {
+            rotateY: 0,
+            duration: 0.6,
+            stagger: { amount: -0.2 },
+            ease: "power2.out",
+          },
+          "-=0.8"
+        )
+        .to(
+          ".span-emozioni",
+          {
+            rotateY: 0,
+            duration: 0.6,
             stagger: { amount: 0.2 },
             ease: "power2.out",
-          });
-        }
+          },
+          "<"
+        )
   
-        if (context.conditions.isMobile) {
-          tlPlus.to(
-            header.burgerBlock,
-            {
-              y: 0,
-              duration: 0.6,
+        .to(
+          ".arrow",
+          {
+            x: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=1"
+        )
+  
+        .to(
+          ".span-p",
+          {
+            y: 0,
+            duration: 0.5,
+            stagger: { amount: 0.2 },
+            ease: "power2.out",
+          },
+          "<"
+        )
+        .to(
+          ".span-p2",
+          {
+            y: 0,
+            duration: 0.5,
+            stagger: { amount: 0.2 },
+            ease: "power2.out",
+          },
+          "<"
+        );
+  
+      tlPlus
+        .call(() => {
+          unblockScroll();
+        })
+        .to(header.logoMenu, {
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        });
+  
+      mm.add(
+        {
+          isDesktop: "(min-width: 992px)", // Breakpoint per desktop
+          isMobile: "(max-width: 991px)", // Breakpoint per mobile
+        },
+        (context) => {
+          if (context.conditions.isDesktop) {
+            tlPlus.to(".link-menu-desk", {
+              rotateX: 0,
+              duration: 0.4,
+              stagger: { amount: 0.2 },
               ease: "power2.out",
-            },
-            "<"
-          );
+            });
+          }
+  
+          if (context.conditions.isMobile) {
+            tlPlus.to(
+              header.burgerBlock,
+              {
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "<"
+            );
+          }
         }
-      }
-    );
+      );
+    });
   }
   
   function transitionOnLoadHeroDefault() {
