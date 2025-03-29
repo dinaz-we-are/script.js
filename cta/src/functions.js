@@ -2132,8 +2132,7 @@ function scrollToTopInstant() {
   //BARBA fine
 
   //ANIMAZIONI di ingresso
-  function defaultEnterTransition() {
-    requestAnimationFrame(() => {
+  function defaultEnterTransition() {  
     const coverTL = gsap.timeline();
     const tlPlus = gsap.timeline();
     const masterTimeline = gsap.timeline({
@@ -2146,7 +2145,7 @@ function scrollToTopInstant() {
     .to("#colore-punto-brand-chiaro", {
       scale: 0,
       transformOrigin: "center center",
-      duration: 0.4,
+      duration: 0.2,
       ease: "power2.out",
     })
     .to(
@@ -2224,7 +2223,7 @@ function scrollToTopInstant() {
       })
       .call(() => {
         unblockScroll();
-      });});
+      });
   }
   
   function defaultSimpleTransition() {
@@ -2570,8 +2569,7 @@ function scrollToTopInstant() {
       });
   }
 
-  function transitionOnLoadHero() {
-    requestAnimationFrame(() => {
+  function transitionOnLoadHero() {  
       const mm = gsap.matchMedia();
       const tlTitle = gsap.timeline();
       const coverTL = gsap.timeline();
@@ -2603,77 +2601,77 @@ function scrollToTopInstant() {
       masterTimeline.add(coverTL, 0).add(tlTitle, 1).add(tlPlus, 1.4);
   
       coverTL
-        .to("#colore-punto-brand-chiaro", {
-          scale: 0,
-          transformOrigin: "center center",
-          duration: 0.4,
-          ease: "power2.out",
-        })
-        .to(
-          ".cover-wrapper-background.clear",
-          {
-            scale: 1,
-            transformOrigin: "bottom center",
-            duration: 0.8,
-            ease: "power3.inOut",
-          },
-          "-=0.4"
-        )
-        .to(
-          "#colore-scuro",
-          {
-            y: "-100vh",
-            duration: 1,
-            ease: "power3.inOut",
-          },
-          "<"
-        )
-        .to(
-          ".logotype-transition",
-          {
-            rotateX: -90,
-            duration: 0.4,
-            transformOrigin: "top",
-            ease: "power1.inOut",
-          },
-          "-=0.8"
-        )
-        .to(
-          brandLettersArray,
-          {
-            y: "100vh",
-            duration: 0.6,
-            ease: "power1.inOut",
-            stagger: 0.2,
-          },
-          "-=0.5"
-        )
-        .to(
-          brandSymbolsArray,
-          {
-            y: "100vh",
-            duration: 0.6,
-            ease: "power1.inOut",
-          },
-          "<"
-        )
-        .to(
-          ".cover-wrapper-background",
-          {
-            y: "100vh",
-            duration: 1,
-            ease: "power3.inOut",
-          },
-          "-=0.8"
-        )
-        .set(
-          "#cover-wrapper-background",
-          {
-            opacity: 0,
-          },
-          "<"
-        )
-        .set(".cover-wrapper", { display: "none" });
+    .to("#colore-punto-brand-chiaro", {
+      scale: 0,
+      transformOrigin: "center center",
+      duration: 0.2,
+      ease: "power2.out",
+    })
+    .to(
+      ".cover-wrapper-background.clear",
+      {
+        scale: 1,
+        transformOrigin: "bottom center",
+        duration: 0.8,
+        ease: "power3.inOut",
+      },
+      "-=0.4"
+    )
+    .to(
+      "#colore-scuro",
+      {
+        y: "-100vh",
+        duration: 1,
+        ease: "power3.inOut",
+      },
+      "<"
+    )
+    .to(
+      ".logotype-transition",
+      {
+        rotateX: -90,
+        duration: 0.4,
+        transformOrigin: "top",
+        ease: "power1.inOut",
+      },
+      "-=0.8"
+    )
+    .to(
+      brandLettersArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+        stagger: 0.2,
+      },
+      "-=0.5"
+    )
+    .to(
+      brandSymbolsArray,
+      {
+        y: "100vh",
+        duration: 0.6,
+        ease: "power1.inOut",
+      },
+      "<"
+    )
+    .to(
+      ".cover-wrapper-background",
+      {
+        y: "100vh",
+        duration: 1,
+        ease: "power3.inOut",
+      },
+      "-=0.8"
+    )
+    .set(
+      "#cover-wrapper-background",
+      {
+        opacity: 0,
+      },
+      "<"
+    )
+    .set(".cover-wrapper", { display: "none" });
   
       tlTitle
         .to(".sphere", {
@@ -2791,8 +2789,7 @@ function scrollToTopInstant() {
             );
           }
         }
-      );
-    });
+      );   
   }
   
   function transitionOnLoadHeroDefault() {
