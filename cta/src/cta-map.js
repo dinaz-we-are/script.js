@@ -506,6 +506,12 @@ export default CTAMap;
         animationPageEnterWebDesign();
         pageServiceScrollTriggerWeb();
         window.safeRequestIdleCallback(() => {
+          if (window.matchMedia("(min-width: 992px)").matches) {
+            window.safeRequestIdleCallback(() => {
+              ctaStickyLastWork.reset();
+            });
+          }
+          setupPageShowcaseButtons();
           videoPause();
           swiperUI();
           logoAnima();

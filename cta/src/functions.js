@@ -48,6 +48,7 @@ const functions = {
     showcaseTransition,
     genericPageTitleAnimations,
     setupGenericCloseButtons,
+    setupPageShowcaseButtons,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -55,7 +56,7 @@ const functions = {
   });
 
   export default { BurgerMenu: window.BurgerMenu, menuNavigation: window.menuNavigation, linkManager: window.linkManager, ctaStickyTransition: window.ctaStickyTransition, 
-    propositoAnimation: window.propositoAnimation, };
+    propositoAnimation: window.propositoAnimation, ctaStickyLastWork: window.ctaStickyLastWork, };
 
 
   //Oggetti e Array Transition
@@ -2215,26 +2216,16 @@ function scrollToTopInstant() {
     .set(".cover-wrapper", { display: "none" });
   
     tlPlus
+    .call(() => {
+      unblockScroll();
+    })
       .to(headerElements, {
         y: 0,
         duration: 0.6,
         ease: "power2.out",
-      })
-      .call(() => {
-        unblockScroll();
       });
   }
   
-  function defaultSimpleTransition() {
-    const tlPlus = gsap.timeline();
-  
-    tlPlus.to(headerElements, {
-      y: 0,
-      duration: 0.6,
-      ease: "power2.out",
-    });
-  }
-
   function animationPageEnterDesign() {
     const split = new SplitType(".h1-page", {
       types: "lines",
@@ -2273,10 +2264,10 @@ function scrollToTopInstant() {
         svg,
         {
           x: 0,
-          duration: 0.4,
+          duration: 0.6,
           ease: "power2.out",
         },
-        "-=0.4"
+        "<"
       )
       .from(
         ".sub-head-page",
@@ -2295,7 +2286,7 @@ function scrollToTopInstant() {
           duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.3"
+        "-=0.4"
       )
       .to(
         "#cerchio-design",
@@ -2315,7 +2306,7 @@ function scrollToTopInstant() {
         },
         "-=0.3"
       );
-  }
+  } 
   
   function animationPageEnterAbout() {
     const split = new SplitType(".h1-span-page", {
@@ -2415,6 +2406,7 @@ function scrollToTopInstant() {
   
     gsap.set(svg, {
       x: "100vw",
+      rotateZ: 135,
     });
     gsap
       .timeline()
@@ -2429,10 +2421,11 @@ function scrollToTopInstant() {
         svg,
         {
           x: 0,
-          duration: 0.4,
+          rotateZ: 0,
+          duration: 0.6,
           ease: "power2.out",
         },
-        "-=0.4"
+        "<"
       )
       .from(".sub-head-page", {
         y: "200%",
@@ -4349,105 +4342,37 @@ function scrollToTopInstant() {
     }
   
     // Elementi da animare
-    const subHead = document.getElementById("sub-heading-proposito-home");
-    const inspire = trigger.querySelectorAll(".span-prop-home");
-    const heading = trigger.querySelector(".proposito-home-h2");
+    const heading = trigger.querySelectorAll(".pro");
+    const subHeading = trigger.querySelectorAll(".pro-top");
     if (!heading) {
       return;
     }
   
-    const split = new SplitType(heading, {
-      types: "chars",
-      tagName: "span",
-    });
-  
-    // Imposta le animazioni iniziali
-    gsap.set(inspire, { rotateX: 90, transformOrigin: "center center" });
-    gsap.set(subHead, { rotateX: 90, transformOrigin: "center center" });
-    gsap.set(".proposito-home-h2 .char", { y: "-150%" });
-  
-    // 🎯 Media Queries
-    const mm = gsap.matchMedia();
-  
     //  Desktop Animation (>= 992px)
-    mm.add("(min-width: 992px)", () => {
-      gsap.to(".proposito-home-h2 .char", {
-        y: 0,
-        ease: "none",
-        duration: 1,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: trigger,
-          start: "top 80%",
-          end: "top 10%",
-          scrub: true, // Scroll progressivo
-        },
-      });
   
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 40%",
-          end: "top top",
-          scrub: true,
-        },
-      });
-  
-      tl.to(subHead, {
-        rotateX: 0,
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: trigger,
+        start: "top 70%",
+        end: "top 10%",
+        toggleActions: "play none none reverse",
+      },
+    });
+    tl.to(heading, {
+      y: 0,
+      ease: "power2.out",
+      duration: 0.6,
+      stagger: 0.2,
+    }).to(
+      subHeading,
+      {
+        y: "100%",
         ease: "power2.out",
         duration: 0.6,
-      }).to(
-        inspire,
-        {
-          rotateX: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          stagger: 0.2,
-        },
-        "<"
-      );
-    });
-  
-    // Mobile Animation (< 992px)
-    mm.add("(max-width: 991px)", () => {
-      gsap.to(".proposito-home-h2 .char", {
-        y: 0,
-        ease: "power2.out",
-        duration: 0.5,
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: trigger,
-          start: "top 70%",
-          end: "top 30%",
-          scrub: false,
-        },
-      });
-  
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 60%",
-          end: "top 10%",
-          scrub: false,
-        },
-      });
-  
-      tl.to(subHead, {
-        rotateX: 0,
-        ease: "power2.out",
-        duration: 0.3,
-      }).to(
-        inspire,
-        {
-          rotateX: 0,
-          duration: 0.3,
-          ease: "power2.out",
-          stagger: 0.1,
-        },
-        "-=0.2"
-      );
-    });
+        stagger: 0.2,
+      },
+      "-=0.95"
+    );
   }
 
   //
@@ -7395,21 +7320,6 @@ function scrollToTopInstant() {
       tagName: "span",
     });
   
-    if (noi) {
-      const noiCover = noi.querySelector(".noi-cover");
-      gsap.to(noiCover, {
-        y: "50vh",
-        duration: 0.6,
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: noi,
-          start: "top center",
-          end: "top 50%",
-          toggleActions: "play none none none",
-        },
-      });
-    }
-  
     // Animazioni per lineWrap (titoli e linee)
     lineWrap.forEach((lineWrap) => {
       const subTitles = lineWrap.querySelectorAll(".heading-h3-studio .word");
@@ -7486,6 +7396,33 @@ function scrollToTopInstant() {
       },
       (context) => {
         let { isDesktop, isMobile } = context.conditions;
+        if (noi) {
+          const noiCover = noi.querySelector(".noi-cover");
+          if (isDesktop) {
+            gsap.to(noiCover, {
+              y: "-50vh",
+              duration: 0.5,
+              ease: "power1.inOut",
+              scrollTrigger: {
+                trigger: noi,
+                start: "top 40%",
+                toggleActions: "play none none reverse",
+              },
+            });
+          } else {
+            gsap.to(noiCover, {
+              y: "50vh",
+              duration: 0.5,
+              ease: "power1.inOut",
+              scrollTrigger: {
+                trigger: noi,
+                start: "top 75%",
+                toggleActions: "play none none reverse",
+              },
+            });
+          }
+        }
+  
         if (isDesktop) {
           gsap.set(studioText, { opacity: 0, y: 100 });
   
@@ -8364,6 +8301,609 @@ function scrollToTopInstant() {
               "-=0.4"
             );
         },
+      });
+    });
+  }
+
+  window.ctaStickyLastWork = window.ctaStickyLastWork || {
+    // Variabili e oggetti
+    horizontalScrollTL: null,
+  
+    // Selettori per Scroll Orizzontale
+    reset() {
+      this.scrollWrapperH = document.querySelector(".horizontal-scroll-wrapper");
+      this.scrollContainerH = document.querySelector(
+        ".horizontal-scroll-container"
+      );
+      this.panelZero = document.getElementById("panelZero");
+      this.panelPrimo = document.getElementById("panelPrimo");
+      this.panelSecondo = document.getElementById("panelSecondo");
+      this.panelTerzo = document.getElementById("panelTerzo");
+      this.triggerPrimo = document.getElementById("itemPrimo");
+      this.triggerSecondo = document.getElementById("itemSecondo");
+      this.triggerTerzo = document.getElementById("itemTerzo");
+      this.innerPanelPrimo = document.getElementById("mobile-inner-panel-primo");
+      this.innerPanelSecondo = document.getElementById(
+        "mobile-inner-panel-secondo"
+      );
+      this.innerPanelTerzo = document.getElementById("mobile-inner-panel-terzo");
+      this.firstLine = document.getElementById("item-line-first");
+      this.secondLine = document.getElementById("item-line-second");
+      this.thirdLine = document.getElementById("item-line-third");
+      this.firstTxt = document.getElementById("txt-first");
+      this.secondTxt = document.getElementById("txt-second");
+      this.thirdTxt = document.getElementById("txt-third");
+  
+      // Se gli elementi sono validi, rilancio le animazioni
+      if (this.scrollWrapperH && this.scrollContainerH && this.panelPrimo) {
+        this.init();
+      } else {
+        console.warn(
+          "reset(): Alcuni elementi non sono stati trovati, animazioni non riavviate."
+        );
+      }
+    },
+  
+    // Inizializzazione dell'oggetto
+    init() {
+      this.showcaseHorizontalScroll();
+      this.showcaseExpandPanels();
+      this.showcaseExpandPanelsInner();
+      this.showcaseProgress();
+      this.showcaseProgressTxt();
+      this.showcaseScaleImages();
+    },
+  
+    // Funzione per lo Scroll Orizzontale
+    showcaseHorizontalScroll() {
+      if (!this.scrollWrapperH || !this.scrollContainerH) {
+        console.warn("❌ showcaseHorizontalScroll: elementi non trovati");
+        return;
+      }
+  
+      const scrollLength = this.scrollContainerH.scrollWidth - window.innerWidth;
+  
+      this.horizontalScrollTL = gsap.timeline({
+        scrollTrigger: {
+          trigger: this.scrollWrapperH,
+          start: "top top",
+          end: `+=${scrollLength}`,
+          scrub: true,
+          pin: true, //  pinna la sezione durante lo scroll orizzontale
+          //anticipatePin: 1, // (opzionale) aiuta a prevenire salti di layout
+        },
+      });
+  
+      this.horizontalScrollTL.to(this.scrollContainerH, {
+        x: `-${scrollLength}px`,
+        ease: "none",
+      });
+    },
+  
+    showcaseExpandPanels() {
+      const panels = [
+        {
+          element: this.panelPrimo,
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          startX: "80%",
+          finalX: "0%",
+        },
+        {
+          element: this.panelSecondo,
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          startX: "97%",
+          finalX: "80%",
+        },
+        {
+          element: this.panelTerzo,
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          startX: "100%",
+          finalX: "97%",
+        },
+      ];
+  
+      panels.forEach(({ element, trigger, start, end, startX, finalX }) => {
+        if (!element || !trigger) {
+          console.warn(`showcaseExpandPanels: Elemento o trigger non trovati.`);
+          return;
+        }
+  
+        gsap.fromTo(
+          [element].filter(Boolean),
+          { x: startX },
+          {
+            x: finalX,
+            ease: "power2.inOut",
+            scrollTrigger: {
+              trigger: trigger,
+              containerAnimation: this.horizontalScrollTL,
+              start: start,
+              end: end,
+              scrub: true,
+            },
+          }
+        );
+      });
+      const followUpPanels = [
+        {
+          element: this.panelSecondo,
+          trigger: this.triggerSecondo,
+          startX: "80%",
+          finalX: "0%",
+        },
+        {
+          element: this.panelTerzo,
+          trigger: this.triggerSecondo,
+          startX: "97%",
+          finalX: "80%",
+        },
+      ];
+  
+      followUpPanels.forEach(({ element, trigger, startX, finalX }) => {
+        if (!element || !trigger) return;
+  
+        ScrollTrigger.create({
+          trigger: trigger,
+          containerAnimation: this.horizontalScrollTL,
+          start: "left left",
+          end: "right left",
+          scrub: true,
+          onEnter: () => {
+            gsap.fromTo(
+              element,
+              { x: startX },
+              {
+                x: finalX,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                  trigger: trigger,
+                  containerAnimation: this.horizontalScrollTL,
+                  start: "left left",
+                  end: "right left",
+                  scrub: true,
+                },
+              }
+            );
+          },
+        });
+      });
+      const followUpPanelsLast = [
+        {
+          element: this.panelTerzo,
+          trigger: this.triggerTerzo,
+          startX: "80%",
+          finalX: "0%",
+        },
+      ];
+  
+      followUpPanelsLast.forEach(({ element, trigger, startX, finalX }) => {
+        if (!element || !trigger) return;
+  
+        ScrollTrigger.create({
+          trigger: trigger,
+          containerAnimation: this.horizontalScrollTL,
+          start: "left left",
+          end: "right left",
+          scrub: true,
+          onEnter: () => {
+            gsap.fromTo(
+              element,
+              { x: startX },
+              {
+                x: finalX,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                  trigger: trigger,
+                  containerAnimation: this.horizontalScrollTL,
+                  start: "left left",
+                  end: "right left",
+                  scrub: true,
+                },
+              }
+            );
+          },
+        });
+      });
+    },
+    showcaseExpandPanelsInner() {
+      const panels = [
+        {
+          element: this.innerPanelPrimo,
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          startX: "-80%",
+          finalX: "0%",
+        },
+        {
+          element: this.innerPanelSecondo,
+          trigger: this.triggerSecondo,
+          start: "left left",
+          end: "right left",
+          startX: "-80%",
+          finalX: "0%",
+        },
+        {
+          element: this.innerPanelTerzo,
+          trigger: this.triggerTerzo,
+          start: "left left",
+          end: "right left",
+          startX: "-80%",
+          finalX: "0%",
+        },
+      ];
+  
+      panels.forEach(({ element, trigger, start, end, startX, finalX }) => {
+        if (!element || !trigger) {
+          console.warn(`showcaseExpandPanels: Elemento o trigger non trovati.`);
+          return;
+        }
+  
+        gsap.fromTo(
+          [element].filter(Boolean),
+          { x: startX },
+          {
+            x: finalX,
+            ease: "power2.inOut",
+            scrollTrigger: {
+              trigger: trigger,
+              containerAnimation: this.horizontalScrollTL,
+              start: start,
+              end: end,
+              scrub: true,
+            },
+          }
+        );
+      });
+    },
+  
+    showcaseProgress() {
+      const lines = [
+        {
+          element: this.firstLine,
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          scale: 1,
+        },
+        {
+          element: this.secondLine,
+          trigger: this.triggerSecondo,
+          start: "left left",
+          end: "right left",
+          scale: 1,
+        },
+        {
+          element: this.thirdLine,
+          trigger: this.triggerTerzo,
+          start: "left left",
+          end: "right left",
+          scale: 1,
+        },
+      ];
+  
+      lines.forEach(({ element, trigger, start, end, scale }) => {
+        if (!element || !trigger) {
+          console.warn(`showcaseExpandPanels: Elemento o trigger non trovati.`);
+          return;
+        }
+  
+        gsap.to(element, {
+          scaleX: scale,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: trigger,
+            containerAnimation: this.horizontalScrollTL,
+            start: start,
+            end: end,
+            scrub: true,
+          },
+        });
+      });
+    },
+    showcaseProgressTxt() {
+      const txt = [
+        {
+          element: this.firstTxt,
+          trigger: this.triggerPrimo,
+          start: "right 80%",
+        },
+        {
+          element: this.secondTxt,
+          trigger: this.triggerSecondo,
+          start: "right 80%",
+        },
+        {
+          element: this.thirdTxt,
+          trigger: this.triggerTerzo,
+          start: "right 80%",
+        },
+      ];
+  
+      txt.forEach(({ element, trigger, start }) => {
+        if (!element || !trigger) {
+          console.warn(`showcaseExpandPanels: Elemento o trigger non trovati.`);
+          return;
+        }
+  
+        gsap.to(element, {
+          y: 0,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: trigger,
+            containerAnimation: this.horizontalScrollTL,
+            start: start,
+            scrub: true,
+          },
+        });
+      });
+    },
+  
+    showcaseScaleImages() {
+      const images = [
+        {
+          id: "#imgZero",
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          from: { scale: 1, x: "0%" },
+          to: { scale: 0.8, x: "-80%" },
+        },
+        {
+          id: "#imgPrimo",
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          from: { scale: 0.43, x: "43%" },
+          to: { scale: 1, x: "0%" },
+        },
+        {
+          id: "#imgSecondo",
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          from: { scale: 0.1, x: "10%" },
+          to: { scale: 0.43, x: "43%" },
+        },
+        {
+          id: "#imgTerzo",
+          trigger: this.triggerPrimo,
+          start: "left left",
+          end: "right left",
+          from: { scale: 0, x: "0%" },
+          to: { scale: 0.1, x: "10%" },
+        },
+      ];
+  
+      images.forEach(({ id, trigger, start, end, from, to }) => {
+        const image = document.querySelector(id);
+        if (!image || !trigger) return;
+  
+        gsap.fromTo(image, from, {
+          ...to,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: trigger,
+            containerAnimation: this.horizontalScrollTL,
+            start: start,
+            end: end,
+            scrub: true,
+          },
+        });
+      });
+  
+      // Seconda fase (attivata solo quando il trigger entra)
+      const followUpImages = [
+        {
+          id: "#imgPrimo",
+          trigger: this.triggerSecondo,
+          from: { scale: 1, x: "0%" },
+          to: { scale: 0.8, x: "-80%" },
+        },
+        {
+          id: "#imgSecondo",
+          trigger: this.triggerSecondo,
+          from: { scale: 0.43, x: "43%" },
+          to: { scale: 1, x: "0%" },
+        },
+        {
+          id: "#imgTerzo",
+          trigger: this.triggerSecondo,
+          from: { scale: 0.1, x: "10%" },
+          to: { scale: 0.53, x: "53%" },
+        },
+      ];
+  
+      followUpImages.forEach(({ id, trigger, from, to }) => {
+        const image = document.querySelector(id);
+        if (!image || !trigger) return;
+  
+        ScrollTrigger.create({
+          trigger: trigger,
+          containerAnimation: this.horizontalScrollTL,
+          start: "left left",
+          end: "right left",
+          scrub: true,
+          onEnter: () => {
+            gsap.fromTo(image, from, {
+              ...to,
+              ease: "power2.inOut",
+              scrollTrigger: {
+                trigger: trigger,
+                containerAnimation: this.horizontalScrollTL,
+                start: "left left",
+                end: "right left",
+                scrub: true,
+              },
+            });
+          },
+        });
+      });
+      const followUpImagesLast = [
+        {
+          id: "#imgSecondo",
+          trigger: this.triggerTerzo,
+          from: { scale: 1, x: "0%" },
+          to: { scale: 0.8, x: "-80%" },
+        },
+        {
+          id: "#imgTerzo",
+          trigger: this.triggerTerzo,
+          from: { scale: 0.53, x: "53%" },
+          to: { scale: 1, x: "0%" },
+        },
+      ];
+  
+      followUpImagesLast.forEach(({ id, trigger, from, to }) => {
+        const image = document.querySelector(id);
+        if (!image || !trigger) return;
+  
+        ScrollTrigger.create({
+          trigger: trigger,
+          containerAnimation: this.horizontalScrollTL,
+          start: "left left",
+          end: "right left",
+          scrub: true,
+          onEnter: () => {
+            gsap.fromTo(image, from, {
+              ...to,
+              ease: "power2.inOut",
+              scrollTrigger: {
+                trigger: trigger,
+                containerAnimation: this.horizontalScrollTL,
+                start: "left left",
+                end: "right left",
+                scrub: true,
+              },
+            });
+          },
+        });
+      });
+    },
+  };
+  
+  function setupPageShowcaseButtons() {
+    const panels = document.querySelectorAll(".panel-portfolio");
+  
+    if (!panels.length) {
+      console.warn("❌ setupVerticalShowcaseButtons: Nessun pannello trovato.");
+      return;
+    }
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-cta-show");
+        const hoverDiv = button?.querySelector(".btn-showcase-hov-lw");
+        const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+  
+        if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+          return;
+        }
+  
+        let enterTl = gsap.timeline({ paused: true });
+        let leaveTl = gsap.timeline({ paused: true });
+        let isHovered = false;
+  
+        // 🔹 Timeline per l'hover IN
+        enterTl
+          .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+          .to(
+            arrowHover,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.2"
+          )
+          .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+        // 🔹 Timeline per l'hover OUT
+        leaveTl
+          .to([hoverDiv, arrowHover], {
+            scale: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          })
+          .to(
+            arrowDefault,
+            { scale: 1, duration: 0.3, ease: "power2.out" },
+            "-=0.2"
+          );
+  
+        const handleMouseEnter = () => {
+          if (!isHovered) {
+            enterTl.restart();
+            isHovered = true;
+          }
+        };
+  
+        const handleMouseLeave = () => {
+          if (isHovered) {
+            leaveTl.restart();
+            isHovered = false;
+          }
+        };
+  
+        // Aggiunge i listener SOLO al button
+        button.addEventListener("mouseenter", handleMouseEnter);
+        button.addEventListener("mouseleave", handleMouseLeave);
+  
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+        window.pageSpecificListeners.push(
+          { element: button, event: "mouseenter", handler: handleMouseEnter },
+          { element: button, event: "mouseleave", handler: handleMouseLeave }
+        );
+      });
+    });
+  
+    mm.add("(max-width: 991px)", () => {
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-cta-show");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+  
+        if (!button || !arrowDefault || !arrowAbs) {
+          return;
+        }
+  
+        let touchTl = gsap.timeline({ paused: true });
+        let isTouched = false;
+  
+        // 🔹 Timeline per il tocco
+        touchTl
+          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        const handleTouchStart = () => {
+          if (!isTouched) {
+            touchTl.restart();
+            isTouched = true;
+          }
+        };
+  
+        const handleTouchEnd = () => {
+          if (isTouched) {
+            setTimeout(() => {
+              touchTl.reverse();
+              isTouched = false;
+            }, 0);
+          }
+        };
+  
+        // Aggiunge il listener al button
+        button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
+  
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
       });
     });
   }
