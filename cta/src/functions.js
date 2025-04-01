@@ -2225,6 +2225,16 @@ function scrollToTopInstant() {
         ease: "power2.out",
       });
   }
+
+  function defaultSimpleTransition() {
+    const tlPlus = gsap.timeline();
+  
+    tlPlus.to(headerElements, {
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+  }
   
   function animationPageEnterDesign() {
     const split = new SplitType(".h1-page", {
