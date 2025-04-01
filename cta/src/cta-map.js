@@ -505,12 +505,12 @@ export default CTAMap;
         }
         animationPageEnterWebDesign();
         pageServiceScrollTriggerWeb();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          window.safeRequestIdleCallback(() => {
+            ctaStickyLastWork.reset();
+          });
+        }    
         window.safeRequestIdleCallback(() => {
-          if (window.matchMedia("(min-width: 992px)").matches) {
-            window.safeRequestIdleCallback(() => {
-              ctaStickyLastWork.reset();
-            });
-          }
           setupPageShowcaseButtons();
           videoPause();
           swiperUI();
