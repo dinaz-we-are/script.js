@@ -614,9 +614,16 @@ window.MultiStepForm = window.MultiStepForm || (() => {
       const requiredInputs = step.querySelectorAll("input[required]");
       if (requiredInputs.length > 0) {
         requiredInputs.forEach((input) => {
-          input.addEventListener("input", () => {
-            updateNextButtonState(step);
+          ["input", "change"].forEach((eventType) => {
+            input.addEventListener(eventType, () => {
+              updateNextButtonState(step);
+            });
           });
+      
+          // Fix per l'autofill: aggiorna lo stato dopo un breve delay
+          setTimeout(() => {
+            updateNextButtonState(step);
+          }, 200);
         });
       }
   
