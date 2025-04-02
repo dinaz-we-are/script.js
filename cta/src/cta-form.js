@@ -619,13 +619,14 @@ window.MultiStepForm = window.MultiStepForm || (() => {
               updateNextButtonState(step);
             });
           });
-      
-          // Fix per l'autofill: aggiorna lo stato dopo un breve delay
-          setTimeout(() => {
-            updateNextButtonState(step);
-          }, 200);
         });
+      
+        // ✅ Esegui una verifica ritardata solo una volta per tutti gli input
+        setTimeout(() => {
+          updateNextButtonState(step);
+        }, 300);
       }
+      
   
       // Gestione radio button con avanzamento automatico
       const radioInputs = step.querySelectorAll("[data-radio-skip='true']");
@@ -642,6 +643,7 @@ window.MultiStepForm = window.MultiStepForm || (() => {
       // Gestione password
       setupPasswordValidation(step);
       setupPhoneAutoFormat(step);
+      updateNextButtonState(step);
     }
   
     function setupEnterKey() {
@@ -739,11 +741,20 @@ window.MultiStepForm = window.MultiStepForm || (() => {
   
       if (requiredInputs.length > 0) {
         requiredInputs.forEach((input) => {
-          if (!input.value.trim()) {
+          const value = input.value;
+      
+          // Controllo robusto per ogni tipo di input
+          if (
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            (typeof value === "string" && value.trim().length === 0)
+          ) {
             isValid = false;
           }
         });
       }
+      
   
       nextButton.disabled = !isValid;
       nextButton.style.pointerEvents = isValid ? "auto" : "none";
