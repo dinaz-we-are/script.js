@@ -330,7 +330,10 @@ window.AppForms = window.AppForms || {
           e.preventDefault();
           e.stopImmediatePropagation();
   
-          jQuery(".lottie-waiting").css("display", "block");
+          jQuery(".lottie-waiting").css({
+            visibility: "visible",
+            opacity: "1"
+          });
   
           var data = AppGeneralForms.convertFormToJSON(form);
           data.formId = form.id || "unknown-form"; // Se il form non ha ID, assegna un valore di default
@@ -358,7 +361,10 @@ window.AppForms = window.AppForms || {
               jQuery(form).parent().children(".w-form-fail").fadeIn();
             },
             complete: function () {
-              jQuery(".lottie-waiting").css("display", "none");
+              jQuery(".lottie-waiting").css({
+                visibility: "hidden",
+                opacity: "0"
+              });
             },
           });
         };
