@@ -641,11 +641,17 @@ function cleanUpTriggers() {
         if (successMessage) successMessage.style.display = "none";
     
         // Mostriamo il loader Lottie
-        if (lottieWaiting) lottieWaiting.style.display = "block";
-    
+        if (lottieWaiting) {
+          lottieWaiting.style.visibility = "visible";
+          lottieWaiting.style.opacity = "1";
+        }
+        
         if (!email || !password) {
           if (errorMessage) errorMessage.style.display = "block";
-          if (lottieWaiting) lottieWaiting.style.display = "none"; // Nascondiamo il loader se c'è un errore
+          if (lottieWaiting) {
+            lottieWaiting.style.visibility = "hidden";
+            lottieWaiting.style.opacity = "0";
+          }
           return;
         }
     
@@ -669,7 +675,10 @@ function cleanUpTriggers() {
           if (errorMessage) errorMessage.style.display = "block";
         } finally {
           // Nascondiamo il loader Lottie alla fine della richiesta
-          if (lottieWaiting) lottieWaiting.style.display = "none";
+          if (lottieWaiting) {
+            lottieWaiting.style.visibility = "hidden";
+            lottieWaiting.style.opacity = "0";
+          }
         }
       });
     },

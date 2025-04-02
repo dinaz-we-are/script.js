@@ -26,7 +26,10 @@ window.AppForms = window.AppForms || {
           e.preventDefault();
           e.stopImmediatePropagation();
   
-          jQuery(".lottie-waiting").css("display", "block");
+          jQuery(".lottie-waiting").css({
+            visibility: "visible",
+            opacity: "1"
+          });
   
           var data = AppForms.convertFormToJSON(form);
           var action =
@@ -66,7 +69,10 @@ window.AppForms = window.AppForms || {
                 .text("Errore durante la registrazione. Riprova.");
             },
             complete: function () {
-              jQuery(".lottie-waiting").css("display", "none");
+              jQuery(".lottie-waiting").css({
+                visibility: "hidden",
+                opacity: "0"
+              });
             },
           });
         };
@@ -113,7 +119,10 @@ window.AppForms = window.AppForms || {
           e.preventDefault();
           e.stopImmediatePropagation();
   
-          jQuery(".lottie-waiting").css("display", "block");
+          jQuery(".lottie-waiting").css({
+            visibility: "visible",
+            opacity: "1"
+          });
   
           var data = AppResetPassword.convertFormToJSON(form);
           var action =
@@ -158,7 +167,10 @@ window.AppForms = window.AppForms || {
                 .text("Errore durante l'invio della richiesta. Riprova.");
             })
             .always(function () {
-              jQuery(".lottie-waiting").css("display", "none");
+              jQuery(".lottie-waiting").css({
+                visibility: "hidden",
+                opacity: "0"
+              });
             });
         };
   
@@ -227,7 +239,10 @@ window.AppForms = window.AppForms || {
           e.preventDefault();
           e.stopImmediatePropagation();
   
-          jQuery(".lottie-waiting").css("display", "block");
+          jQuery(".lottie-waiting").css({
+            visibility: "visible",
+            opacity: "1"
+          });
   
           // **🔹 Recupera la password dal form**
           // 🔹 Aggiungiamo email, token e nuova password
@@ -279,7 +294,10 @@ window.AppForms = window.AppForms || {
                 .text("Errore durante l'aggiornamento della password. Riprova.");
             },
             complete: function () {
-              jQuery(".lottie-waiting").css("display", "none");
+              jQuery(".lottie-waiting").css({
+                visibility: "hidden",
+                opacity: "0"
+              });
             },
           });
         };
@@ -413,7 +431,10 @@ window.AppForms = window.AppForms || {
           e.preventDefault();
           e.stopImmediatePropagation();
   
-          jQuery(".lottie-waiting").css("display", "block");
+          jQuery(".lottie-waiting").css({
+            visibility: "visible",
+            opacity: "1"
+          });
   
           //  **Recupera l'UID dell'utente loggato**
           const user = firebase.auth().currentUser;
@@ -447,7 +468,10 @@ window.AppForms = window.AppForms || {
               jQuery(form).parent().children(".w-form-fail").fadeIn();
             },
             complete: function () {
-              jQuery(".lottie-waiting").css("display", "none");
+              jQuery(".lottie-waiting").css({
+                visibility: "hidden",
+                opacity: "0"
+              });
             },
           });
         };
