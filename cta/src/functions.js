@@ -9013,8 +9013,7 @@ function scrollToTopInstant() {
         { element: button, event: "mouseleave", handler: handleMouseLeave }
       );
     });
-    mm.add("(max-width: 991px)", () => {
-      panels.forEach((panel) => {
+    mm.add("(max-width: 991px)", () => {    
         const button = panel.querySelector(".btn-cta-show");
         const arrowDefault = button?.querySelector(".freccia-cta-arrow");
         const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
@@ -9056,6 +9055,5 @@ function scrollToTopInstant() {
           { element: button, event: "touchstart", handler: handleTouchStart },
           { element: button, event: "touchend", handler: handleTouchEnd }
         );
-      });
-    });
+      });   
   }
