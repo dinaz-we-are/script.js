@@ -49,6 +49,7 @@ const functions = {
     genericPageTitleAnimations,
     setupGenericCloseButtons,
     setupPageShowcaseButtons,
+    setupVerticalContatti,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -3127,10 +3128,14 @@ function scrollToTopInstant() {
       this.transitionZoneTrigger = document.getElementById("item-trans");
       this.transitionZoneImage = document.getElementById("img-trans");
       this.transitionIndex = document.getElementById("item-index");
-  
+      this.lastPanel = document.getElementById("img-last-one");
       // Popoliamo gli array solo se gli elementi sono stati trovati
       this.panelArray = [this.verticalPath, this.panelTerzo].filter(Boolean);
       this.contentArray = [this.scrollContainerH, this.verticalPath].filter(
+        Boolean
+      );
+  
+      this.transitionArrray = [this.lastPanel, this.transitionZoneImage].filter(
         Boolean
       );
   
@@ -3187,7 +3192,7 @@ function scrollToTopInstant() {
         return;
       }
   
-      gsap.to(this.transitionZoneImage, {
+      gsap.to(this.transitionArrray, {
         y: 0,
         ease: "none",
         scrollTrigger: {
@@ -3240,16 +3245,32 @@ function scrollToTopInstant() {
       const lineTextMiss = document.querySelectorAll(".miss-text .line");
       gsap.set(lineText, { y: 100, opacity: 0 });
       gsap.set(lineTextMiss, { y: 100, opacity: 0 });
+  
+      // Contatore per assegnare ID univoci ai trigger
+      let triggerID = 0;
+  
+      // Funzione per generare un ID univoco
+      function getUniqueTriggerID() {
+        triggerID++;
+        return `scrollTrigger-${triggerID}`;
+      }
+  
       // Calcolo delle altezze
       const verticalScrollLength =
         this.scrollContainerV.scrollHeight - window.innerHeight;
       const totalImagesHeight = (this.numImages * 20 * window.innerWidth) / 100;
+      const extraDivHeight = ((30 * window.innerWidth) / 100) * (9 / 16); // Altezza del div 16:9
+  
       const viewportHeight = window.innerHeight;
-      const missingHeight = Math.max(totalImagesHeight - viewportHeight, 0); // Evita valori negativi
+      const missingHeight = Math.max(
+        totalImagesHeight + extraDivHeight - viewportHeight,
+        0
+      ); // Evita valori negativi
   
       // Timeline per lo Scroll Verticale
       this.verticalScrollTL = gsap.timeline({
         scrollTrigger: {
+          id: getUniqueTriggerID(),
           trigger: trigger,
           start: "top top",
           end: `+=${verticalScrollLength}`,
@@ -3262,8 +3283,9 @@ function scrollToTopInstant() {
       // Animazione per ridurre la larghezza dei pannelli
       gsap.to(this.panelArray, {
         width: "30vw",
-        ease: "power1.inOut",
+        ease: "none",
         scrollTrigger: {
+          id: getUniqueTriggerID(),
           trigger: trigger,
           start: "top 50%",
           end: "top -75%",
@@ -3271,11 +3293,12 @@ function scrollToTopInstant() {
         },
       });
   
-      // Spostamento del contenuto per compensare l'altezza mancante
+      //  Spostamento del contenuto per compensare l'altezza mancante
       gsap.to(this.contentArray, {
         y: `-${missingHeight}px`,
         ease: "none",
         scrollTrigger: {
+          id: getUniqueTriggerID(),
           trigger: trigger,
           start: "top top",
           end: "bottom bottom",
@@ -3283,11 +3306,13 @@ function scrollToTopInstant() {
         },
       });
   
+      //  Animazione del titolo
       gsap.to(".line-title.text-par.red", {
         width: "100%",
         ease: "none",
         stagger: 0.3,
         scrollTrigger: {
+          id: getUniqueTriggerID(),
           trigger: trigger,
           start: "top 80%",
           end: "center 40%",
@@ -3295,10 +3320,12 @@ function scrollToTopInstant() {
         },
       });
   
+      //  Timeline per l’animazione di testi e valori
       gsap.to(
         {},
         {
           scrollTrigger: {
+            id: getUniqueTriggerID(),
             trigger: trigger,
             start: "top -50%",
             end: "bottom top",
@@ -3518,7 +3545,7 @@ function scrollToTopInstant() {
   
         // Imposta lo stato iniziale con gsap.set()
         gsap.set(titleChars, { y: "100%", opacity: 0 });
-        gsap.set(descriptionContainer, { y: -200 });
+        gsap.set(descriptionContainer, { y: 200 });
         gsap.set(button, { scale: 0 });
         gsap.set(buttonHover, { opacity: 0 });
   
@@ -3562,7 +3589,7 @@ function scrollToTopInstant() {
               })
               .to(
                 descriptionContainer,
-                { y: -200, duration: 0.2, ease: "power2.in" },
+                { y: 200, duration: 0.2, ease: "power2.in" },
                 "<"
               )
               .to(button, { scale: 0, duration: 0.2, ease: "power2.out" })
@@ -3714,6 +3741,7 @@ function scrollToTopInstant() {
       });
     },
   };
+
 
   function setupShowcaseButtons() {
     const mm = gsap.matchMedia();
@@ -8871,6 +8899,120 @@ function scrollToTopInstant() {
       });
     });
   
+    mm.add("(max-width: 991px)", () => {
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-cta-show");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+  
+        if (!button || !arrowDefault || !arrowAbs) {
+          return;
+        }
+  
+        let touchTl = gsap.timeline({ paused: true });
+        let isTouched = false;
+  
+        // 🔹 Timeline per il tocco
+        touchTl
+          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        const handleTouchStart = () => {
+          if (!isTouched) {
+            touchTl.restart();
+            isTouched = true;
+          }
+        };
+  
+        const handleTouchEnd = () => {
+          if (isTouched) {
+            setTimeout(() => {
+              touchTl.reverse();
+              isTouched = false;
+            }, 0);
+          }
+        };
+  
+        // Aggiunge il listener al button
+        button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
+  
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
+      });
+    });
+  }
+
+  function setupVerticalContatti() {
+    const panel = document.getElementById("last-one");
+  
+    if (!panel) {
+      console.warn("❌ setupVerticalContatti: Nessun pannello trovato.");
+      return;
+    }
+  
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      const button = panel.querySelector(".btn-cta-show");
+      const hoverDiv = button?.querySelector(".btn-showcase-hov-lw");
+      const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
+      const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+  
+      if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+        return;
+      }
+  
+      let enterTl = gsap.timeline({ paused: true });
+      let leaveTl = gsap.timeline({ paused: true });
+      let isHovered = false;
+  
+      // 🔹 Timeline per l'hover IN
+      enterTl
+        .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+        .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2")
+        .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+      // 🔹 Timeline per l'hover OUT
+      leaveTl
+        .to([hoverDiv, arrowHover], {
+          scale: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        })
+        .to(
+          arrowDefault,
+          { scale: 1, duration: 0.3, ease: "power2.out" },
+          "-=0.2"
+        );
+  
+      const handleMouseEnter = () => {
+        if (!isHovered) {
+          enterTl.restart();
+          isHovered = true;
+        }
+      };
+  
+      const handleMouseLeave = () => {
+        if (isHovered) {
+          leaveTl.restart();
+          isHovered = false;
+        }
+      };
+  
+      // Aggiunge i listener SOLO al button
+      button.addEventListener("mouseenter", handleMouseEnter);
+      button.addEventListener("mouseleave", handleMouseLeave);
+  
+      // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+      window.pageSpecificListeners.push(
+        { element: button, event: "mouseenter", handler: handleMouseEnter },
+        { element: button, event: "mouseleave", handler: handleMouseLeave }
+      );
+    });
     mm.add("(max-width: 991px)", () => {
       panels.forEach((panel) => {
         const button = panel.querySelector(".btn-cta-show");

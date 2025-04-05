@@ -114,6 +114,12 @@ export default CTAMap;
       scripts: ["https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"],
       styles: ["https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css"],
     },
+    "67efed3d2ac67086280f4cdb": {
+      name: "valutazione",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
     "66dade8f8f33db9a444e4160": {
       name: "blogPost",
       jsonKey: "",
@@ -236,6 +242,12 @@ export default CTAMap;
     },
     "67db09fa49d1825ccef118aa": {
       name: "converse",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
+    "67f0f11dbe1df2493a54daef": {
+      name: "mati",
       jsonKey: "",
       scripts: [],
       styles: [],
@@ -448,6 +460,7 @@ export default CTAMap;
           createScrollTriggerHero();
           setupShowcaseButtons();
           setupVerticalShowcaseButtons();
+          setupVerticalContatti();
           genericPageTitleAnimations();
           ctaAnimations();
           serviceWrapper();
@@ -868,6 +881,7 @@ export default CTAMap;
           createScrollTriggerHero();
           setupShowcaseButtons();
           setupVerticalShowcaseButtons();
+          setupVerticalContatti();
           genericPageTitleAnimations();
           ctaAnimations();
           serviceWrapper();
@@ -991,6 +1005,18 @@ export default CTAMap;
         cleanUpPageListeners();
       },
     },
+    mati:{
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          showcaseTransition();
+        }
+        setupGenericCloseButtons();                     
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
     contattaci: {
       execute: function () {
         if (!window.isBarbaTransition) {
@@ -999,6 +1025,19 @@ export default CTAMap;
         MultiStepForm.init();
         window.AppGeneralForms.init();
         calendar();
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
+    valutazione: {
+      execute: function () {
+        if (!window.isBarbaTransition) {
+          defaultEnterTransition();
+        }
+        MultiStepForm.init();
+        window.AppGeneralForms.init();        
       },
       cleanup: function () {
         cleanUpTriggers();
