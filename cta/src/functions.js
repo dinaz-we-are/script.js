@@ -5534,6 +5534,15 @@ function scrollToTopInstant() {
               duration: 0.2,
             })
             .to(
+              "#scroll-bar-home",
+              {
+                opacity: 1,
+                ease: "power2.out",
+                duration: 0.6,
+              },
+              "<"
+            )
+            .to(
               header.burgerBlock,
               {
                 scale: 1,
@@ -5551,6 +5560,15 @@ function scrollToTopInstant() {
               duration: 0.4,
               ease: "power2.inOut",
             })
+            .to(
+              "#scroll-bar-home",
+              {
+                opacity: 0,
+                ease: "power2.out",
+                duration: 0.2,
+              },
+              "<"
+            )
             .to(".menu-desktop", {
               rotateX: 0,
               ease: "power2.inOut",
@@ -7133,6 +7151,13 @@ function scrollToTopInstant() {
       button.addEventListener("click", () => {
         startAutoAnimation();
       });
+
+      sliderWrapper.addEventListener("mouseenter", () => {
+        pauseAutoAnimation();
+      });
+      sliderWrapper.addEventListener("mouseleave", () => {
+        resumeAutoAnimation();
+      });
   
       window.pageSpecificListeners.push({
         element: button,
@@ -7140,6 +7165,19 @@ function scrollToTopInstant() {
         handler: () => startAutoAnimation(),
       });
     });
+
+    window.pageSpecificListeners.push(
+      {
+        element: sliderWrapper,
+        event: "mouseenter",
+        handler: pauseAutoAnimation,
+      },
+      {
+        element: sliderWrapper,
+        event: "mouseleave",
+        handler: resumeAutoAnimation,
+      }
+    );
   
     const observer = new IntersectionObserver(
       (entries) => {
@@ -9156,12 +9194,14 @@ function scrollToTopInstant() {
         { element: button, event: "mouseleave", handler: handleMouseLeave }
       );
     });
-    mm.add("(max-width: 991px)", () => {
-      panels.forEach((panel) => {
-        const button = panel.querySelector(".btn-cta-show");
-        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
-        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
-  
+    mm.add("(max-width: 991px)", () => {   
+      const button = panel.querySelector(".btn-cta-show");
+      const btn = panel.querySelector(".btn-showcase-lw");        
+      const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+      const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+      const sfondo = button?.querySelector(".sfondo-cta-btn");
+      gsap.set(btn, { scale: 0 });             
+     
         if (!button || !arrowDefault || !arrowAbs) {
           return;
         }
@@ -9189,6 +9229,31 @@ function scrollToTopInstant() {
             }, 0);
           }
         };
+
+        const scrollTl = gsap.timeline();
+  
+        ScrollTrigger.create({
+          trigger: button,
+          start: "top 97%",
+          end: "top 10%",
+          toggleActions: "play none none reverse",
+          onEnter: () =>
+            scrollTl
+              .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+              .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+          onLeave: () =>
+            scrollTl
+              .to(sfondo, { y: -120, duration: 0.5, ease: "power2.out" })
+              .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+          onEnterBack: () =>
+            scrollTl
+              .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+              .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+          onLeaveBack: () =>
+            scrollTl
+              .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
+              .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+        });
   
         // Aggiunge il listener al button
         button.addEventListener("touchstart", handleTouchStart);
@@ -9198,8 +9263,7 @@ function scrollToTopInstant() {
         window.pageSpecificListeners.push(
           { element: button, event: "touchstart", handler: handleTouchStart },
           { element: button, event: "touchend", handler: handleTouchEnd }
-        );
-      });
+        );     
     });
   }
 
