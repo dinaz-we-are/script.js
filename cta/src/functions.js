@@ -50,6 +50,9 @@ const functions = {
     setupGenericCloseButtons,
     setupPageShowcaseButtons,
     setupVerticalContatti,
+    globalCtaButton,
+    scrollProgressLine,
+    initCustomCursor,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -9056,4 +9059,357 @@ function scrollToTopInstant() {
           { element: button, event: "touchend", handler: handleTouchEnd }
         );
       });   
+  }
+
+  function globalCtaButton() {
+    const panel = document.getElementById("cta-talk");
+  
+    if (!panel) {
+      console.warn("❌ setupVerticalContatti: Nessun pannello trovato.");
+      return;
+    }
+  
+    const mm = gsap.matchMedia();
+  
+    mm.add("(min-width: 992px)", () => {
+      const button = panel.querySelector(".btn-cta-show");
+      const btn = panel.querySelector(".btn-showcase-lw");
+      const hoverDiv = button?.querySelector(".btn-showcase-hov-lw");
+      const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
+      const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+      const sfondo = button?.querySelector(".sfondo-cta-btn");
+      gsap.set(btn, { scale: 0 });
+  
+      if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+        return;
+      }
+  
+      let enterTl = gsap.timeline({ paused: true });
+      let leaveTl = gsap.timeline({ paused: true });
+      let isHovered = false;
+  
+      // 🔹 Timeline per l'hover IN
+      enterTl
+        .to(hoverDiv, { scale: 1, duration: 0.3, ease: "power2.out" })
+        .to(arrowHover, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2")
+        .to(arrowDefault, { scale: 0, duration: 0.2, ease: "power2.out" }, 0.3);
+  
+      // 🔹 Timeline per l'hover OUT
+      leaveTl
+        .to([hoverDiv, arrowHover], {
+          scale: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        })
+        .to(
+          arrowDefault,
+          { scale: 1, duration: 0.3, ease: "power2.out" },
+          "-=0.2"
+        );
+  
+      const handleMouseEnter = () => {
+        if (!isHovered) {
+          enterTl.restart();
+          isHovered = true;
+        }
+      };
+  
+      const handleMouseLeave = () => {
+        if (isHovered) {
+          leaveTl.restart();
+          isHovered = false;
+        }
+      };
+  
+      const scrollTl = gsap.timeline();
+  
+      ScrollTrigger.create({
+        trigger: button,
+        start: "top 97%",
+        end: "top 10%",
+        toggleActions: "play none none reverse",
+        onEnter: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+        onLeave: () =>
+          scrollTl
+            .to(sfondo, { y: -120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+        onEnterBack: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+        onLeaveBack: () =>
+          scrollTl
+            .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+      });
+  
+      // Aggiunge i listener SOLO al button
+      button.addEventListener("mouseenter", handleMouseEnter);
+      button.addEventListener("mouseleave", handleMouseLeave);
+  
+      // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+      window.pageSpecificListeners.push(
+        { element: button, event: "mouseenter", handler: handleMouseEnter },
+        { element: button, event: "mouseleave", handler: handleMouseLeave }
+      );
+    });
+    mm.add("(max-width: 991px)", () => {
+      panels.forEach((panel) => {
+        const button = panel.querySelector(".btn-cta-show");
+        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+  
+        if (!button || !arrowDefault || !arrowAbs) {
+          return;
+        }
+  
+        let touchTl = gsap.timeline({ paused: true });
+        let isTouched = false;
+  
+        // 🔹 Timeline per il tocco
+        touchTl
+          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+        const handleTouchStart = () => {
+          if (!isTouched) {
+            touchTl.restart();
+            isTouched = true;
+          }
+        };
+  
+        const handleTouchEnd = () => {
+          if (isTouched) {
+            setTimeout(() => {
+              touchTl.reverse();
+              isTouched = false;
+            }, 0);
+          }
+        };
+  
+        // Aggiunge il listener al button
+        button.addEventListener("touchstart", handleTouchStart);
+        button.addEventListener("touchend", handleTouchEnd);
+  
+        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+        window.pageSpecificListeners.push(
+          { element: button, event: "touchstart", handler: handleTouchStart },
+          { element: button, event: "touchend", handler: handleTouchEnd }
+        );
+      });
+    });
+  }
+
+  function scrollProgressLine() {
+    const settings = [
+      {
+        lineId: "item-line-zero",
+        textId: "txt-zero",
+        triggerStart: document.querySelector(".horizontal-scroll-wrapper"),
+        triggerEnd: document.getElementById("v-trigger-first"),
+        start: "top top",
+        end: "bottom bottom",
+      },
+      {
+        lineId: "item-line-first",
+        textId: "txt-first",
+        triggerStart: document.querySelector(".service-wrapper"),
+        triggerEnd: document.querySelector(".service-wrapper"),
+        start: "top bottom",
+        end: "bottom bottom",
+      },
+      {
+        lineId: "item-line-second",
+        textId: "txt-second",
+        triggerStart: document.querySelector(".studio-wrapper"),
+        triggerEnd: document.querySelector(".proposito-section"),
+        start: "top bottom",
+        end: "bottom bottom",
+      },
+      {
+        lineId: "item-line-third",
+        textId: "txt-third",
+        triggerStart: document.getElementById("cta-talk"),
+        triggerEnd: document.getElementById("cta-talk"),
+        start: "top bottom",
+        end: "bottom bottom",
+      },
+    ];
+  
+    settings.forEach((item) => {
+      const line = document.getElementById(item.lineId);
+      const text = document.getElementById(item.textId);
+      const triggerStart = item.triggerStart;
+      const triggerEnd = item.triggerEnd;
+  
+      if (!line || !text || !triggerStart || !triggerEnd) {
+        console.warn(`Elemento mancante per ${item.lineId}`);
+        return;
+      }
+  
+      // 🔹 Animazione linea
+      gsap.to(line, {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerStart,
+          start: item.start,
+          endTrigger: triggerEnd,
+          end: item.end,
+          scrub: true,
+        },
+      });
+  
+      // 🔹 Animazione testo IN/OUT
+      ScrollTrigger.create({
+        trigger: triggerStart,
+        start: item.start,
+        endTrigger: triggerEnd,
+        end: item.end,
+        scrub: true,
+        onEnter: () => {
+          gsap.to(text, { y: 0, duration: 0.6, ease: "power2.out" });
+        },
+        onLeaveBack: () => {
+          gsap.to(text, { y: -100, duration: 0.4, ease: "power2.in" });
+        },
+      });
+    });
+  }
+
+  function initCustomCursor() {
+    const cursor = document.getElementById("custom-cursor");
+    const pulse = document.getElementById("pulse-cursor");
+    const cursorNormal = document.getElementById("cursor-svg"); // svg normale
+    const cursorGrab = document.getElementById("cursor-svg-grab"); // svg grab
+    const cursorGrabbing = document.getElementById("cursor-svg-grabbing"); // svg grabbing
+  
+    if (!cursor || !pulse || !cursorNormal || !cursorGrab || !cursorGrabbing) {
+      console.warn("Custom cursor o svg non trovati!");
+      return;
+    }
+  
+    // Movimento base del cursore
+    window.addEventListener("pointermove", (e) => {
+      gsap.to(cursor, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    });
+  
+    // Interazioni normali (link, input, ecc.)
+    const interactiveElements = document.querySelectorAll(
+      "a, button, .pointer, .w-radio, .w-input, .w-checkbox, [role='button'], input[type='submit'], input[type='button'], input[type='reset'], input[type='radio'], input[type='checkbox'], input[type='text'], select, [data-form='next-btn'], [data-form='back-btn'], [data-form='submit-btn'], [data-barba='link']"
+    );
+  
+    interactiveElements.forEach((el) => {
+      const handleEnter = () => {
+        gsap.to(cursorNormal, {
+          scale: 1.4,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+        gsap.to(pulse, {
+          fill: "#ff006e",
+          scale: 1.3,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      };
+  
+      const handleLeave = () => {
+        gsap.to(cursorNormal, {
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+        gsap.to(pulse, {
+          fill: "#ffffff",
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      };
+  
+      el.addEventListener("mouseenter", handleEnter);
+      el.addEventListener("mouseleave", handleLeave);
+  
+      window.pageSpecificListeners.push(
+        { element: el, event: "mouseenter", handler: handleEnter },
+        { element: el, event: "mouseleave", handler: handleLeave }
+      );
+    });
+  
+    // Gestione speciale per lo swiper
+    const swiperWrappers = document.querySelectorAll(".swiper-wrapper");
+  
+    swiperWrappers.forEach((wrapper) => {
+      const setGrabCursor = () => {
+        cursorNormal.style.opacity = 0;
+        cursorGrab.style.opacity = 1;
+        cursorGrabbing.style.opacity = 0;
+      };
+  
+      const setGrabbingCursor = () => {
+        cursorGrab.style.opacity = 0;
+        cursorGrabbing.style.opacity = 1;
+      };
+  
+      const resetCursor = () => {
+        cursorNormal.style.opacity = 1;
+        cursorGrab.style.opacity = 0;
+        cursorGrabbing.style.opacity = 0;
+      };
+  
+      // Quando entri nello swiper
+      wrapper.addEventListener("pointerenter", setGrabCursor);
+      wrapper.addEventListener("pointerleave", resetCursor);
+  
+      // Quando inizi a trascinare (mousedown/touchstart)
+      wrapper.addEventListener("pointerdown", setGrabbingCursor);
+  
+      // Quando rilasci (mouseup/touchend)
+      wrapper.addEventListener("pointerup", setGrabCursor);
+  
+      window.pageSpecificListeners.push(
+        { element: wrapper, event: "pointerenter", handler: setGrabCursor },
+        { element: wrapper, event: "pointerleave", handler: resetCursor },
+        { element: wrapper, event: "pointerdown", handler: setGrabbingCursor },
+        { element: wrapper, event: "pointerup", handler: setGrabCursor }
+      );
+    });
+  
+    // Se siamo sopra un elemento interattivo dentro lo Swiper, priorità: torna al cursore normale
+    const swiperInteractiveElements = document.querySelectorAll(
+      " .swiper-wrapper [role='button']"
+    );
+  
+    swiperInteractiveElements.forEach((el) => {
+      const handleEnter = () => {
+        // Ritorna cursore normale
+        cursorNormal.style.opacity = 1;
+        cursorGrab.style.opacity = 0;
+        cursorGrabbing.style.opacity = 0;
+      };
+  
+      const handleLeave = () => {
+        // Torna grab dopo aver lasciato
+        cursorNormal.style.opacity = 0;
+        cursorGrab.style.opacity = 1;
+        cursorGrabbing.style.opacity = 0;
+      };
+  
+      el.addEventListener("pointerenter", handleEnter);
+      el.addEventListener("pointerleave", handleLeave);
+  
+      window.pageSpecificListeners.push(
+        { element: el, event: "pointerenter", handler: handleEnter },
+        { element: el, event: "pointerleave", handler: handleLeave }
+      );
+    });  
   }

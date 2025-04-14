@@ -446,6 +446,8 @@ export default CTAMap;
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
             window.menuNavigation.handleLinkMenuHover();
+            scrollProgressLine();
+            initCustomCursor();
           });
         } else {
           window.safeRequestIdleCallback(() => {
@@ -463,6 +465,7 @@ export default CTAMap;
           setupVerticalContatti();
           genericPageTitleAnimations();
           ctaAnimations();
+          globalCtaButton();
           serviceWrapper();
         });
         // 🔹 PRIORITÀ BASSA - differita dopo load + verifica swiper
@@ -497,12 +500,16 @@ export default CTAMap;
         }
         animationPageEnterDesign();
         pageServiceScrollTriggerDesign();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.safeRequestIdleCallback(() => {
           videoPause();
           logoAnima();
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
+          globalCtaButton();
           info();
         });
       },
@@ -521,6 +528,7 @@ export default CTAMap;
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.safeRequestIdleCallback(() => {
             ctaStickyLastWork.reset();
+            initCustomCursor();
           });
         }    
         window.safeRequestIdleCallback(() => {
@@ -531,6 +539,7 @@ export default CTAMap;
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
+          globalCtaButton();
           info();
         });
       },
@@ -546,6 +555,9 @@ export default CTAMap;
         }
         animationPageEnterMarketing();
         pageServiceScrollTriggerSeo();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.safeRequestIdleCallback(() => {
           changePrice();
           toggleServiceSection();
@@ -553,6 +565,7 @@ export default CTAMap;
           toggleFaq();
           secondSection(false);
           ctaAnimations();
+          globalCtaButton();
           info();
         });
       },
@@ -569,10 +582,14 @@ export default CTAMap;
         animationPageEnterWomen();
         videoPause();
         pageServiceScrollTriggerWomen();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.safeRequestIdleCallback(() => {
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
+          globalCtaButton();
           info();
         });
       },
@@ -588,11 +605,15 @@ export default CTAMap;
         }
         animationPageEnterAbout();
         startInfiniteMarquee();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.safeRequestIdleCallback(() => {        
           studioAnimations();
           genericPageTitleAnimations();
           serviceWrapper();
           ctaAnimations();
+          globalCtaButton();
           pageServiceScrollTriggerAbout();
           info();
         });
@@ -606,6 +627,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -621,6 +645,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         MultiStepForm.init();
         window.AppGeneralForms.init();
         calendar();
@@ -634,6 +661,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -649,6 +679,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         MultiStepForm.init();
         window.AppGeneralForms.init();
         calendar();
@@ -662,6 +695,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         window.linkManager.init();
         propositoAnimation.btnReadAnimation();
@@ -682,6 +718,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }       
       },
       cleanup: function () {
@@ -692,6 +731,9 @@ export default CTAMap;
     blogPost: {
       execute: function () {
         blogTransition();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.linkManager.init();
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
@@ -709,6 +751,9 @@ export default CTAMap;
     blogCategory: {
       execute: function () {
         blogTransition();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.linkManager.init();
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
@@ -726,6 +771,9 @@ export default CTAMap;
     blogTag: {
       execute: function () {
         blogTransition();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         window.linkManager.init();
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
@@ -743,6 +791,9 @@ export default CTAMap;
     quattroZeroQuattro: {
       execute: function () {
         defaultSimpleTransition();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
       },
       cleanup: function () {
         cleanUpTriggers();
@@ -753,6 +804,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         FirebaseAppManager.initLoginForm();
@@ -768,6 +822,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         MultiStepForm.init();
         window.AppForms.init();
         window.AppPasswordToggle.init();
@@ -782,6 +839,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         MultiStepForm.init();
         window.AppResetPassword.init();
       },
@@ -794,6 +854,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         window.AppUpdatePassword.init();
@@ -809,6 +872,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
       },
       cleanup: function () {
         cleanUpTriggers();
@@ -820,6 +886,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
       },
       cleanup: function () {
         cleanUpTriggers();
@@ -830,6 +899,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         DashboardManager.init();
         toggleFaq();
@@ -843,6 +915,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         AssessmentManager.init();
         MultiStepForm.init();
@@ -867,6 +942,8 @@ export default CTAMap;
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
             window.menuNavigation.handleLinkMenuHover();
+            scrollProgressLine();
+            initCustomCursor();
           });
         } else {
           window.safeRequestIdleCallback(() => {
@@ -884,6 +961,7 @@ export default CTAMap;
           setupVerticalContatti();
           genericPageTitleAnimations();
           ctaAnimations();
+          globalCtaButton();
           serviceWrapper();
         });
         // 🔹 PRIORITÀ BASSA - differita dopo load + verifica swiper
@@ -916,6 +994,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         setupGenericButtons();
         setupGenericCloseButtons();
         startMarquee();
@@ -929,6 +1010,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           showcaseTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -944,6 +1028,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         setupGenericButtons();
         setupGenericCloseButtons();
         initSliderCTA();        
@@ -957,6 +1044,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           showcaseTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }        
         setupGenericCloseButtons();             
       },
@@ -969,6 +1059,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           showcaseTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -984,6 +1077,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         setupGenericButtons();
         setupGenericCloseButtons();
         initSliderCTA();        
@@ -998,6 +1094,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         setupGenericCloseButtons();                     
       },
       cleanup: function () {
@@ -1010,6 +1109,9 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
         setupGenericCloseButtons();                     
       },
       cleanup: function () {
@@ -1021,6 +1123,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -1035,6 +1140,9 @@ export default CTAMap;
       execute: function () {
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
+        }
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();        
