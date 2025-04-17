@@ -7237,6 +7237,20 @@ function scrollToTopInstant() {
     );
   
     observer.observe(sliderWrapper);
+    const slides = document.querySelectorAll(".slider-ui-wrapper .swiper-slide");
+
+slides.forEach((slide) => {
+  const handleSlideEnter = () => pauseAutoAnimation();
+  const handleSlideLeave = () => resumeAutoAnimation();
+
+  slide.addEventListener("mouseenter", handleSlideEnter);
+  slide.addEventListener("mouseleave", handleSlideLeave);
+
+  window.pageSpecificListeners.push(
+    { element: slide, event: "mouseenter", handler: handleSlideEnter },
+    { element: slide, event: "mouseleave", handler: handleSlideLeave }
+  );
+});
   }
 
   function calendar() {
