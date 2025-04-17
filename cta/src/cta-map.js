@@ -82,6 +82,12 @@ export default CTAMap;
       scripts: [],
       styles: [],
     },
+    "669e49419a3d3f013cf0d7f6": {
+      name: "portfolio",
+      jsonKey: "",
+      scripts: [],
+      styles: [],
+    },
     "66d584f1d3fbec73d80a4bb7": {
       name: "Proposito",
       jsonKey: "66d584f1d3fbec73d80a4bb7",
@@ -475,8 +481,7 @@ export default CTAMap;
           ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
   
           try {
-            info();
-            window.linkManager.init();
+            info();            
             propositoAnimation.btnReadAnimation?.();
             propositoAnimation.btnCategoryAnimation?.();
             propositoAnimation.initializeSwiper?.();  
@@ -623,6 +628,18 @@ export default CTAMap;
         cleanUpPageListeners();
       },
     },
+    portfolio:{
+      execute: function () {
+        defaultSimpleTransition();
+        if (window.matchMedia("(min-width: 992px)").matches) {
+          initCustomCursor();
+        }
+      },
+      cleanup: function () {
+        cleanUpTriggers();
+        cleanUpPageListeners();
+      },
+    },
     contatti: {
       execute: function () {
         if (!window.isBarbaTransition) {
@@ -698,8 +715,7 @@ export default CTAMap;
         }
         if (window.matchMedia("(min-width: 992px)").matches) {
           initCustomCursor();
-        }
-        window.linkManager.init();
+        }        
         propositoAnimation.btnReadAnimation();
         propositoAnimation.NewsLetterAnimation();
         propositoAnimation.btnCategoryAnimation();
@@ -730,11 +746,12 @@ export default CTAMap;
     },
     blogPost: {
       execute: function () {
-        blogTransition();
+        if (!window.isBarbaTransition) {
+          blogTransition();
+        }          
         if (window.matchMedia("(min-width: 992px)").matches) {
           initCustomCursor();
-        }
-        window.linkManager.init();
+        }        
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
@@ -750,17 +767,20 @@ export default CTAMap;
     },
     blogCategory: {
       execute: function () {
-        blogTransition();
+        if (!window.isBarbaTransition) {
+          blogTransition();
+        }          
         if (window.matchMedia("(min-width: 992px)").matches) {
           initCustomCursor();
-        }
-        window.linkManager.init();
+        }        
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
         propositoAnimation.btnReadAnimation();
         propositoAnimation.NewsLetterAnimation();
         propositoAnimation.btnCategoryAnimation();
+        propositoAnimation.thumbnailImageAnimation();
+        propositoAnimation.postEntry();
         window.AppGeneralForms.init();
       },
       cleanup: function () {
@@ -770,11 +790,12 @@ export default CTAMap;
     },
     blogTag: {
       execute: function () {
-        blogTransition();
+        if (!window.isBarbaTransition) {
+          blogTransition();
+        }          
         if (window.matchMedia("(min-width: 992px)").matches) {
           initCustomCursor();
-        }
-        window.linkManager.init();
+        }        
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
@@ -971,8 +992,7 @@ export default CTAMap;
           ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
   
           try {
-            info();
-            window.linkManager.init();
+            info();            
             propositoAnimation.btnReadAnimation?.();
             propositoAnimation.btnCategoryAnimation?.();
             propositoAnimation.initializeSwiper?.();  

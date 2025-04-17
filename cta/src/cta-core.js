@@ -8,7 +8,9 @@ const functions = {
     loadScript,
     loadCSS,
     updatePageMetaAndInteractions,
-    updateOrCreateMeta,
+    updateOrCreateMetaFromDoc,
+    updateOrCreateLinkFromDoc,
+    updateCmsMetaTags,
     restartWebflowInteractions,
     trackPageView,
     blockScroll,
@@ -160,70 +162,118 @@ function cleanUpTriggers() {
   }
   
   function updatePageMetaAndInteractions(newPageHTML) {
-    // 1. Parse del nuovo HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(newPageHTML, "text/html");
   
-    // 2. Aggiorna il titolo della pagina
+    // 1. Titolo
     const newTitle = doc.querySelector("title");
-    if (newTitle) {
-      document.title = newTitle.textContent;
-    }
+    if (newTitle) document.title = newTitle.textContent;
   
-    // 3. Aggiorna data-wf-page
+    // 2. data-wf-page
     const newDataWfPage = doc.documentElement.getAttribute("data-wf-page");
     if (newDataWfPage) {
       document.documentElement.setAttribute("data-wf-page", newDataWfPage);
     }
   
-    // 4. Aggiorna meta description
-    const newMetaDescription = doc.querySelector('meta[name="description"]');
-    if (newMetaDescription) {
-      updateOrCreateMeta("description", newMetaDescription.content);
-    }
+    // 3. Meta description
+    updateOrCreateMetaFromDoc(doc, "name", "description");
   
-    // 5. Aggiorna Open Graph e Twitter meta
-    [
+    // 4. Meta standard social
+    const socialMetaProps = [
       "og:title",
       "og:description",
       "og:image",
+      "og:url",
+      "og:locale",
       "twitter:title",
       "twitter:description",
       "twitter:image",
-    ].forEach((property) => {
-      updateOrCreateMeta(
-        property,
-        doc.querySelector(`meta[property="${property}"]`)?.content
-      );
+    ];
+    socialMetaProps.forEach((prop) => {
+      updateOrCreateMetaFromDoc(doc, "property", prop);
     });
   
-    // 6. Riavvia le interazioni di Webflow
-    restartWebflowInteractions();
+    // 5. Meta extra SEO
+    updateOrCreateMetaFromDoc(doc, "name", "image");
+    updateOrCreateMetaFromDoc(doc, "itemprop", "image");
+    updateOrCreateMetaFromDoc(doc, "name", "url");
+    updateOrCreateMetaFromDoc(doc, "name", "robots");
   
-    // 7. Invia evento a Google Analytics
-    trackPageView();
+    // 6. <link rel="image_src">
+    updateOrCreateLinkFromDoc(doc, "image_src");
+  
+    // 7. <link rel="canonical">
+    updateOrCreateLinkFromDoc(doc, "canonical");
+  
+    // 8. <meta property="og:locale:alternate"> (tutti, se presenti)
+    const alternateLocales = doc.querySelectorAll(
+      'meta[property="og:locale:alternate"]'
+    );
+  
+    document
+      .querySelectorAll('meta[property="og:locale:alternate"]')
+      .forEach((el) => el.remove());
+    alternateLocales.forEach((meta) => {
+      const clone = meta.cloneNode(true);
+      document.head.appendChild(clone);
+    });
+  
+    // 9. Interazioni Webflow
+    restartWebflowInteractions();
   }
   
-  function updateOrCreateMeta(nameOrProperty, content) {
-    if (!content) return;
-    let meta = document.querySelector(
-      `meta[name="${nameOrProperty}"], meta[property="${nameOrProperty}"]`
-    );
-    if (meta) {
-      meta.setAttribute("content", content);
-    } else {
-      meta = document.createElement("meta");
-      if (
-        nameOrProperty.startsWith("og:") ||
-        nameOrProperty.startsWith("twitter:")
-      ) {
-        meta.setAttribute("property", nameOrProperty);
-      } else {
-        meta.setAttribute("name", nameOrProperty);
+  // Meta tag: aggiorna o crea
+  function updateOrCreateMetaFromDoc(doc, attrType, attrValue) {
+    const newMeta = doc.querySelector(`meta[${attrType}="${attrValue}"]`);
+    if (newMeta) {
+      let existing = document.head.querySelector(
+        `meta[${attrType}="${attrValue}"]`
+      );
+      if (!existing) {
+        existing = document.createElement("meta");
+        existing.setAttribute(attrType, attrValue);
+        document.head.appendChild(existing);
       }
-      meta.setAttribute("content", content);
-      document.head.appendChild(meta);
+      existing.setAttribute("content", newMeta.getAttribute("content"));
     }
+  }
+  
+  // Link tag: aggiorna o crea
+  function updateOrCreateLinkFromDoc(doc, relValue) {
+    const newLink = doc.querySelector(`link[rel="${relValue}"]`);
+    if (newLink) {
+      let existing = document.head.querySelector(`link[rel="${relValue}"]`);
+      if (!existing) {
+        existing = document.createElement("link");
+        existing.setAttribute("rel", relValue);
+        document.head.appendChild(existing);
+      }
+      existing.setAttribute("href", newLink.getAttribute("href"));
+    }
+  }
+  
+  function updateCmsMetaTags(doc) {
+    const cmsMetaProps = [
+      "og:url",
+      "fb:app_id",
+      "article:author",
+      "article:published_time",
+    ];
+  
+    cmsMetaProps.forEach((prop) => {
+      const newMeta = doc.querySelector(`meta[property="${prop}"]`);
+      if (newMeta && newMeta.getAttribute("content")) {
+        let existingMeta = document.head.querySelector(
+          `meta[property="${prop}"]`
+        );
+        if (!existingMeta) {
+          existingMeta = document.createElement("meta");
+          existingMeta.setAttribute("property", prop);
+          document.head.appendChild(existingMeta);
+        }
+        existingMeta.setAttribute("content", newMeta.getAttribute("content"));
+      }
+    });
   }
   
   function restartWebflowInteractions() {

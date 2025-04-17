@@ -53,13 +53,14 @@ const functions = {
     globalCtaButton,
     scrollProgressLine,
     initCustomCursor,
+    resetCustomCursor,
   };
 
   Object.keys(functions).forEach(fn => {
     window[fn] = functions[fn];
   });
 
-  export default { BurgerMenu: window.BurgerMenu, menuNavigation: window.menuNavigation, linkManager: window.linkManager, ctaStickyTransition: window.ctaStickyTransition, 
+  export default { BurgerMenu: window.BurgerMenu, menuNavigation: window.menuNavigation, ctaStickyTransition: window.ctaStickyTransition, 
     propositoAnimation: window.propositoAnimation, ctaStickyLastWork: window.ctaStickyLastWork, };
 
 
@@ -1245,62 +1246,6 @@ const showElements = [
     },
   };
 
-  window.linkManager = window.linkManager ||{
-    excludePatterns: ["/proposito-blog-posts/", "/categorie/", "/tags/", "/web-studio/"],
-  
-    init: function () {
-      if (!document.querySelectorAll("a[href]")) {
-        return;
-      }
-  
-      const excludedLinks = [...document.querySelectorAll("a[href]")].filter(
-        (link) =>
-          this.excludePatterns.some((pattern) => link.href.includes(pattern))
-      );
-  
-      if (excludedLinks.length === 0) {
-        console.log("Nessun link escluso trovato.");
-        return;
-      }
-  
-      excludedLinks.forEach((link) => {
-        link.addEventListener("click", (event) => {
-          event.preventDefault();
-          this.handleExcludedLinkClick(link);
-  
-          setTimeout(() => {
-            window.location.href = link.href;
-          }, 600);
-        });
-      });
-    },
-  
-    handleExcludedLinkClick: function (link) {
-      if (!gsap) {
-        console.error("GSAP non è caricato.");
-        return;
-      }
-  
-      gsap
-        .timeline()
-        .set(".prop-cover-wrapper", { display: "block" })
-        .to(".prop-cover-wrapper", {
-          y: "0vh",
-          duration: 0.6,
-          ease: "power3.inOut",
-        })
-        .to(
-          headerElements,
-          {
-            y: "-6rem",
-            duration: 0.6,
-            ease: "power2.out",
-          },
-          "-=0.6"
-        );
-    },
-  };
-
 //BARBA  
 window.isBarbaTransition = false;
 
@@ -1325,7 +1270,7 @@ function initBarbaWithGSAP() {
         window.isBarbaTransition = true; 
           const done = this.async();
           gsap.set(transitionElementsObj.transitionWrapper, {
-            display: "block",
+            visibility: "visible",
           });
           gsap
             .timeline({
@@ -1480,7 +1425,7 @@ function initBarbaWithGSAP() {
             window.isBarbaTransition = true; 
           const done = this.async();
           gsap.set(transitionElementsObj.transitionWrapper, {
-            display: "block",
+            visibility: "visible",
             y: 0,
             x: "100vw",
           });
@@ -1636,6 +1581,9 @@ function initBarbaWithGSAP() {
         leave(data) {
             window.isBarbaTransition = true; 
           const done = this.async();
+          gsap.set(transitionElementMenuObj.transitionMenuWrapper, {
+            visibility: "visible",
+          });
           gsap
             .timeline()
             .to(transitionElementMenuObj.transitionMenuWrapper, {
@@ -1749,8 +1697,8 @@ function initBarbaWithGSAP() {
         leave(data) {
             window.isBarbaTransition = true; 
           const done = this.async();
-          gsap.set(".transition-wrapper", {
-            display: "block",
+          gsap.set(transitionElementsObj.transitionWrapper, {
+            visibility: "visible",
           });
           gsap
             .timeline({
@@ -1906,7 +1854,7 @@ function initBarbaWithGSAP() {
           isBarbaTransition = true;
           const done = this.async();
           gsap.set(showcaseElementsObj.transitionWrapper, {
-            display: "block",
+           visibility: "visible",
           });
 
           gsap
@@ -2068,7 +2016,7 @@ function initBarbaWithGSAP() {
                 duration: 0.4,
                 ease: "power2.out",
               },
-              "-=0.2"
+              "-=0.4"
             );
         },
         after(data) {
@@ -2082,12 +2030,147 @@ function initBarbaWithGSAP() {
           }
         },
       },
+      {
+        name: "proposito-transition",
+        from: {
+          custom: ({ trigger }) =>
+            trigger instanceof HTMLElement &&
+            trigger.getAttribute("data-custom") === "propo",
+        },
+        leave(data) {
+          isBarbaTransition = true;
+          const done = this.async();
+          gsap.set(".prop-cover-wrapper", { visibility: "visible" });
+          gsap
+            .timeline({
+              onComplete: () => {
+                done();
+              },
+            })
+            .call(() => {
+              BurgerMenu.disableBurgerClick();
+            })
+            .to(".prop-cover-wrapper", {
+              y: "0vh",
+              duration: 0.8,
+              ease: "power3.inOut",
+            })
+            .to(
+              ".pro-span",
+              {
+                y: "0%",
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: { amount: 0.4 },
+              },
+              "-=0.4"
+            )
+            .to(
+              headerElements,
+              {
+                y: "-6rem",
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "-=0.6"
+            );
+        },
+        afterLeave(data) {
+          // Controlla se stai entrando nella home
+          if (data.current.namespace === "home") {
+            ScrollTrigger.getAll().forEach((trigger) => {
+              if (
+                trigger.vars.id &&
+                trigger.vars.id.startsWith("hero-trigger")
+              ) {
+                trigger.kill();
+              }
+            });
+          }
+        },
+        enter(data) {
+          const done = this.async();
+          const pageTl = gsap.timeline({
+            onComplete: () => {
+              lenisInstance.start();
+              BurgerMenu.enableBurgerClick();
+              gsap.set(".prop-cover-wrapper", { visibility: "hidden" });
+              gsap.set(
+                ".pro-span, .pro-top-trans, .proptype-transition, .web-propo, .magazine-propo",
+                {
+                  clearProps: "all",
+                }
+              );
+            },
+          });
+          pageTl
+            .call(() => {
+              done();
+            })
+            .to(".pro-top-trans", {
+              y: "0%",
+              duration: 0.6,
+              ease: "power2.out",
+              stagger: 0.2,
+            })
+            .to(
+              ".pro-span.transform",
+              {
+                y: "100%",
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: 0.2,
+              },
+              "-=0.95"
+            )
+            .to(
+              ".web-propo, .magazine-propo",
+              {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power1.inOut",
+                stagger: 0.2,
+              },
+              "<"
+            )
+            .to(
+              ".prop-cover-wrapper",
+              {
+                delay: 0.2,
+                y: "100vh",
+                duration: 1.2,
+                ease: "power2.inOut",
+              },
+              "-=0.4"
+            )
+            .to(
+              headerElements,
+              {
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "<"
+            );
+        },
+        after(data) {
+          updatePageMetaAndInteractions(data.next.html);
+          updateCmsMetaTags(
+            new DOMParser().parseFromString(data.next.html, "text/html")
+          );
+          initializeMainFunctions();
+          lenisInstance.update();
+          scrollToTopInstant();
+          lenisInstance.stop();
+          resetCustomCursor();
+          if (!cookieManager.getCookie("cta")) {
+            uiManager.showBanner();
+          }
+        },
+      },
     ],
     prevent: ({ href }) => {
-      const excludePatterns = [
-        "/proposito-blog-posts/",
-        "/categorie/",
-        "/tags/",
+      const excludePatterns = [       
         "/web-studio/",
       ];
       return excludePatterns.some((pattern) => href.includes(pattern));
@@ -2095,7 +2178,6 @@ function initBarbaWithGSAP() {
     hooks: {
       after() {
         window.isBarbaTransition = false;
-
       },
     },
     preventRunning: true,
@@ -6145,85 +6227,72 @@ function scrollToTopInstant() {
 
   //Animazioni VARIE
   function blogTransition() {
-    const coverTL = gsap.timeline();
-    const tlPlus = gsap.timeline();
-    const masterTimeline = gsap.timeline({
+    const coverTL = gsap.timeline({
       onStart: () => {
         blockScroll();
       },
       onComplete: () => {
-        gsap.set(".prop-cover-wrapper", { display: "none", y: "100vh" });
+        gsap.set(".prop-cover-wrapper", { visibility: "hidden" });
         gsap.set(
-          "#colore-punto-brand-chiaro-pro, .proptype-transition, .category-cover, #c-pro, #t-pro, #a-pro, #punto-pro, #colore-punto-brand-pro, #freccia-pro, .prop-wrapper-background, .category-cover",
-          { clearProps: "all" }
+          ".pro-span, .pro-top-trans, .proptype-transition, .web-propo, .magazine-propo",
+          {
+            clearProps: "all",
+          }
         );
       },
     });
-  
-    masterTimeline.add(coverTL, 0).add(tlPlus, 1.2);
-  
     coverTL
-      .to("#colore-punto-brand-chiaro-pro", {
-        scale: 0,
-        transformOrigin: "center center",
+      .to(".pro-span", {
+        y: "0%",
         duration: 0.6,
-        ease: "power4.out",
+        ease: "power2.out",
+        stagger: { amount: 0.4 },
+      })
+      .to(".pro-top-trans", {
+        y: "0%",
+        duration: 0.6,
+        ease: "power2.out",
+        stagger: 0.2,
       })
       .to(
-        ".proptype-transition",
+        ".pro-span.transform",
         {
-          rotateX: -90,
-          duration: 0.8,
-          transformOrigin: "top",
-          ease: "power1.out",
+          y: "100%",
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.2,
         },
-        "<"
+        "-=0.95"
       )
       .to(
-        ".category-cover",
+        ".web-propo, .magazine-propo",
         {
-          rotateX: 0,
-          duration: 0.8,
-          transformOrigin: "top",
-          ease: "power1.out",
-        },
-        "<"
-      )
-      .to(
-        "#c-pro, #t-pro, #a-pro",
-        {
-          y: "100vh",
+          opacity: 1,
           duration: 0.6,
           ease: "power1.inOut",
           stagger: 0.2,
         },
-        "-=0.2"
-      )
-      .to(
-        "#punto-pro, #colore-punto-brand-pro, #freccia-pro",
-        {
-          y: "100vh",
-          duration: 0.6,
-          ease: "power1.inOut",
-        },
         "<"
       )
       .to(
-        ".prop-wrapper-background, .category-cover",
+        ".prop-cover-wrapper",
         {
+          delay: 0.2,
           y: "100vh",
           duration: 1.2,
           ease: "power2.inOut",
         },
-        "-=0.6"
-      );
-  
-    tlPlus
-      .to(headerElements, {
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      })
+        "-=0.4"
+      )
+      .to(
+        headerElements,
+        {
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      )
       .call(() => {
         unblockScroll();
       });
@@ -8122,30 +8191,8 @@ function scrollToTopInstant() {
           },
         });
       });
-    },
-  
-    postEntry: function () {
-      const relatedPosts = document.querySelectorAll(".related-post-category");
-      gsap.set(".related-post-category", { opacity: 0, y: "-20%" });
-  
-      relatedPosts.forEach((post) => {
-        // Creiamo un'animazione per ciascun .related-post-category individualmente
-        ScrollTrigger.create({
-          trigger: post, // Ogni singolo post è il trigger
-          start: "top 80%", // L'animazione parte quando il post è al 80% della viewport
-          toggleActions: "play none none none", // Anima quando entra, reverte quando esce
-          onEnter: () => {
-            // Animazione per il singolo post
-            gsap.to(post, {
-              y: "0%",
-              opacity: 1,
-              duration: 0.5,
-              ease: "power1.inOut",
-            });
-          },
-        });
-      });
-    },
+    },  
+   
     init: function () {
       this.initializeSwiper();
       this.categoryLabel();
@@ -9477,3 +9524,15 @@ function scrollToTopInstant() {
       );
     });  
   }
+  function resetCustomCursor() {
+    const cursorNormal = document.getElementById("cursor-svg");
+    const cursorGrab = document.getElementById("cursor-svg-grab");
+    const cursorGrabbing = document.getElementById("cursor-svg-grabbing");
+  
+    if (cursorNormal && cursorGrab && cursorGrabbing) {
+      cursorNormal.style.opacity = 1;
+      cursorGrab.style.opacity = 0;
+      cursorGrabbing.style.opacity = 0;
+    }
+  }
+  
