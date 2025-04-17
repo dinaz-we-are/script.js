@@ -7145,33 +7145,22 @@ function scrollToTopInstant() {
           .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        button.addEventListener("mouseenter", () => {
-          pauseAutoAnimation();
-          hoverTl.play();
-        });
-        button.addEventListener("mouseleave", () => {
-          resumeAutoAnimation();
-          hoverTl.reverse();
-        });
-  
-        window.pageSpecificListeners.push(
-          {
-            element: button,
-            event: "mouseenter",
-            handler: () => pauseAutoAnimation(),
-          },
-          {
-            element: button,
-            event: "mouseleave",
-            handler: () => resumeAutoAnimation(),
-          },
-          { element: button, event: "mouseenter", handler: () => hoverTl.play() },
-          {
-            element: button,
-            event: "mouseleave",
-            handler: () => hoverTl.reverse(),
-          }
-        );
+          const handleEnter = () => {
+            pauseAutoAnimation();
+            hoverTl.play();
+          };
+          const handleLeave = () => {
+            resumeAutoAnimation();
+            hoverTl.reverse();
+          };
+          
+          button.addEventListener("mouseenter", handleEnter);
+          button.addEventListener("mouseleave", handleLeave);
+          
+          window.pageSpecificListeners.push(
+            { element: button, event: "mouseenter", handler: handleEnter },
+            { element: button, event: "mouseleave", handler: handleLeave }
+          );          
       });
     });
   
@@ -7189,50 +7178,34 @@ function scrollToTopInstant() {
           .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        button.addEventListener("touchstart", () => {
-          pauseAutoAnimation();
-          touchTl.play();
-        });
-  
-        button.addEventListener("touchend", () => {
-          resumeAutoAnimation();
-          touchTl.reverse();
-        });
-  
-        window.pageSpecificListeners.push(
-          {
-            element: button,
-            event: "touchstart",
-            handler: () => pauseAutoAnimation(),
-          },
-          {
-            element: button,
-            event: "touchend",
-            handler: () => resumeAutoAnimation(),
-          },
-          { element: button, event: "touchstart", handler: () => touchTl.play() },
-          { element: button, event: "touchend", handler: () => touchTl.reverse() }
-        );
+          const handleTouchStart = () => {
+            pauseAutoAnimation();
+            touchTl.play();
+          };
+          const handleTouchEnd = () => {
+            resumeAutoAnimation();
+            touchTl.reverse();
+          };
+          
+          button.addEventListener("touchstart", handleTouchStart);
+          button.addEventListener("touchend", handleTouchEnd);
+          
+          window.pageSpecificListeners.push(
+            { element: button, event: "touchstart", handler: handleTouchStart },
+            { element: button, event: "touchend", handler: handleTouchEnd }
+          );          
       });
     });
   
     buttons.forEach((button) => {
-      button.addEventListener("click", () => {
-        startAutoAnimation();
-      });
+      const handleClick = () => startAutoAnimation();
 
-      sliderWrapper.addEventListener("mouseenter", () => {
-        pauseAutoAnimation();
-      });
-      sliderWrapper.addEventListener("mouseleave", () => {
-        resumeAutoAnimation();
-      });
-  
+      button.addEventListener("click", handleClick);
       window.pageSpecificListeners.push({
         element: button,
         event: "click",
-        handler: () => startAutoAnimation(),
-      });
+        handler: handleClick,
+      });      
     });
 
     window.pageSpecificListeners.push(
@@ -7903,21 +7876,16 @@ function scrollToTopInstant() {
                 "-=0.2"
               );
   
-            button.addEventListener("mouseenter", () => hoverTl.play());
-            button.addEventListener("mouseleave", () => hoverTl.reverse());
-  
-            window.pageSpecificListeners.push(
-              {
-                element: button,
-                event: "mouseenter",
-                handler: () => hoverTl.play(),
-              },
-              {
-                element: button,
-                event: "mouseleave",
-                handler: () => hoverTl.reverse(),
-              }
-            );
+              const handleEnter = () => hoverTl.play();
+              const handleLeave = () => hoverTl.reverse();
+              
+              button.addEventListener("mouseenter", handleEnter);
+              button.addEventListener("mouseleave", handleLeave);
+              
+              window.pageSpecificListeners.push(
+                { element: button, event: "mouseenter", handler: handleEnter },
+                { element: button, event: "mouseleave", handler: handleLeave }
+              );
           });
         });
   
@@ -7939,21 +7907,17 @@ function scrollToTopInstant() {
                 "-=0.2"
               );
   
-            button.addEventListener("touchstart", () => touchTl.play());
-            button.addEventListener("touchend", () => touchTl.reverse());
-  
-            window.pageSpecificListeners.push(
-              {
-                element: button,
-                event: "touchstart",
-                handler: () => touchTl.play(),
-              },
-              {
-                element: button,
-                event: "touchend",
-                handler: () => touchTl.reverse(),
-              }
-            );
+              const handleTouchStart = () => touchTl.play();
+              const handleTouchEnd = () => touchTl.reverse();
+              
+              button.addEventListener("touchstart", handleTouchStart);
+              button.addEventListener("touchend", handleTouchEnd);
+              
+              window.pageSpecificListeners.push(
+                { element: button, event: "touchstart", handler: handleTouchStart },
+                { element: button, event: "touchend", handler: handleTouchEnd }
+              );
+              
           });
         });
       });   
@@ -7977,19 +7941,31 @@ function scrollToTopInstant() {
           }
   
           // Eventi hover
-          label.addEventListener("mouseenter", () => animateCategoryLabel(true));
-          label.addEventListener("mouseleave", () => animateCategoryLabel(false));
-  
-          // Eventi touch
-          label.addEventListener("touchstart", () => animateCategoryLabel(true));
-          label.addEventListener("touchend", () => animateCategoryLabel(false));
+          const handleEnter = () => animateCategoryLabel(true);
+          const handleLeave = () => animateCategoryLabel(false);
+          const handleTouchStart = () => animateCategoryLabel(true);
+          const handleTouchEnd = () => animateCategoryLabel(false);
+    
+          // Applichiamo gli eventi
+          label.addEventListener("mouseenter", handleEnter);
+          label.addEventListener("mouseleave", handleLeave);
+          label.addEventListener("touchstart", handleTouchStart);
+          label.addEventListener("touchend", handleTouchEnd);
+    
+          // Registriamo gli handler reali
+          window.pageSpecificListeners.push(
+            { element: label, event: "mouseenter", handler: handleEnter },
+            { element: label, event: "mouseleave", handler: handleLeave },
+            { element: label, event: "touchstart", handler: handleTouchStart },
+            { element: label, event: "touchend", handler: handleTouchEnd }
+          );
         });
       });
     },
   
     tagLinkAnimation: function () {
       const tagLinks = document.querySelectorAll(".tag-link");
-  
+    
       tagLinks.forEach((tag) => {
         let context = gsap.context(() => {
           function animateTagLink(isHover) {
@@ -8000,17 +7976,30 @@ function scrollToTopInstant() {
               ease: "back.out(3)",
             });
           }
-  
-          // Eventi hover
-          tag.addEventListener("mouseenter", () => animateTagLink(true));
-          tag.addEventListener("mouseleave", () => animateTagLink(false));
-  
-          // Eventi touch (per dispositivi mobili)
-          tag.addEventListener("touchstart", () => animateTagLink(true));
-          tag.addEventListener("touchend", () => animateTagLink(false));
-        }, tag); // Applichiamo il context a ciascun tag-link
+    
+          // ✅ Handler nominati
+          const handleEnter = () => animateTagLink(true);
+          const handleLeave = () => animateTagLink(false);
+          const handleTouchStart = () => animateTagLink(true);
+          const handleTouchEnd = () => animateTagLink(false);
+    
+          // ✅ Aggiunta eventi
+          tag.addEventListener("mouseenter", handleEnter);
+          tag.addEventListener("mouseleave", handleLeave);
+          tag.addEventListener("touchstart", handleTouchStart);
+          tag.addEventListener("touchend", handleTouchEnd);
+    
+          // ✅ Tracciamento per rimozione
+          window.pageSpecificListeners.push(
+            { element: tag, event: "mouseenter", handler: handleEnter },
+            { element: tag, event: "mouseleave", handler: handleLeave },
+            { element: tag, event: "touchstart", handler: handleTouchStart },
+            { element: tag, event: "touchend", handler: handleTouchEnd }
+          );
+        }, tag); // Context GSAP applicato al singolo tag
       });
     },
+
     btnReadAnimation: function () {
       const btnReads = document.querySelectorAll(".btn-read");
   
@@ -8049,10 +8038,23 @@ function scrollToTopInstant() {
           }
         }
   
-        btn.addEventListener("mouseenter", () => animateBtnRead(true));
-        btn.addEventListener("mouseleave", () => animateBtnRead(false));
-        btn.addEventListener("touchstart", () => animateBtnRead(true));
-        btn.addEventListener("touchend", () => animateBtnRead(false));
+        const handleMouseEnter = () => animateBtnRead(true);
+        const handleMouseLeave = () => animateBtnRead(false);
+        const handleTouchStart = () => animateBtnRead(true);
+        const handleTouchEnd = () => animateBtnRead(false);
+        
+        btn.addEventListener("mouseenter", handleMouseEnter);
+        btn.addEventListener("mouseleave", handleMouseLeave);
+        btn.addEventListener("touchstart", handleTouchStart);
+        btn.addEventListener("touchend", handleTouchEnd);
+        
+        window.pageSpecificListeners.push(
+          { element: btn, event: "mouseenter", handler: handleMouseEnter },
+          { element: btn, event: "mouseleave", handler: handleMouseLeave },
+          { element: btn, event: "touchstart", handler: handleTouchStart },
+          { element: btn, event: "touchend", handler: handleTouchEnd }
+        );
+        
       });
     },
     NewsLetterAnimation: function () {
@@ -8129,10 +8131,23 @@ function scrollToTopInstant() {
         }
   
         // Eventi per hover e touch
-        btn.addEventListener("mouseenter", () => animateBtnCategory(true));
-        btn.addEventListener("mouseleave", () => animateBtnCategory(false));
-        btn.addEventListener("touchstart", () => animateBtnCategory(true));
-        btn.addEventListener("touchend", () => animateBtnCategory(false));
+        const handleCategoryEnter = () => animateBtnCategory(true);
+        const handleCategoryLeave = () => animateBtnCategory(false);
+        const handleCategoryTouchStart = () => animateBtnCategory(true);
+        const handleCategoryTouchEnd = () => animateBtnCategory(false);
+        
+        btn.addEventListener("mouseenter", handleCategoryEnter);
+        btn.addEventListener("mouseleave", handleCategoryLeave);
+        btn.addEventListener("touchstart", handleCategoryTouchStart);
+        btn.addEventListener("touchend", handleCategoryTouchEnd);
+        
+        window.pageSpecificListeners.push(
+          { element: btn, event: "mouseenter", handler: handleCategoryEnter },
+          { element: btn, event: "mouseleave", handler: handleCategoryLeave },
+          { element: btn, event: "touchstart", handler: handleCategoryTouchStart },
+          { element: btn, event: "touchend", handler: handleCategoryTouchEnd }
+        );
+        
       });
     },
     thumbnailImageAnimation: function () {
@@ -8164,8 +8179,16 @@ function scrollToTopInstant() {
           );
   
           // Aggiungiamo gli eventi hover
-          container.addEventListener("mouseenter", () => tl.play()); // Attiva l'animazione all'hover
-          container.addEventListener("mouseleave", () => tl.reverse()); // Reverte l'animazione al termine dell'hover
+          const handleContainerEnter = () => tl.play();
+          const handleContainerLeave = () => tl.reverse();
+          
+          container.addEventListener("mouseenter", handleContainerEnter);
+          container.addEventListener("mouseleave", handleContainerLeave);
+          
+          window.pageSpecificListeners.push(
+            { element: container, event: "mouseenter", handler: handleContainerEnter },
+            { element: container, event: "mouseleave", handler: handleContainerLeave }
+          );          
         }
       });
     },
@@ -8192,6 +8215,45 @@ function scrollToTopInstant() {
         });
       });
     },  
+
+    shareBtnAnimation: function () {
+      const shareBtns = document.querySelectorAll(".share-btn-propo");
+    
+      shareBtns.forEach((btn) => {
+        const svgCont = btn.querySelector(".svg-cont");
+    
+        let context = gsap.context(() => {
+          function animateSvgCont(show) {
+            gsap.to(svgCont, {
+              duration: 0.3,
+              opacity: show ? 1 : 0,
+              right: show ? 0 : "auto",
+              ease: "power1.out",
+            });
+          }
+    
+          // ✅ Handler nominati
+          const handleEnter = () => animateSvgCont(true);
+          const handleLeave = () => animateSvgCont(false);
+          const handleTouchStart = () => animateSvgCont(true);
+          const handleTouchEnd = () => animateSvgCont(false);
+    
+          // ✅ Eventi
+          btn.addEventListener("mouseenter", handleEnter);
+          btn.addEventListener("mouseleave", handleLeave);
+          btn.addEventListener("touchstart", handleTouchStart);
+          btn.addEventListener("touchend", handleTouchEnd);
+    
+          // ✅ Tracciamento per cleanup
+          window.pageSpecificListeners.push(
+            { element: btn, event: "mouseenter", handler: handleEnter },
+            { element: btn, event: "mouseleave", handler: handleLeave },
+            { element: btn, event: "touchstart", handler: handleTouchStart },
+            { element: btn, event: "touchend", handler: handleTouchEnd }
+          );
+        }, btn);
+      });
+    },    
    
     init: function () {
       this.initializeSwiper();
@@ -8200,6 +8262,7 @@ function scrollToTopInstant() {
       this.btnReadAnimation();
       this.NewsLetterAnimation();
       this.btnCategoryAnimation();
+      this.shareBtnAnimation();
       if (window.matchMedia("(min-width: 768px)").matches) {
         this.thumbnailImageAnimation();
       }
@@ -8290,33 +8353,23 @@ function scrollToTopInstant() {
           .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        button.addEventListener("mouseenter", () => {
-          pauseAutoAnimation();
-          hoverTl.play();
-        });
-        button.addEventListener("mouseleave", () => {
-          resumeAutoAnimation();
-          hoverTl.reverse();
-        });
-  
-        window.pageSpecificListeners.push(
-          {
-            element: button,
-            event: "mouseenter",
-            handler: () => pauseAutoAnimation(),
-          },
-          {
-            element: button,
-            event: "mouseleave",
-            handler: () => resumeAutoAnimation(),
-          },
-          { element: button, event: "mouseenter", handler: () => hoverTl.play() },
-          {
-            element: button,
-            event: "mouseleave",
-            handler: () => hoverTl.reverse(),
-          }
-        );
+          const handleEnter = () => {
+            pauseAutoAnimation();
+            hoverTl.play();
+          };
+          
+          const handleLeave = () => {
+            resumeAutoAnimation();
+            hoverTl.reverse();
+          };
+          
+          button.addEventListener("mouseenter", handleEnter);
+          button.addEventListener("mouseleave", handleLeave);
+          
+          window.pageSpecificListeners.push(
+            { element: button, event: "mouseenter", handler: handleEnter },
+            { element: button, event: "mouseleave", handler: handleLeave }
+          );          
       });
     });
   
@@ -8334,44 +8387,37 @@ function scrollToTopInstant() {
           .to(bg, { scale: 1, duration: 0.3, ease: "power2.out" })
           .to(border, { opacity: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
   
-        button.addEventListener("touchstart", () => {
-          pauseAutoAnimation();
-          touchTl.play();
-        });
-  
-        button.addEventListener("touchend", () => {
-          resumeAutoAnimation();
-          touchTl.reverse();
-        });
-  
-        window.pageSpecificListeners.push(
-          {
-            element: button,
-            event: "touchstart",
-            handler: () => pauseAutoAnimation(),
-          },
-          {
-            element: button,
-            event: "touchend",
-            handler: () => resumeAutoAnimation(),
-          },
-          { element: button, event: "touchstart", handler: () => touchTl.play() },
-          { element: button, event: "touchend", handler: () => touchTl.reverse() }
-        );
+          const handleTouchStart = () => {
+            pauseAutoAnimation();
+            touchTl.play();
+          };
+          
+          const handleTouchEnd = () => {
+            resumeAutoAnimation();
+            touchTl.reverse();
+          };
+          
+          button.addEventListener("touchstart", handleTouchStart);
+          button.addEventListener("touchend", handleTouchEnd);
+          
+          window.pageSpecificListeners.push(
+            { element: button, event: "touchstart", handler: handleTouchStart },
+            { element: button, event: "touchend", handler: handleTouchEnd }
+          );          
       });
     });
   
     buttons.forEach((button) => {
-      button.addEventListener("click", () => {
-        startAutoAnimation();
-      });
-  
+      const handleClick = () => startAutoAnimation();
+    
+      button.addEventListener("click", handleClick);
+    
       window.pageSpecificListeners.push({
         element: button,
         event: "click",
-        handler: () => startAutoAnimation(),
+        handler: handleClick,
       });
-    });
+    });    
   
     const observer = new IntersectionObserver(
       (entries) => {

@@ -758,6 +758,7 @@ export default CTAMap;
         propositoAnimation.btnReadAnimation();
         propositoAnimation.NewsLetterAnimation();
         propositoAnimation.btnCategoryAnimation();
+        propositoAnimation.shareBtnAnimation();
         window.AppGeneralForms.init();
       },
       cleanup: function () {
