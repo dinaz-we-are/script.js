@@ -9497,6 +9497,8 @@ slides.forEach((slide) => {
     });
   }
 
+  let currentCursorState = "normal"; // "normal", "grab", "grabbing"
+
   function initCustomCursor() {
     if (!cursorNormal || !cursorGrab || !cursorGrabbing) {
       cacheCursorElements(); // li assegna solo se non già definiti
@@ -9575,17 +9577,21 @@ slides.forEach((slide) => {
         cursorNormal.style.opacity = 0;
         cursorGrab.style.opacity = 1;
         cursorGrabbing.style.opacity = 0;
+        currentCursorState = "grab";
       };
   
       const setGrabbingCursor = () => {
+        cursorNormal.style.opacity = 0;
         cursorGrab.style.opacity = 0;
         cursorGrabbing.style.opacity = 1;
+        currentCursorState = "grabbing";
       };
   
       const resetCursor = () => {
         cursorNormal.style.opacity = 1;
         cursorGrab.style.opacity = 0;
         cursorGrabbing.style.opacity = 0;
+        currentCursorState = "normal";
       };
   
       // Quando entri nello swiper
@@ -9613,17 +9619,17 @@ slides.forEach((slide) => {
   
     swiperInteractiveElements.forEach((el) => {
       const handleEnter = () => {
-        // Ritorna cursore normale
         cursorNormal.style.opacity = 1;
         cursorGrab.style.opacity = 0;
         cursorGrabbing.style.opacity = 0;
+        currentCursorState = "normal";
       };
   
       const handleLeave = () => {
-        // Torna grab dopo aver lasciato
         cursorNormal.style.opacity = 0;
         cursorGrab.style.opacity = 1;
         cursorGrabbing.style.opacity = 0;
+        currentCursorState = "grab";
       };
   
       el.addEventListener("pointerenter", handleEnter);
@@ -9633,12 +9639,15 @@ slides.forEach((slide) => {
         { element: el, event: "pointerenter", handler: handleEnter },
         { element: el, event: "pointerleave", handler: handleLeave }
       );
-    });  
+    });
   }
+  
   function resetCustomCursor() {
-    if (cursorNormal && cursorGrab && cursorGrabbing) {
-      cursorNormal.style.opacity = 1;
-      cursorGrab.style.opacity = 0;
-      cursorGrabbing.style.opacity = 0;
-    }
+    if (!cursorNormal || !cursorGrab || !cursorGrabbing) return;
+  
+    // Ripristina sempre lo stato base
+    cursorNormal.style.opacity = 1;
+    cursorGrab.style.opacity = 0;
+    cursorGrabbing.style.opacity = 0;
+    currentCursorState = "normal";
   }
