@@ -452,8 +452,7 @@ export default CTAMap;
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
             window.menuNavigation.handleLinkMenuHover();
-            scrollProgressLine();
-            initCustomCursor();
+            scrollProgressLine();           
           });
         } else {
           window.safeRequestIdleCallback(() => {
@@ -464,6 +463,11 @@ export default CTAMap;
   
         // 🔹 PRIORITÀ MEDIA - idle
         window.safeRequestIdleCallback(() => {
+          if (shouldEnableCustomCursor()) {
+            initCustomCursor();
+          } else {
+            document.body.classList.add("no-cursor"); 
+          }
           createScrollTriggerScrollWrapper();
           createScrollTriggerHero();
           setupShowcaseButtons();
@@ -481,6 +485,7 @@ export default CTAMap;
           ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
   
           try {
+            setupScrollColorChange();
             info();            
             propositoAnimation.btnReadAnimation?.();
             propositoAnimation.btnCategoryAnimation?.();
@@ -505,11 +510,13 @@ export default CTAMap;
         }
         animationPageEnterDesign();
         pageServiceScrollTriggerDesign();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         window.safeRequestIdleCallback(() => {
-          videoPause();
+          setupScrollColorChange();
           logoAnima();
           toggleFaq();
           servicePageWrapper();
@@ -532,11 +539,16 @@ export default CTAMap;
         pageServiceScrollTriggerWeb();
         if (window.matchMedia("(min-width: 992px)").matches) {
           window.safeRequestIdleCallback(() => {
-            ctaStickyLastWork.reset();
-            initCustomCursor();
+            ctaStickyLastWork.reset();           
           });
-        }    
+        }  
+        if (shouldEnableCustomCursor()) {
+          initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }  
         window.safeRequestIdleCallback(() => {
+          setupScrollColorChange();
           setupPageShowcaseButtons();
           videoPause();
           swiperUI();
@@ -560,16 +572,18 @@ export default CTAMap;
         }
         animationPageEnterMarketing();
         pageServiceScrollTriggerSeo();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         window.safeRequestIdleCallback(() => {
+          setupScrollColorChange();
           changePrice();
           toggleServiceSection();
           toggleButtonAnimation();
           toggleFaq();
-          secondSection(false);
-          ctaAnimations();
+          secondSection(false);         
           globalCtaButton();
           info();
         });
@@ -587,10 +601,13 @@ export default CTAMap;
         animationPageEnterWomen();
         videoPause();
         pageServiceScrollTriggerWomen();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         window.safeRequestIdleCallback(() => {
+          setupScrollColorChange();
           toggleFaq();
           servicePageWrapper();
           ctaAnimations();
@@ -610,10 +627,13 @@ export default CTAMap;
         }
         animationPageEnterAbout();
         startInfiniteMarquee();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
-        window.safeRequestIdleCallback(() => {        
+        window.safeRequestIdleCallback(() => { 
+          setupScrollColorChange();      
           studioAnimations();
           genericPageTitleAnimations();
           serviceWrapper();
@@ -631,8 +651,10 @@ export default CTAMap;
     portfolio:{
       execute: function () {
         defaultSimpleTransition();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
       },
       cleanup: function () {
@@ -645,8 +667,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -662,8 +686,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -679,8 +705,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -696,8 +724,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -713,9 +743,12 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }        
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }
+        setupScrollColorChange();      
         propositoAnimation.btnReadAnimation();
         propositoAnimation.NewsLetterAnimation();
         propositoAnimation.btnCategoryAnimation();
@@ -735,9 +768,12 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }       
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }
+        setupScrollColorChange();      
       },
       cleanup: function () {
         cleanUpTriggers();
@@ -749,9 +785,12 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           blogTransition();
         }          
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }        
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }
+        setupScrollColorChange();      
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
@@ -771,9 +810,12 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           blogTransition();
         }          
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }        
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }  
+        setupScrollColorChange();   
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
@@ -794,9 +836,12 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           blogTransition();
         }          
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }        
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }  
+        setupScrollColorChange();    
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
@@ -813,8 +858,10 @@ export default CTAMap;
     quattroZeroQuattro: {
       execute: function () {
         defaultSimpleTransition();
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
       },
       cleanup: function () {
@@ -827,8 +874,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         FirebaseAppManager.initLoginForm();
@@ -844,8 +893,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppForms.init();
@@ -861,8 +912,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppResetPassword.init();
@@ -877,8 +930,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppUpdatePassword.init();
@@ -894,8 +949,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
       },
       cleanup: function () {
@@ -908,8 +965,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
       },
       cleanup: function () {
@@ -922,8 +981,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         DashboardManager.init();
         toggleFaq();
@@ -938,8 +999,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultSimpleTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         AssessmentManager.init();
         MultiStepForm.init();
@@ -964,8 +1027,7 @@ export default CTAMap;
           window.safeRequestIdleCallback(() => {
             ctaStickyTransition.reset();
             window.menuNavigation.handleLinkMenuHover();
-            scrollProgressLine();
-            initCustomCursor();
+            scrollProgressLine();            
           });
         } else {
           window.safeRequestIdleCallback(() => {
@@ -973,7 +1035,11 @@ export default CTAMap;
             showcaseTextContentMobile();
           });
         }
-  
+        if (shouldEnableCustomCursor()) {
+          initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }
         // 🔹 PRIORITÀ MEDIA - idle
         window.safeRequestIdleCallback(() => {
           createScrollTriggerScrollWrapper();
@@ -993,6 +1059,7 @@ export default CTAMap;
           ).catch((err) => console.error("❌ Errore caricamento Swiper:", err));
   
           try {
+            setupScrollColorChange();
             info();            
             propositoAnimation.btnReadAnimation?.();
             propositoAnimation.btnCategoryAnimation?.();
@@ -1015,8 +1082,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -1032,8 +1101,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -1049,8 +1120,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -1066,9 +1139,11 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
-        }        
+        } else {
+          document.body.classList.add("no-cursor"); 
+        }    
         setupGenericCloseButtons();             
       },
       cleanup: function () {
@@ -1081,8 +1156,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -1098,8 +1175,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericButtons();
         setupGenericCloseButtons();
@@ -1115,8 +1194,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericCloseButtons();                     
       },
@@ -1130,8 +1211,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           showcaseTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         setupGenericCloseButtons();                     
       },
@@ -1145,8 +1228,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();
@@ -1162,8 +1247,10 @@ export default CTAMap;
         if (!window.isBarbaTransition) {
           defaultEnterTransition();
         }
-        if (window.matchMedia("(min-width: 992px)").matches) {
+        if (shouldEnableCustomCursor()) {
           initCustomCursor();
+        } else {
+          document.body.classList.add("no-cursor"); 
         }
         MultiStepForm.init();
         window.AppGeneralForms.init();        

@@ -27,7 +27,8 @@ const functions = {
     servicePageWrapper,
     blogTransition,
     smoothScrollToTop,
-    dataColorAndScrollTop,
+    setupScrollToTop,
+    setupScrollColorChange,
     secondSection,
     info,
     videoPause,
@@ -53,7 +54,7 @@ const functions = {
     globalCtaButton,
     scrollProgressLine,
     initCustomCursor,
-    resetCustomCursor,
+    resetCustomCursor,    
   };
 
   Object.keys(functions).forEach(fn => {
@@ -245,6 +246,17 @@ const showElements = [
     document.getElementById("a"),
   ].filter((el) => el);
   
+  let cursorNormal = null;
+  let cursorGrab = null;
+  let cursorGrabbing = null;
+  
+  function cacheCursorElements() {
+    if (!shouldEnableCustomCursor()) return;
+    cursorNormal = document.getElementById("cursor-svg");
+    cursorGrab = document.getElementById("cursor-svg-grab");
+    cursorGrabbing = document.getElementById("cursor-svg-grabbing");
+  }
+
   window.BurgerMenu = window.BurgerMenu || {
     menuOpen: false,
     isHomePage: false, // Puoi passarlo dinamicamente quando necessario
@@ -574,7 +586,7 @@ const showElements = [
       if (!this.menuOpen) {
         this.disableBurgerHover();
         this.disableBackHomeLink();
-        gsap.set(burgerElements.wrapper, { display: "flex" });
+        gsap.set(burgerElements.wrapper, { visibility: "visible" });
   
         tl.to(burgerElements.row, {
           y: "0vh",
@@ -2059,11 +2071,11 @@ function initBarbaWithGSAP() {
               ".pro-span",
               {
                 y: "0%",
-                duration: 0.6,
-                ease: "power2.out",
+                duration: 0.8,
+                ease: "power3.inOut",
                 stagger: { amount: 0.4 },
               },
-              "-=0.4"
+              "-=0.6"
             )
             .to(
               headerElements,
@@ -2161,8 +2173,7 @@ function initBarbaWithGSAP() {
           initializeMainFunctions();
           lenisInstance.update();
           scrollToTopInstant();
-          lenisInstance.stop();
-          resetCustomCursor();
+          lenisInstance.stop();          
           if (!cookieManager.getCookie("cta")) {
             uiManager.showBanner();
           }
@@ -2178,6 +2189,9 @@ function initBarbaWithGSAP() {
     hooks: {
       after() {
         window.isBarbaTransition = false;
+        if (shouldEnableCustomCursor()) {
+          resetCustomCursor();
+        }
       },
     },
     preventRunning: true,
@@ -6309,8 +6323,61 @@ function scrollToTopInstant() {
     }
   }
 
-  function dataColorAndScrollTop() {
+  function setupScrollToTop(targetSelector = "body") {
+    const target = document.querySelector(targetSelector);
+  
+    document.querySelectorAll('[data-scroll="top"]').forEach((button) => {
+      button.addEventListener("click", () => {
+        // Fade out
+        if (target) {
+          gsap.to(target, {
+            opacity: 0,
+            duration: 0.4,
+            ease: "power1.out",
+          });
+        }
+  
+        // Scroll al top
+        const scrollComplete = () => {
+          if (target) {
+            gsap.to(target, {
+              opacity: 1,
+              duration: 0.6,
+              ease: "power1.inOut",
+            });
+          }
+        };
+  
+        if (window.lenisInstance?.instance) {
+          window.lenisInstance.instance.scrollTo(0, {
+            duration: 1.2,
+            easing: (t) => 1 - Math.pow(1 - t, 3),
+            onComplete: scrollComplete,
+          });
+        } else {
+          gsap.to(window, {
+            duration: 1,
+            scrollTo: { y: 0, autoKill: true },
+            ease: "power2.inOut",
+            onComplete: scrollComplete,
+          });
+        }
+      });
+    });
+  }
+
+  function setupScrollColorChange() {
     const elementsWithColor = document.querySelectorAll("[data-color]");
+  
+    if (!elementsWithColor.length) {
+      // Nessun elemento da animare → cancella eventualmente il trigger
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars?.trigger?.hasAttribute?.("data-color")) {
+          trigger.kill();
+        }
+      });
+      return;
+    }
   
     elementsWithColor.forEach((element) => {
       const color = element.getAttribute("data-color");
@@ -6327,28 +6394,7 @@ function scrollToTopInstant() {
             toggleActions: "play none none reverse",
           },
         });
-      } else {
-        console.warn(
-          `Element ${element} does not have a valid data-color attribute.`
-        );
       }
-    });
-  
-    document.querySelectorAll('[data-scroll="top"]').forEach((button) => {
-      button.addEventListener("click", () => {
-        if (lenisInstance?.instance) {
-          lenisInstance.instance.scrollTo(0, {
-            duration: 1.2, // Scroll più fluido
-            easing: (t) => 1 - Math.pow(1 - t, 3), // Easing personalizzato
-          });
-        } else {
-          gsap.to(window, {
-            duration: 1,
-            scrollTo: { y: 0, autoKill: true },
-            ease: "power2.inOut",
-          });
-        }
-      });
     });
   }
 
@@ -9452,17 +9498,22 @@ slides.forEach((slide) => {
   }
 
   function initCustomCursor() {
-    const cursor = document.getElementById("custom-cursor");
-    const pulse = document.getElementById("pulse-cursor");
-    const cursorNormal = document.getElementById("cursor-svg"); // svg normale
-    const cursorGrab = document.getElementById("cursor-svg-grab"); // svg grab
-    const cursorGrabbing = document.getElementById("cursor-svg-grabbing"); // svg grabbing
+    if (!cursorNormal || !cursorGrab || !cursorGrabbing) {
+      cacheCursorElements(); // li assegna solo se non già definiti
+    }
   
-    if (!cursor || !pulse || !cursorNormal || !cursorGrab || !cursorGrabbing) {
-      console.warn("Custom cursor o svg non trovati!");
+    if (!cursorNormal || !cursorGrab || !cursorGrabbing) {
+      console.warn("Custom cursor SVG non trovati!");
       return;
     }
   
+    const cursor = document.getElementById("custom-cursor");
+    const pulse = document.getElementById("pulse-cursor");
+  
+    if (!cursor || !pulse) {
+      console.warn("Custom cursor base non trovato!");
+      return;
+    }
     // Movimento base del cursore
     window.addEventListener("pointermove", (e) => {
       gsap.to(cursor, {
@@ -9585,14 +9636,9 @@ slides.forEach((slide) => {
     });  
   }
   function resetCustomCursor() {
-    const cursorNormal = document.getElementById("cursor-svg");
-    const cursorGrab = document.getElementById("cursor-svg-grab");
-    const cursorGrabbing = document.getElementById("cursor-svg-grabbing");
-  
     if (cursorNormal && cursorGrab && cursorGrabbing) {
       cursorNormal.style.opacity = 1;
       cursorGrab.style.opacity = 0;
       cursorGrabbing.style.opacity = 0;
     }
   }
-  

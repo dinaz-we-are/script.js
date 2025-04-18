@@ -21,6 +21,7 @@ const functions = {
     handleUnblockScroll,
     handleToggleScroll,
     initializeScrollControlButtons,
+    shouldEnableCustomCursor,
   };
 
   Object.keys(functions).forEach(fn => {
@@ -1269,3 +1270,8 @@ function cleanUpTriggers() {
       }
     },
   };
+
+  function shouldEnableCustomCursor() {
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  }
+  
