@@ -48,6 +48,10 @@ function cleanUpTriggers() {
   
     // Reset dell'array per la prossima pagina
     window.pageSpecificListeners = [];
+    // Reset Custom Cursor se presente
+    if (shouldEnableCustomCursor()) {
+      resetCustomCursor();
+    }
   }
   
   // Funzione principale per gestire le azioni specifiche della pagina

@@ -278,7 +278,7 @@ export default CTAMap;
             {
                "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it/"
             }
           ]
@@ -297,7 +297,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
@@ -322,7 +322,7 @@ export default CTAMap;
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+            "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
             "item": "https://www.ctastudio.it"
           },
           {
@@ -347,7 +347,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
@@ -372,7 +372,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
@@ -397,7 +397,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
@@ -422,7 +422,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Call to Action: Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {

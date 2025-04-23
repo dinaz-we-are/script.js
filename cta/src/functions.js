@@ -249,13 +249,16 @@ const showElements = [
   let cursorNormal = null;
   let cursorGrab = null;
   let cursorGrabbing = null;
+  let pulse = null;
   
   function cacheCursorElements() {
     if (!shouldEnableCustomCursor()) return;
     cursorNormal = document.getElementById("cursor-svg");
     cursorGrab = document.getElementById("cursor-svg-grab");
     cursorGrabbing = document.getElementById("cursor-svg-grabbing");
+    pulse = document.getElementById("pulse-cursor");
   }
+  
 
   window.BurgerMenu = window.BurgerMenu || {
     menuOpen: false,
@@ -2072,7 +2075,7 @@ function initBarbaWithGSAP() {
               {
                 y: "0%",
                 duration: 0.8,
-                ease: "power3.inOut",
+                ease: "power2.inOut",
                 stagger: { amount: 0.4 },
               },
               "-=0.6"
@@ -2188,10 +2191,7 @@ function initBarbaWithGSAP() {
     },
     hooks: {
       after() {
-        window.isBarbaTransition = false;
-        if (shouldEnableCustomCursor()) {
-          resetCustomCursor();
-        }
+        window.isBarbaTransition = false;      
       },
     },
     preventRunning: true,
@@ -6256,12 +6256,14 @@ function scrollToTopInstant() {
       },
     });
     coverTL
-      .to(".pro-span", {
-        y: "0%",
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: { amount: 0.4 },
-      })
+      .to(".pro-span",
+              {
+                y: "0%",
+                duration: 0.8,
+                ease: "power2.inOut",
+                stagger: { amount: 0.4 },
+              }             
+            )
       .to(".pro-top-trans", {
         y: "0%",
         duration: 0.6,
@@ -9500,19 +9502,18 @@ slides.forEach((slide) => {
   let currentCursorState = "normal"; // "normal", "grab", "grabbing"
 
   function initCustomCursor() {
-    if (!cursorNormal || !cursorGrab || !cursorGrabbing) {
+    if (!cursorNormal || !cursorGrab || !cursorGrabbing || !pulse) {
       cacheCursorElements(); // li assegna solo se non già definiti
     }
   
-    if (!cursorNormal || !cursorGrab || !cursorGrabbing) {
+    if (!cursorNormal || !cursorGrab || !cursorGrabbing || !pulse) {
       console.warn("Custom cursor SVG non trovati!");
       return;
     }
   
     const cursor = document.getElementById("custom-cursor");
-    const pulse = document.getElementById("pulse-cursor");
   
-    if (!cursor || !pulse) {
+    if (!cursor) {
       console.warn("Custom cursor base non trovato!");
       return;
     }
@@ -9641,13 +9642,27 @@ slides.forEach((slide) => {
       );
     });
   }
-  
+
   function resetCustomCursor() {
     if (!cursorNormal || !cursorGrab || !cursorGrabbing) return;
   
-    // Ripristina sempre lo stato base
     cursorNormal.style.opacity = 1;
     cursorGrab.style.opacity = 0;
     cursorGrabbing.style.opacity = 0;
     currentCursorState = "normal";
+  
+    if (pulse) {
+      gsap.to(pulse, {
+        fill: "#ffffff",
+        scale: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
+  
+    gsap.to(cursorNormal, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out",
+    });
   }
