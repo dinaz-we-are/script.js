@@ -6763,9 +6763,7 @@ function scrollToTopInstant() {
   }
 
   function videoPause() {
-    const videoContainers = document.querySelectorAll(
-      "div.w-background-video[data-pause-on-scroll]"
-    );
+    const videoContainers = document.querySelectorAll("div[data-pause-on-scroll]");
   
     if ("IntersectionObserver" in window) {
       const lazyVideoObserver = new IntersectionObserver((entries, observer) => {
@@ -6774,14 +6772,18 @@ function scrollToTopInstant() {
             const video = entry.target.querySelector("video");
   
             if (video) {
-              // Carica il video se ha l'attributo data-lazy
-              if (video.hasAttribute("data-lazy")) {
-                video.setAttribute("src", video.dataset.src);
-                video.load();
-                video.removeAttribute("data-lazy"); // Rimuove l'attributo per non caricarlo più volte
-              }
+              // Forza il caricamento se necessario
+              video.load();
   
-              video.play(); // Riproduci il video quando è nel viewport
+              const playWhenReady = () => {
+                video.play().catch(err => console.warn("🚫 Errore nel play:", err));
+              };
+  
+              if (video.readyState >= 2) {
+                playWhenReady();
+              } else {
+                video.addEventListener("canplay", playWhenReady, { once: true });
+              }
   
               ScrollTrigger.create({
                 trigger: entry.target,
@@ -6792,7 +6794,7 @@ function scrollToTopInstant() {
                 onLeaveBack: () => video.pause(),
               });
   
-              observer.unobserve(entry.target); // Smette di osservare una volta che il video è stato caricato
+              observer.unobserve(entry.target);
             }
           }
         });
@@ -6802,26 +6804,25 @@ function scrollToTopInstant() {
         lazyVideoObserver.observe(container);
       });
     } else {
-      // Fallback per browser che non supportano IntersectionObserver
+      // Fallback
+      const videoContainers = document.querySelectorAll("div[data-pause-on-scroll]");
       videoContainers.forEach((container) => {
         const video = container.querySelector("video");
         if (video) {
-          ScrollTrigger.create(
-            {
-              trigger: container,
-              start: "top bottom",
-              end: "bottom top",
-              onEnter: () => video.play(),
-              onLeave: () => video.pause(),
-              onEnterBack: () => video.play(),
-              onLeaveBack: () => video.pause(),
-            },
-            { passive: true }
-          );
+          ScrollTrigger.create({
+            trigger: container,
+            start: "top bottom",
+            end: "bottom top",
+            onEnter: () => video.play(),
+            onLeave: () => video.pause(),
+            onEnterBack: () => video.play(),
+            onLeaveBack: () => video.pause(),
+          });
         }
       });
     }
   }
+  
 
   function toggleFaq() {
     document.querySelectorAll(".dropdown-container").forEach((faq) => {
