@@ -328,7 +328,7 @@ export default CTAMap;
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "CTA Studio: Web Design e Sviluppo per Esperienze Digitali Uniche",
+            "name": "CTA Studio: Web Design, UI/UX e Sviluppo Siti Web",
             "item": "https://www.ctastudio.it/ui-ux-design"
           }
         ]
@@ -790,7 +790,8 @@ export default CTAMap;
         } else {
           document.body.classList.add("no-cursor"); 
         }
-        setupScrollColorChange();      
+        setupScrollColorChange();
+        videoPause();      
         propositoAnimation.initializeSwiper();
         propositoAnimation.categoryLabel();
         propositoAnimation.tagLinkAnimation();
