@@ -1,33 +1,44 @@
-// Importa GSAP
-import { gsap } from "gsap";
-import barba from "@barba/core"; // Importa Barba.js
-import Lenis from 'lenis'
-import SplitType from 'split-type';
+// Importa GSAP da UMD
+import { gsap } from "gsap/dist/gsap";
 
+// Importa i plugin di GSAP da dist/
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { Observer } from "gsap/dist/Observer";
+import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
+import { MotionPathPlugin } from "gsap/dist/MotionPathPlugin";
+import { Draggable } from "gsap/dist/Draggable";
+import { InertiaPlugin } from "gsap/dist/InertiaPlugin";
 
-// Importa tutti i plugin di GSAP che ti servono
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Observer } from "gsap/Observer";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { Draggable } from "gsap/Draggable";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
+// Importa gli altri moduli
+import barba from "@barba/core";
+import Lenis from "lenis";
+import SplitType from "split-type";
 
-// Registra tutti i plugin con GSAP
-gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, MotionPathPlugin, Draggable, InertiaPlugin);
+// Registra i plugin con GSAP
+gsap.registerPlugin(
+  ScrollTrigger,
+  Observer,
+  ScrollToPlugin,
+  MotionPathPlugin,
+  Draggable,
+  InertiaPlugin
+);
 
-// Esportazione globale di GSAP e di tutti i plugin
+// Esporta tutto su window per accesso globale
 if (typeof window !== "undefined") {
   window.gsap = gsap;
   window.barba = barba;
   window.Lenis = Lenis;
   window.SplitType = SplitType;
+
+  // Plugin singoli se servono da richiamare separatamente
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
   window.MotionPathPlugin = MotionPathPlugin;
-  window.Draggable = Draggable;   
+  window.Draggable = Draggable;
   window.InertiaPlugin = InertiaPlugin;
 }
+
 
 
