@@ -10,9 +10,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Observer } from "gsap/Observer";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 // Registra tutti i plugin con GSAP
-gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, MotionPathPlugin);
+gsap.registerPlugin(ScrollTrigger, Observer, ScrollToPlugin, MotionPathPlugin, Draggable, InertiaPlugin);
 
 // Esportazione globale di GSAP e di tutti i plugin
 if (typeof window !== "undefined") {
@@ -23,7 +25,9 @@ if (typeof window !== "undefined") {
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
-  window.MotionPathPlugin = MotionPathPlugin;  
+  window.MotionPathPlugin = MotionPathPlugin;
+  window.Draggable = Draggable;   
+  window.InertiaPlugin = InertiaPlugin;
 }
 
 
