@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Observer } from "gsap/dist/Observer";
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
 import { DrawSVGPlugin } from "gsap/dist/DrawSVGPlugin";
-import { CustomEase } from "gsap/dist/CustomEase";
+
 
 // Importa gli altri moduli
 import barba from "@barba/core";
@@ -18,8 +18,7 @@ gsap.registerPlugin(
   ScrollTrigger,
   Observer,
   ScrollToPlugin,  
-  DrawSVGPlugin,
-  CustomEase
+  DrawSVGPlugin, 
 );
 
 // Esporta tutto su window per accesso globale
@@ -33,8 +32,7 @@ if (typeof window !== "undefined") {
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
-   window.DrawSVGPlugin = DrawSVGPlugin;  
-  window.CustomEase = CustomEase;  
+   window.DrawSVGPlugin = DrawSVGPlugin;    
  }
 
 
