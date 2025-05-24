@@ -9261,7 +9261,7 @@ slides.forEach((slide) => {
   
       if (!button || !btn || !arrowAbs || !arrowDefault || !sfondo || !txt)
         return;
-  
+  gsap.set(btn, { scale: 0 });
       let touchTl = gsap.timeline({ paused: true });
       let isTouched = false;
   
@@ -9291,7 +9291,7 @@ slides.forEach((slide) => {
       ScrollTrigger.create({
         trigger: panel,
         scrub: true,
-        start: "top 60%",
+        start: "top 70%",
   
         onEnter: () =>
           scrollTl
@@ -9540,7 +9540,8 @@ slides.forEach((slide) => {
   
       if (!button || !btn || !arrowAbs || !arrowDefault || !sfondo || !txt)
         return;
-  
+
+      gsap.set(btn, { scale: 0 });  
       let touchTl = gsap.timeline({ paused: true });
       let isTouched = false;
   
