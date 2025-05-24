@@ -5,7 +5,7 @@ import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Observer } from "gsap/dist/Observer";
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
-import { InertiaPlugin } from "gsap/dist/InertiaPlugin";
+import { DrawSVGPlugin } from "gsap/dist/DrawSVGPlugin";
 import { CustomEase } from "gsap/dist/CustomEase";
 
 // Importa gli altri moduli
@@ -17,8 +17,8 @@ import SplitType from "split-type";
 gsap.registerPlugin(
   ScrollTrigger,
   Observer,
-  ScrollToPlugin,
-  InertiaPlugin,
+  ScrollToPlugin,  
+  DrawSVGPlugin,
   CustomEase
 );
 
@@ -33,7 +33,7 @@ if (typeof window !== "undefined") {
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
-  window.InertiaPlugin = InertiaPlugin;
+   window.DrawSVGPlugin = DrawSVGPlugin;  
   window.CustomEase = CustomEase;  
  }
 

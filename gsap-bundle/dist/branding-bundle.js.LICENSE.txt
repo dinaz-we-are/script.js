@@ -1,5 +1,5 @@
 /*!
-	 * DrawSVGPlugin 3.13.0
+	 * InertiaPlugin 3.13.0
 	 * https://gsap.com
 	 *
 	 * @license Copyright 2008-2025, GreenSock. All rights reserved.
