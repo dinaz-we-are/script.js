@@ -4,14 +4,18 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',  // Punto di ingresso
+  entry: {
+  'gsap': './src/index.js',
+  'branding': './src/indexBranding.js'
+},
   output: {
-    filename: 'gsap-bundle.js',  // Nome del file di output
+    filename: '[name]-bundle.js',  // Nome del file di output
     path: path.resolve(__dirname, 'dist'),  // Directory di output
-    library: 'GSAPBundle', // Nome del bundle esportato
+   library: '[name]Bundle', // Nome del bundle esportato
     libraryTarget: 'umd', // Target UMD per compatibilità con Webflow
     globalObject: 'this' // Assicura compatibilità con ambienti browser
   },
+  
   module: {
     rules: [
       {

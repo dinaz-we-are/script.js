@@ -5,7 +5,8 @@ import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Observer } from "gsap/dist/Observer";
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
-import { MotionPathPlugin } from "gsap/dist/MotionPathPlugin";
+import { InertiaPlugin } from "gsap/dist/InertiaPlugin";
+import { CustomEase } from "gsap/dist/CustomEase";
 
 // Importa gli altri moduli
 import barba from "@barba/core";
@@ -17,7 +18,8 @@ gsap.registerPlugin(
   ScrollTrigger,
   Observer,
   ScrollToPlugin,
-  MotionPathPlugin, 
+  InertiaPlugin,
+  CustomEase
 );
 
 // Esporta tutto su window per accesso globale
@@ -31,7 +33,8 @@ if (typeof window !== "undefined") {
   window.ScrollTrigger = ScrollTrigger;
   window.Observer = Observer;
   window.ScrollToPlugin = ScrollToPlugin;
-  window.MotionPathPlugin = MotionPathPlugin;
+  window.InertiaPlugin = InertiaPlugin;
+  window.CustomEase = CustomEase;  
  }
 
 
