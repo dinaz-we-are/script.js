@@ -47,7 +47,7 @@ export default CTAMap;
     "66744f8d053fecc97b97583d": {
       name: "branding",
       jsonKey: "66744f8d053fecc97b97583d",
-      scripts: [],
+      scripts: ["https://cdn.jsdelivr.net/gh/dinaz-we-are/script.js@20a9ac7b9505b9ab97a95f13df0ad1849a1dcc58/gsap-bundle/dist/branding-bundle.js"],
       styles: [],
     },
     "66867d874ba89152319da959": {
@@ -278,7 +278,7 @@ export default CTAMap;
             {
                "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio – Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it/"
             }
           ]
@@ -297,13 +297,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio – Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio: Branding, Visual e Logo Design emozionale",
+              "name": "CTA Web Studio: Branding, Visual e Logo Design Emozionale.",
               "item": "https://www.ctastudio.it/branding-e-graphic-design"
             }
           ]
@@ -322,13 +322,13 @@ export default CTAMap;
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+            "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
             "item": "https://www.ctastudio.it"
           },
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "CTA Studio: Web Design, UI/UX e Sviluppo Siti Web",
+            "name": "CTA Web Studio: Web Design, UI/UX e Sviluppo Siti Web.",
             "item": "https://www.ctastudio.it/ui-ux-design"
           }
         ]
@@ -347,13 +347,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio: Web Booster, SEO e Strategie Digitali",
+              "name": "CTA Web Studio: Web Booster, SEO e Strategie Digitali.",
               "item": "https://www.ctastudio.it/web-marketing"
             }
           ]
@@ -372,13 +372,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio: Contatti - Raccontaci la tua idea",
+              "name": "CTA Web Studio: Contatti - Parlaci del tuo Progetto.",
               "item": "https://www.ctastudio.it/contatti"
             }
           ]
@@ -397,13 +397,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio: Il nostro Studio, la nostra visione",
+              "name": "CTA Web Studio: Chi siamo e la nostra visione.",
               "item": "https://www.ctastudio.it/about"
             }
           ]
@@ -422,13 +422,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "PROPOSITO - il Web Magazine per ispirare, crescere e realizzare",
+              "name": "PROPOSITO - Il Web Magazine per ispirare, crescere e realizzare.",
               "item": "https://www.ctastudio.it/proposito/home"
             }
           ]

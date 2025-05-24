@@ -2337,86 +2337,86 @@ function scrollToTopInstant() {
   }
   
   function animationPageEnterDesign() {
-    const split = new SplitType(".h1-page", {
-      types: "lines",
-      tagName: "span",
-    });
-  
-    const svg = document.getElementById("svg-page-container");
-  
-    gsap.set("#Union", {
-      opacity: 0,
-    });
-  
-    gsap.set("#quadrato-design", {
-      scale: 0,
-      transformOrigin: "bottom left",
-    });
-    gsap.set("#cerchio-design", {
-      scale: 1.7,
-      transformOrigin: "bottom left",
-    });
-  
-    gsap.set(svg, {
-      x: "100vw",
-    });
-  
-    gsap
-      .timeline()
-      .from(split.lines, {
-        delay: 1.4,
+  const split = new SplitType(".h1-page", {
+    types: "lines",
+    tagName: "span",
+  });
+
+  const svg = document.getElementById("svg-page-container");
+
+  gsap.set("#Union", {
+    drawSVG: "0%",
+  });
+
+  gsap.set("#quadrato-design", {
+    scale: 0,
+    transformOrigin: "bottom left",
+  });
+  gsap.set("#cerchio-design", {
+    scale: 1.7,
+    transformOrigin: "bottom left",
+  });
+
+  gsap.set(svg, {
+    x: "100vw",
+  });
+
+  gsap
+    .timeline()
+    .from(split.lines, {
+      delay: 1.4,
+      y: "200%",
+      duration: 0.6,
+      stagger: 0.2,
+      ease: "power2.out",
+    })
+    .to(
+      svg,
+      {
+        x: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "<"
+    )
+    .from(
+      ".sub-head-page",
+      {
         y: "200%",
         duration: 0.6,
         stagger: 0.2,
         ease: "power2.out",
-      })
-      .to(
-        svg,
-        {
-          x: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .from(
-        ".sub-head-page",
-        {
-          y: "200%",
-          duration: 0.6,
-          stagger: 0.2,
-          ease: "power2.out",
-        },
-        "-=0.2"
-      )
-      .to(
-        "#quadrato-design",
-        {
-          scale: 1,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.4"
-      )
-      .to(
-        "#cerchio-design",
-        {
-          scale: 1,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .to(
-        "#Union",
-        {
-          opacity: 1,
-          duration: 0.6,
-          ease: "power2.in",
-        },
-        "-=0.3"
-      );
-  } 
+      },
+      "-=0.2"
+    )
+    .to(
+      "#quadrato-design",
+      {
+        scale: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      },
+      "-=0.4"
+    )
+    .to(
+      "#cerchio-design",
+      {
+        scale: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "<"
+    )
+    .to(
+      "#Union",
+      {
+        drawSVG: "100%",
+        duration: 3,
+        ease: "power1.inOut",
+      },
+      "-=1.5"
+    );
+}
   
   function animationPageEnterAbout() {
     const split = new SplitType(".h1-span-page", {
@@ -2487,91 +2487,83 @@ function scrollToTopInstant() {
       );
   }
   
-  function animationPageEnterWebDesign() {
-    const split = new SplitType(".h1-page", {
-      types: "lines",
-      tagName: "span",
-    });
-  
-    const svg = document.getElementById("svg-page-container");
-    const paths = ["#big-square-web-design", "#arrow-web-design"]
-      .map((selector) => {
-        let path = document.querySelector(selector);
-        if (path) {
-          let length = path.getTotalLength() * 1.02; // 🔹 Piccola compensazione (+2%)
-          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-          return path;
-        }
-      })
-      .filter(Boolean);
-  
-    gsap.set("#big-square-web-design", {
-      scale: 0,
-      transformOrigin: "bottom left",
-    });
-    gsap.set("#arrow-web-design", {
-      scale: 1.7,
-      transformOrigin: "bottom left",
-    });
-  
-    gsap.set(svg, {
-      x: "100vw",
-      rotateZ: 135,
-    });
-    gsap
-      .timeline()
-      .from(split.lines, {
-        delay: 1.4,
-        y: "200%",
+function animationPageEnterWebDesign() {
+  const split = new SplitType(".h1-page", {
+    types: "lines",
+    tagName: "span",
+  });
+
+  const svg = document.getElementById("svg-page-container");
+  const paths = ["#big-square-web-design", "#arrow-web-design"];
+  gsap.set(paths, { drawSVG: "0%" });
+
+  gsap.set("#big-square-web-design", {
+    scale: 0,
+    transformOrigin: "bottom left",
+  });
+  gsap.set("#arrow-web-design", {
+    scale: 1.7,
+    transformOrigin: "bottom left",
+  });
+
+  gsap.set(svg, {
+    x: "100vw",
+    rotateZ: 135,
+  });
+  gsap
+    .timeline()
+    .from(split.lines, {
+      delay: 1.4,
+      y: "200%",
+      duration: 0.6,
+      stagger: 0.2,
+      ease: "power2.out",
+    })
+    .to(
+      svg,
+      {
+        x: 0,
+        rotateZ: 0,
         duration: 0.6,
-        stagger: 0.2,
         ease: "power2.out",
-      })
-      .to(
-        svg,
-        {
-          x: 0,
-          rotateZ: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .from(".sub-head-page", {
-        y: "200%",
+      },
+      "<"
+    )
+    .from(".sub-head-page", {
+      y: "200%",
+      duration: 0.6,
+      stagger: 0.2,
+      ease: "power2.out",
+    })
+    .to(
+      " #arrow-web-design",
+      {
+        scale: 1,
         duration: 0.6,
-        stagger: 0.2,
         ease: "power2.out",
-      })
-      .to(
-        " #arrow-web-design",
-        {
-          scale: 1,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "<"
-      )
-      .to(
-        "#big-square-web-design",
-        {
-          scale: 1,
-          duration: 1.2,
-          ease: "power2.out",
-        },
-        "-=0.6"
-      )
-      .to(
-        paths,
-        {
-          strokeDashoffset: "0",
-          duration: 1.2,
-          ease: "power2.out",
-          stagger: -0.6,
-        },
-        "<"
-      );
-  }
+      },
+      "<"
+    )
+    .to(
+      "#big-square-web-design",
+      {
+        scale: 1,
+        duration: 1.2,
+        ease: "power2.out",
+      },
+      "-=0.6"
+    )
+    .to(
+      paths,
+      {
+        drawSVG: "100%",
+        duration: 1.5,
+        ease: "power2.out",
+        stagger: -1,
+      },
+      "<"
+    );
+}
   
   function animationPageEnterMarketing() {
     const split = new SplitType(".h1-page", {
@@ -9022,7 +9014,7 @@ slides.forEach((slide) => {
       });
     },
   };
-  
+  //animazioni button showcase verticale oltre i primi tre item principali
   function setupPageShowcaseButtons() {
     const panels = document.querySelectorAll(".panel-portfolio");
   
@@ -9142,7 +9134,7 @@ slides.forEach((slide) => {
       });
     });
   }
-
+// funzione button contatti showcase verticale homepage
   function setupVerticalContatti() {
     const panel = document.getElementById("last-one");
   
@@ -9150,19 +9142,30 @@ slides.forEach((slide) => {
       console.warn("❌ setupVerticalContatti: Nessun pannello trovato.");
       return;
     }
-  
     const mm = gsap.matchMedia();
   
     mm.add("(min-width: 992px)", () => {
       const button = panel.querySelector(".btn-cta-show");
+      const btn = panel.querySelector(".btn-showcase-lw");
       const hoverDiv = button?.querySelector(".btn-showcase-hov-lw");
       const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
       const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+      const sfondo = button?.querySelector(".sfondo-cta-btn");
+      const txt = button?.querySelector(".btn-cta-txt");
+      const trigger = document.querySelector("#v-trigger-first");
   
-      if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+      if (
+        !button ||
+        !btn ||
+        !hoverDiv ||
+        !arrowHover ||
+        !arrowDefault ||
+        !sfondo ||
+        !txt
+      )
         return;
-      }
   
+      gsap.set(btn, { scale: 0 });
       let enterTl = gsap.timeline({ paused: true });
       let leaveTl = gsap.timeline({ paused: true });
       let isHovered = false;
@@ -9200,6 +9203,44 @@ slides.forEach((slide) => {
         }
       };
   
+      const scrollTl = gsap.timeline();
+  
+      ScrollTrigger.create({
+        trigger: trigger,
+        scrub: true,
+        start: "bottom bottom+=150",
+        onEnter: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+        onLeaveBack: () =>
+          scrollTl
+            .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+      });
+  
       // Aggiunge i listener SOLO al button
       button.addEventListener("mouseenter", handleMouseEnter);
       button.addEventListener("mouseleave", handleMouseLeave);
@@ -9210,60 +9251,147 @@ slides.forEach((slide) => {
         { element: button, event: "mouseleave", handler: handleMouseLeave }
       );
     });
-    mm.add("(max-width: 991px)", () => {    
-        const button = panel.querySelector(".btn-cta-show");
-        const arrowDefault = button?.querySelector(".freccia-cta-arrow");
-        const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+    mm.add("(max-width: 991px)", () => {
+      const button = panel.querySelector(".btn-cta-show");
+      const btn = panel.querySelector(".btn-showcase-lw");
+      const arrowDefault = button?.querySelector(".freccia-cta-arrow");
+      const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
+      const sfondo = button?.querySelector(".sfondo-cta-btn");
+      const txt = button?.querySelector(".btn-cta-txt");  
   
-        if (!button || !arrowDefault || !arrowAbs) {
-          return;
+      if (!button || !btn || !arrowAbs || !arrowDefault || !sfondo || !txt)
+        return;
+  
+      let touchTl = gsap.timeline({ paused: true });
+      let isTouched = false;
+  
+      // 🔹 Timeline per il tocco
+      touchTl
+        .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+        .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+      const handleTouchStart = () => {
+        if (!isTouched) {
+          touchTl.restart();
+          isTouched = true;
         }
+      };
   
-        let touchTl = gsap.timeline({ paused: true });
-        let isTouched = false;
+      const handleTouchEnd = () => {
+        if (isTouched) {
+          setTimeout(() => {
+            touchTl.reverse();
+            isTouched = false;
+          }, 0);
+        }
+      };
   
-        // 🔹 Timeline per il tocco
-        touchTl
-          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
-          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+      const scrollTl = gsap.timeline();
   
-        const handleTouchStart = () => {
-          if (!isTouched) {
-            touchTl.restart();
-            isTouched = true;
-          }
-        };
+      ScrollTrigger.create({
+        trigger: panel,
+        scrub: true,
+        start: "top 60%",
   
-        const handleTouchEnd = () => {
-          if (isTouched) {
-            setTimeout(() => {
-              touchTl.reverse();
-              isTouched = false;
-            }, 0);
-          }
-        };
+        onEnter: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
   
-        // Aggiunge il listener al button
-        button.addEventListener("touchstart", handleTouchStart);
-        button.addEventListener("touchend", handleTouchEnd);
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+        onLeaveBack: () =>
+          scrollTl
+            .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
   
-        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
-        window.pageSpecificListeners.push(
-          { element: button, event: "touchstart", handler: handleTouchStart },
-          { element: button, event: "touchend", handler: handleTouchEnd }
-        );
-      });   
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+      });
+  
+      // Aggiunge il listener al button
+      button.addEventListener("touchstart", handleTouchStart);
+      button.addEventListener("touchend", handleTouchEnd);
+  
+      // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+      window.pageSpecificListeners.push(
+        { element: button, event: "touchstart", handler: handleTouchStart },
+        { element: button, event: "touchend", handler: handleTouchEnd }
+      );
+    });
   }
-
+// funzione button cta component
   function globalCtaButton() {
-    const panel = document.getElementById("cta-talk");
-  
-    if (!panel) {
-      console.warn("❌ setupVerticalContatti: Nessun pannello trovato.");
-      return;
-    }
-  
-    const mm = gsap.matchMedia();
+  const panel = document.getElementById("cta-talk");
+  const lets = panel.querySelectorAll(".cta-letter-span");
+  const talk = panel.querySelectorAll(".cta-letter-span-talk");
+
+  if (!panel) {
+    console.warn("❌ setupVerticalContatti: Nessun pannello trovato.");
+    return;
+  }
+  const mm = gsap.matchMedia();
+
+  ScrollTrigger.create({
+    trigger: panel,
+    start: "top 60%",
+    end: "top 40%",
+    onEnter: () =>
+      gsap
+        .timeline()
+        .to(lets, {
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: { amount: 0.2 },
+        })
+        .to(
+          talk,
+          {
+            rotateY: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: { amount: 0.2 },
+          },
+          "-=0.2"
+        ),
+
+    onLeaveBack: () =>
+      gsap
+        .timeline()
+        .to(talk, {
+          rotateY: -90,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: { amount: 0.2 },
+        })
+        .to(
+          lets,
+          {
+            y: "150%",
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: { amount: 0.2 },
+          },
+          "-=0.2"
+        ),
+  });
   
     mm.add("(min-width: 992px)", () => {
       const button = panel.querySelector(".btn-cta-show");
@@ -9272,12 +9400,20 @@ slides.forEach((slide) => {
       const arrowHover = hoverDiv?.querySelector(".freccia-cta-arrow-hover");
       const arrowDefault = button?.querySelector(".freccia-cta-arrow");
       const sfondo = button?.querySelector(".sfondo-cta-btn");
-      gsap.set(btn, { scale: 0 });
+      const txt = button?.querySelector(".btn-cta-txt");
   
-      if (!button || !hoverDiv || !arrowHover || !arrowDefault) {
+      if (
+        !button ||
+        !btn ||
+        !hoverDiv ||
+        !arrowHover ||
+        !arrowDefault ||
+        !sfondo ||
+        !txt
+      )
         return;
-      }
   
+      gsap.set(btn, { scale: 0 });
       let enterTl = gsap.timeline({ paused: true });
       let leaveTl = gsap.timeline({ paused: true });
       let isHovered = false;
@@ -9321,23 +9457,67 @@ slides.forEach((slide) => {
         trigger: button,
         start: "top 97%",
         end: "top 10%",
-        toggleActions: "play none none reverse",
+        scrub: true,
         onEnter: () =>
           scrollTl
             .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
-            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
         onLeave: () =>
           scrollTl
             .to(sfondo, { y: -120, duration: 0.5, ease: "power2.out" })
-            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
         onEnterBack: () =>
           scrollTl
             .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
-            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
         onLeaveBack: () =>
           scrollTl
             .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
-            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
+  
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
       });
   
       // Aggiunge i listener SOLO al button
@@ -9350,79 +9530,122 @@ slides.forEach((slide) => {
         { element: button, event: "mouseleave", handler: handleMouseLeave }
       );
     });
-    mm.add("(max-width: 991px)", () => {   
+    mm.add("(max-width: 991px)", () => {
       const button = panel.querySelector(".btn-cta-show");
-      const btn = panel.querySelector(".btn-showcase-lw");        
+      const btn = panel.querySelector(".btn-showcase-lw");
       const arrowDefault = button?.querySelector(".freccia-cta-arrow");
       const arrowAbs = button?.querySelector(".freccia-cta-arrow-mobile");
       const sfondo = button?.querySelector(".sfondo-cta-btn");
-      gsap.set(btn, { scale: 0 });             
-     
-        if (!button || !arrowDefault || !arrowAbs) {
-          return;
+      const txt = button?.querySelector(".btn-cta-txt");
+  
+      if (!button || !btn || !arrowAbs || !arrowDefault || !sfondo || !txt)
+        return;
+  
+      let touchTl = gsap.timeline({ paused: true });
+      let isTouched = false;
+  
+      // 🔹 Timeline per il tocco
+      touchTl
+        .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
+        .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+  
+      const handleTouchStart = () => {
+        if (!isTouched) {
+          touchTl.restart();
+          isTouched = true;
         }
+      };
   
-        let touchTl = gsap.timeline({ paused: true });
-        let isTouched = false;
+      const handleTouchEnd = () => {
+        if (isTouched) {
+          setTimeout(() => {
+            touchTl.reverse();
+            isTouched = false;
+          }, 0);
+        }
+      };
   
-        // 🔹 Timeline per il tocco
-        touchTl
-          .to(arrowDefault, { scale: 0, duration: 0.3, ease: "power2.out" })
-          .to(arrowAbs, { scale: 1, duration: 0.3, ease: "power2.out" }, "-=0.2");
+      const scrollTl = gsap.timeline();
   
-        const handleTouchStart = () => {
-          if (!isTouched) {
-            touchTl.restart();
-            isTouched = true;
-          }
-        };
+      ScrollTrigger.create({
+        trigger: button,
+        start: "top 97%",
+        end: "top 10%",
+        scrub: true,
+        onEnter: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
   
-        const handleTouchEnd = () => {
-          if (isTouched) {
-            setTimeout(() => {
-              touchTl.reverse();
-              isTouched = false;
-            }, 0);
-          }
-        };
-
-        const scrollTl = gsap.timeline();
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+        onLeave: () =>
+          scrollTl
+            .to(sfondo, { y: -120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
   
-        ScrollTrigger.create({
-          trigger: button,
-          start: "top 97%",
-          end: "top 10%",
-          toggleActions: "play none none reverse",
-          onEnter: () =>
-            scrollTl
-              .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
-              .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
-          onLeave: () =>
-            scrollTl
-              .to(sfondo, { y: -120, duration: 0.5, ease: "power2.out" })
-              .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
-          onEnterBack: () =>
-            scrollTl
-              .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
-              .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3"),
-          onLeaveBack: () =>
-            scrollTl
-              .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
-              .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3"),
-        });
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+        onEnterBack: () =>
+          scrollTl
+            .to(sfondo, { y: 0, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 1, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 1, duration: 0.3, ease: "power2.out" }, "<")
   
-        // Aggiunge il listener al button
-        button.addEventListener("touchstart", handleTouchStart);
-        button.addEventListener("touchend", handleTouchEnd);
+            .to(
+              button,
+              {
+                borderColor: "var(--background-first)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+        onLeaveBack: () =>
+          scrollTl
+            .to(sfondo, { y: 120, duration: 0.5, ease: "power2.out" })
+            .to(btn, { scale: 0, duration: 0.5, ease: "power2.out" }, "-=0.3")
+            .to(txt, { opacity: 0, duration: 0.3, ease: "power2.out" }, "<")
   
-        // 🔹 Registra gli eventi in `window.pageSpecificListeners`
-        window.pageSpecificListeners.push(
-          { element: button, event: "touchstart", handler: handleTouchStart },
-          { element: button, event: "touchend", handler: handleTouchEnd }
-        );     
+            .to(
+              button,
+              {
+                borderColor: "var(--trasparent)",
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "<"
+            ),
+      });
+  
+      // Aggiunge il listener al button
+      button.addEventListener("touchstart", handleTouchStart);
+      button.addEventListener("touchend", handleTouchEnd);
+  
+      // 🔹 Registra gli eventi in `window.pageSpecificListeners`
+      window.pageSpecificListeners.push(
+        { element: button, event: "touchstart", handler: handleTouchStart },
+        { element: button, event: "touchend", handler: handleTouchEnd }
+      );
     });
   }
-
+// funzione avanzamento progresso home page
   function scrollProgressLine() {
     const settings = [
       {
