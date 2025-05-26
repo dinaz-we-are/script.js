@@ -6820,7 +6820,7 @@ function animationPageEnterWebDesign() {
     document.querySelectorAll(".dropdown-container").forEach((faq) => {
       const faqContainer = faq.querySelector(".p-toggle");
       const dropBtn = faq.querySelector(".drop-toggle");
-      const trigger = faq.querySelector(".faq-toggle");
+      const trigger = faq.querySelector(".dropdown-wrapper");
   
       if (!faqContainer || !dropBtn || !trigger) return; // 🔹 Evita errori se gli elementi non esistono
   
@@ -7295,180 +7295,259 @@ slides.forEach((slide) => {
   }
 
   function calendar() {
-    var inputFields = document.querySelectorAll(".form-text-field-2");
-    var calendarModal = document.getElementById("calendar-modal");
-    var timeSelectionModal = document.getElementById("time-selection-modal");
-    var timeSelectionEl = document.getElementById("time-selection");
-    var calendarEl = document.getElementById("calendar");
-    var currentInputField;
-  
-    if (!calendarEl || calendarEl.dataset.initialized) {
-      console.warn("Il calendario è già stato inizializzato o non esiste.");
-      return;
-    }
-  
-    calendarEl.dataset.initialized = "true"; // Impedisce la duplicazione
-  
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: "dayGridMonth",
-      firstDay: 1, // Lunedì
-      selectable: true,
-      headerToolbar: {
-        left: "prev",
-        center: "title",
-        right: "next",
-      },
-      locale: "it",
-      buttonText: { today: "oggi" },
-      dayHeaderFormat: { weekday: "short" },
-      selectAllow: (selectInfo) =>
-        selectInfo.start.getUTCDay() !== 5 && selectInfo.start.getUTCDay() !== 6,
-      events: async (fetchInfo, successCallback, failureCallback) => {
-        try {
-          const response = await fetch(
-            "https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                timeMin: fetchInfo.startStr,
-                timeMax: fetchInfo.endStr,
-              }),
-            }
-          );
-  
-          if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
-  
-          const events = await response.json();
-          events.forEach((event) => (event.className = "hidden-event"));
-          successCallback(events);
-        } catch (err) {
-          console.error("Errore nel recupero degli eventi:", err);
-          failureCallback(err);
-        }
-      },
-      select: (info) => {
-        if (info.start.getUTCDay() !== 5 && info.start.getUTCDay() !== 6)
-          openTimeSelection(info.start);
-      },
-      dateClick: (info) => {
-        if (info.date.getUTCDay() !== 5 && info.date.getUTCDay() !== 6)
-          openTimeSelection(info.date);
-      },
-      eventOverlap: false,
-      selectOverlap: (event) => !event,
-      eventBackgroundColor: "red",
-    });
-  
-    calendar.render();
-  
-    inputFields.forEach((inputField) => {
-      const openCalendar = function () {
-        inputField.value = "";
-        calendarModal.style.display = "block";
-        calendar.updateSize();
-        currentInputField = inputField;
-        gsap.to(".cover-page, .section-form, .page-heading-wrapper", {
-          opacity: 0.5,
-          duration: 0.3,
-          ease: "none",
-        });
-        lenisInstance.pauseForCalendar();
-      };
-  
-      inputField.addEventListener("click", openCalendar);
-      window.pageSpecificListeners.push({
-        element: inputField,
-        event: "click",
-        handler: openCalendar,
-      });
-    });
-  
-    function openTimeSelection(date) {
-      if (date.getUTCDay() === 5 || date.getUTCDay() === 6) return;
-  
-      timeSelectionEl.innerHTML = "";
-      timeSelectionModal.style.display = "block";
-  
-      var times = [];
-      for (var hour = 10; hour <= 19; hour++) {
-        times.push({ hour, minute: 0 }, { hour, minute: 30 });
+  var inputFields = document.querySelectorAll(".form-text-field-2");
+  var calendarModal = document.getElementById("calendar-modal");
+  var timeSelectionModal = document.getElementById("time-selection-modal");
+  var timeSelectionEl = document.getElementById("time-selection");
+  var calendarEl = document.getElementById("calendar");
+  var currentInputField;
+
+  if (!calendarEl || calendarEl.dataset.initialized) {
+    console.warn("Il calendario è già stato inizializzato o non esiste.");
+    return;
+  }
+
+  calendarEl.dataset.initialized = "true";
+
+  // ASPETTA che il container sia completamente visibile
+  calendarModal.offsetHeight;
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridMonth",
+    firstDay: 1, // Lunedì
+    selectable: true,
+    headerToolbar: {
+      left: "prev",
+      center: "title",
+      right: "next",
+    },
+    locale: "it",
+    buttonText: { today: "oggi" },
+    dayHeaderFormat: { weekday: "short" },
+
+    // 🚫 CONTROLLO SELEZIONE - Escludi weekend, oggi e giorni passati
+    selectAllow: (selectInfo) => {
+      const selectedDate = selectInfo.start;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Escludi sabato (6) e domenica (0)
+      if (selectedDate.getUTCDay() === 0 || selectedDate.getUTCDay() === 6) {
+        return false;
       }
-      times.push({ hour: 20, minute: 0 });
-  
-      times.forEach((time) => {
-        var dateTime = new Date(date);
-        dateTime.setHours(time.hour, time.minute, 0, 0);
-        if (!isTimeSlotOccupied(dateTime)) {
-          var button = document.createElement("button");
-          button.innerText = `${("0" + time.hour).slice(-2)}:${(
-            "0" + time.minute
-          ).slice(-2)}`;
-          button.addEventListener("click", function () {
+
+      // Escludi oggi e giorni passati
+      if (selectedDate <= today) {
+        return false;
+      }
+
+      // 🔥 NUOVA AGGIUNTA: Escludi giorni completamente occupati
+      if (isDayCompletelyOccupied(selectedDate)) {
+        console.log(
+          "🚫 Giorno completamente occupato:",
+          selectedDate.toDateString()
+        );
+        return false;
+      }
+
+      return true;
+    },
+
+    // 📅 CALLBACK DOPO IL RENDER - Aggiungi classi ai giorni passati
+    datesSet: function (info) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Trova tutti i giorni passati e aggiungi la classe
+      const dayEls = calendarEl.querySelectorAll(".fc-daygrid-day");
+      dayEls.forEach((dayEl) => {
+        const dateStr = dayEl.getAttribute("data-date");
+        if (dateStr) {
+          const cellDate = new Date(dateStr + "T00:00:00");
+          if (cellDate < today) {
+            dayEl.classList.add("fc-day-past");
+          }
+        }
+      });
+    },
+
+    // 🎯 EVENT HANDLERS - Semplificati (selectAllow già filtra)
+    select: (info) => {
+      openTimeSelection(info.start);
+    },
+
+    dateClick: (info) => {
+      openTimeSelection(info.date);
+    },
+
+    // 🎨 PERSONALIZZAZIONE CELLE
+    dayCellClassNames: function (info) {
+      const classes = [];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+    
+      // Aggiungi classe per giorni passati
+      if (info.date < today) {
+        classes.push("fc-day-past");
+      }
+      
+      //  NUOVA AGGIUNTA: Classe per giorni completamente occupati
+      if (info.date > today && isDayCompletelyOccupied(info.date)) {
+        classes.push("fc-day-occupied");
+      }
+    
+      return classes;
+    },
+
+    //  EVENTI API - Ripristinato il tuo codice originale
+    events: async (fetchInfo, successCallback, failureCallback) => {
+      try {
+        const response = await fetch(
+          "https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              timeMin: fetchInfo.startStr,
+              timeMax: fetchInfo.endStr,
+            }),
+          }
+        );
+
+        if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+
+        const events = await response.json();
+        events.forEach((event) => (event.className = "hidden-event"));
+        successCallback(events);
+      } catch (err) {
+        console.error("Errore nel recupero degli eventi:", err);
+        failureCallback(err);
+      }
+    },
+
+    eventOverlap: false,
+    selectOverlap: (event) => !event,
+    eventBackgroundColor: "red",
+  });
+
+  // RENDER DEL CALENDARIO
+  calendar.render();
+
+  // MODIFICA: Identifica automaticamente il campo input nascosto
+  currentInputField =
+    inputFields[0] || document.querySelector(".form-text-field-2");
+
+  // FUNZIONE SELEZIONE ORARI - Aggiornata e semplificata
+  function openTimeSelection(date) {
+    timeSelectionEl.innerHTML = "";
+
+    // Animazione di apertura
+    gsap.to(timeSelectionModal, {
+      height: "auto",
+      duration: 0.4,
+      ease: "power2.out",
+    });
+
+    // Genera gli orari disponibili
+    var times = [];
+    for (var hour = 10; hour <= 19; hour++) {
+      times.push({ hour, minute: 0 }, { hour, minute: 30 });
+    }
+    times.push({ hour: 20, minute: 0 });
+
+    times.forEach((time) => {
+      var dateTime = new Date(date);
+      dateTime.setHours(time.hour, time.minute, 0, 0);
+
+      if (!isTimeSlotOccupied(dateTime)) {
+        var button = document.createElement("button");
+        button.innerText = `${("0" + time.hour).slice(-2)}:${(
+          "0" + time.minute
+        ).slice(-2)}`;
+
+        button.addEventListener("click", function () {
+          // Popola il campo nascosto
+          if (currentInputField) {
             currentInputField.value = `${("0" + date.getDate()).slice(-2)}/${(
               "0" +
               (date.getMonth() + 1)
             ).slice(-2)}/${date.getFullYear()} ${button.innerText}`;
-            timeSelectionModal.style.display = "none";
-            calendarModal.style.display = "none";
-            gsap.to(".cover-page, .section-form, .page-heading-wrapper", {
-              opacity: 1,
-              duration: 0.3,
-              ease: "none",
+          }
+
+          // ATTIVA AUTOMATICAMENTE IL CHECKBOX
+          const dateCheckbox = document.getElementById("date-checkbox");
+          if (dateCheckbox) {
+            // Checka il checkbox
+            dateCheckbox.checked = true;
+
+            // Simula il click per attivare la validazione Webflow
+            const clickEvent = new Event("click", {
+              bubbles: true,
+              cancelable: true,
             });
-            lenisInstance.resumeAfterCalendar();
+            dateCheckbox.dispatchEvent(clickEvent);
+
+            // Anche change event per sicurezza
+            const changeEvent = new Event("change", {
+              bubbles: true,
+              cancelable: true,
+            });
+            dateCheckbox.dispatchEvent(changeEvent);
+
+            console.log(
+              "✅ Checkbox date-checkbox automaticamente selezionato"
+            );
+          } else {
+            console.warn('⚠️ Checkbox con id "date-checkbox" non trovato');
+          }
+
+          // Animazione di chiusura
+          gsap.to(timeSelectionModal, {
+            height: "0px",
+            duration: 0.3,
+            ease: "power2.out",
           });
-          timeSelectionEl.appendChild(button);
-        }
-      });
-    }
-  
-    function isTimeSlotOccupied(dateTime) {
-      return calendar.getEvents().some((event) => {
-        var start = new Date(event.start);
-        var end = new Date(event.end);
-        return dateTime >= start && dateTime < end;
-      });
-    }
-  
-    const closeCalendar = function (event) {
-      if (
-        !calendarModal.contains(event.target) &&
-        !timeSelectionModal.contains(event.target) &&
-        !event.target.classList.contains("form-text-field-2")
-      ) {
-        calendarModal.style.display = "none";
-        timeSelectionModal.style.display = "none";
-        gsap.to(".cover-page, .section-form, .page-heading-wrapper", {
-          opacity: 1,
-          duration: 0.3,
-          ease: "none",
+
+          console.log("Data e ora selezionate:", currentInputField.value);
         });
-        lenisInstance.resumeAfterCalendar();
+
+        timeSelectionEl.appendChild(button);
       }
-    };
-  
-    document.addEventListener("click", closeCalendar);
-    window.pageSpecificListeners.push({
-      element: document,
-      event: "click",
-      handler: closeCalendar,
-    });
-  
-    const preventGlobalScroll = function (event) {
-      event.preventDefault();
-      this.scrollTop += event.deltaY;
-    };
-  
-    document
-      .querySelector("#calendar-modal")
-      .addEventListener("wheel", preventGlobalScroll, { passive: false });
-    window.pageSpecificListeners.push({
-      element: document.querySelector("#calendar-modal"),
-      event: "wheel",
-      handler: preventGlobalScroll,
     });
   }
+
+  // 🔍 FUNZIONE CONTROLLO SLOT OCCUPATI
+  function isTimeSlotOccupied(dateTime) {
+    return calendar.getEvents().some((event) => {
+      var start = new Date(event.start);
+      var end = new Date(event.end);
+      return dateTime >= start && dateTime < end;
+    });
+  }
+
+  function isDayCompletelyOccupied(date) {
+    // Genera tutti gli orari possibili per il giorno
+    var allTimeSlots = [];
+    for (var hour = 10; hour <= 19; hour++) {
+      allTimeSlots.push({ hour, minute: 0 }, { hour, minute: 30 });
+    }
+    allTimeSlots.push({ hour: 20, minute: 0 }); // Ultimo slot
+
+    // Controlla se TUTTI gli orari sono occupati
+    var availableSlots = 0;
+    allTimeSlots.forEach((time) => {
+      var dateTime = new Date(date);
+      dateTime.setHours(time.hour, time.minute, 0, 0);
+
+      if (!isTimeSlotOccupied(dateTime)) {
+        availableSlots++;
+      }
+    });
+
+    // Se non ci sono slot disponibili, il giorno è completamente occupato
+    return availableSlots === 0;
+  }
+}
 
   function studioAnimations() {
     const wrapper = document.getElementById("studio-wrapper");
