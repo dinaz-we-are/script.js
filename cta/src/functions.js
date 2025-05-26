@@ -7353,37 +7353,36 @@ function calendar() {
       return true;
     },
 
-    // 🔄 CALLBACK PRINCIPALE - NASCONDE LOTTIE QUANDO PRONTO
-    loading: function(isLoading) {
-      if (isLoading) {
-        console.log('⏳ Caricamento eventi dal server...');
-        // Lottie già visibile, non fare nulla
-      } else {
-        console.log('✅ Eventi caricati completamente dal server');
-        
-        // 🎯 NASCONDI IL TUO LOTTIE
-        hideCalendarWaiting();
-        
-        // 🔄 APPLICA STYLING DOPO CARICAMENTO COMPLETO
-        setTimeout(() => {
-          applyAllDaysStyling();
-        }, 150);
-      }
-    },
-
-    // 🔧 CALLBACK DOPO OGNI EVENTO MONTATO
-    eventDidMount: function(info) {
-      console.log('📅 Evento montato:', info.event.title);
+    // 🎯 SOLUZIONE 1 - CALLBACK NATIVI FULLCALENDAR
+    
+    // 🔄 DOPO CARICAMENTO EVENTI DAL SERVER
+    eventSourceSuccess: function(content, xhr) {
+      console.log('✅ Eventi caricati dal server');
       
-      // Riapplica styling ogni volta che un evento viene renderizzato
+      // Nascondi Lottie
+      hideCalendarWaiting();
+      
+      // Forza re-render dopo aver caricato gli eventi
       setTimeout(() => {
-        applyAllDaysStyling();
-      }, 10);
+        calendar.render();
+        applyOccupiedDaysStyling();
+        console.log('🔄 Calendar re-renderizzato dopo sync eventi');
+      }, 100);
+    },
+    
+    // 🔧 DOPO MOUNT DELLA VISTA
+    viewDidMount: function(info) {
+      console.log('📅 Vista calendario montata:', info.view.type);
+      
+      // Applica styling ai giorni occupati dopo il render
+      setTimeout(() => {
+        applyOccupiedDaysStyling();
+      }, 50);
     },
 
-    // 📅 CALLBACK DOPO IL RENDER - Aggiungi classi ai giorni passati + styling occupati
+    // 📅 CALLBACK DOPO IL RENDER - Aggiungi classi ai giorni passati
     datesSet: function (info) {
-      console.log('📅 Date renderizzate da', info.start.toISOString().split('T')[0], 'a', info.end.toISOString().split('T')[0]);
+      console.log('📅 Date renderizzate da', info.start, 'a', info.end);
       
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -7400,10 +7399,10 @@ function calendar() {
         }
       });
 
-      // 🔄 Riapplica styling quando cambi mese
+      // Riapplica styling ogni volta che le date cambiano
       setTimeout(() => {
-        applyAllDaysStyling();
-      }, 100);
+        applyOccupiedDaysStyling();
+      }, 50);
     },
 
     // 🎯 EVENT HANDLERS - Semplificati (selectAllow già filtra)
@@ -7467,152 +7466,108 @@ function calendar() {
 
   // RENDER DEL CALENDARIO
   calendar.render();
-  console.log('🎯 Calendario inizializzato, Lottie attivo fino al caricamento eventi');
+  
+  // 🔄 FORZA AGGIORNAMENTO DOPO RENDER INIZIALE
+  setTimeout(() => {
+    applyOccupiedDaysStyling();
+    console.log('🎯 Styling iniziale applicato');
+  }, 200);
 
   // MODIFICA: Identifica automaticamente il campo input nascosto
   currentInputField =
     inputFields[0] || document.querySelector(".form-text-field-2");
 
-  // 🔧 FUNZIONE PER NASCONDERE IL TUO LOTTIE
+  // 🔧 FUNZIONE SEMPLICE PER NASCONDERE LOTTIE
   function hideCalendarWaiting() {
     const waitingEl = document.querySelector('.calendar-waiting');
     
     if (waitingEl) {
-      // Animazione fade out opzionale
-      waitingEl.style.transition = 'opacity 0.3s ease';
-      waitingEl.style.opacity = '0';
-      
-      setTimeout(() => {
-        waitingEl.style.display = 'none';
-        console.log('🎯 Lottie calendar-waiting nascosto');
-      }, 300);
+      waitingEl.style.display = 'none';
+      console.log('🎯 Lottie calendar-waiting nascosto');
     } else {
       console.log('⚠️ Elemento .calendar-waiting non trovato');
     }
   }
 
-  // 🔧 FUNZIONE COMPLETA PER APPLICARE STYLING GIORNI OCCUPATI
-  function applyAllDaysStyling() {
+  // 🔧 FUNZIONE PER APPLICARE STYLING AI GIORNI OCCUPATI
+  function applyOccupiedDaysStyling() {
     const events = calendar.getEvents();
+    console.log('📊 Eventi trovati:', events.length);
     
     if (events.length === 0) {
-      console.log('⚠️ Nessun evento trovato, riprovo tra 500ms...');
-      setTimeout(applyAllDaysStyling, 500);
+      console.log('⚠️ Nessun evento, riprovo tra 300ms');
+      setTimeout(applyOccupiedDaysStyling, 300);
       return;
     }
     
-    console.log(`🎯 Applicazione styling a ${events.length} eventi trovati`);
-    
-    // 🧹 RESET di tutti i giorni (rimuovi styling precedente)
-    document.querySelectorAll('.fc-daygrid-day').forEach(day => {
-      day.classList.remove('occupied-day');
-      day.style.textDecoration = '';
-      day.style.opacity = '';
-      day.style.pointerEvents = '';
-      day.style.backgroundColor = '';
-    });
-    
-    // 📊 RAGGRUPPA EVENTI PER GIORNO
-    const eventsByDay = {};
+    // Mappa dei giorni completamente occupati
+    const occupiedDays = new Map();
     
     events.forEach(event => {
-      const dateKey = event.start.toISOString().split('T')[0]; // YYYY-MM-DD
-      
-      if (!eventsByDay[dateKey]) {
-        eventsByDay[dateKey] = [];
+      if (!event.start || !event.end) {
+        console.warn('⚠️ Evento senza start/end:', event);
+        return;
       }
       
-      eventsByDay[dateKey].push({
-        start: event.start.getHours() * 60 + event.start.getMinutes(), // minuti dal midnight
+      const eventDate = event.start.toDateString();
+      
+      if (!occupiedDays.has(eventDate)) {
+        occupiedDays.set(eventDate, []);
+      }
+      
+      occupiedDays.get(eventDate).push({
+        start: event.start.getHours() * 60 + event.start.getMinutes(),
         end: event.end.getHours() * 60 + event.end.getMinutes()
       });
     });
     
-    console.log('📅 Giorni con eventi:', Object.keys(eventsByDay));
-    
-    // 🔍 CONTROLLA OGNI GIORNO SE È COMPLETAMENTE OCCUPATO
-    Object.keys(eventsByDay).forEach(dateKey => {
-      const dayEvents = eventsByDay[dateKey];
-      const isCompletelyOccupied = checkIfDayCompletelyOccupiedAdvanced(dayEvents);
+    // Controlla ogni giorno se è completamente occupato
+    occupiedDays.forEach((dayEvents, dateString) => {
+      const date = new Date(dateString);
       
-      if (isCompletelyOccupied) {
-        const dayElement = document.querySelector(`[data-date="${dateKey}"]`);
+      if (isDayCompletelyOccupiedByEvents(dayEvents)) {
+        const dayElement = calendar.el.querySelector(`[data-date="${date.toISOString().split('T')[0]}"]`);
         
         if (dayElement) {
-          // 🚫 APPLICA STYLING GIORNO OCCUPATO
           dayElement.classList.add('occupied-day');
           dayElement.style.textDecoration = 'line-through';
           dayElement.style.opacity = '0.6';
           dayElement.style.pointerEvents = 'none';
           dayElement.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-          dayElement.style.cursor = 'not-allowed';
           
-          console.log(`🚫 Giorno ${dateKey} completamente occupato e barrato`);
+          console.log('🚫 Giorno completamente occupato:', dateString);
         }
       }
     });
     
-    console.log('✅ Styling giorni completato - giorni occupati ora visibili');
+    console.log('✅ Styling giorni completato');
   }
 
-  // 🔧 HELPER AVANZATO: Controlla se un giorno è completamente occupato
-  function checkIfDayCompletelyOccupiedAdvanced(events) {
-    const WORK_START = 10 * 60; // 10:00 = 600 minuti
-    const WORK_END = 20 * 60;   // 20:00 = 1200 minuti
-    const WORK_DURATION = WORK_END - WORK_START; // 600 minuti (10 ore)
+  // 🔧 HELPER: Controlla se un giorno è completamente occupato basato sugli eventi
+  function isDayCompletelyOccupiedByEvents(events) {
+    // Orari di lavoro: 10:00-20:00 (600-1200 minuti)
+    const workStart = 10 * 60; // 600 min
+    const workEnd = 20 * 60;   // 1200 min
     
-    console.log(`🔍 Controllo occupazione giorno con ${events.length} eventi`);
-    
-    // 📈 ORDINA EVENTI PER ORA DI INIZIO
+    // Ordina eventi per ora di inizio
     events.sort((a, b) => a.start - b.start);
     
-    // 🔗 UNISCI EVENTI SOVRAPPOSTI O CONSECUTIVI
-    const mergedEvents = [];
+    let covered = 0;
+    let lastEnd = workStart;
     
-    events.forEach(event => {
-      if (mergedEvents.length === 0) {
-        mergedEvents.push({ ...event });
+    for (const event of events) {
+      if (event.start <= lastEnd) {
+        // Evento si sovrappone o è consecutivo
+        lastEnd = Math.max(lastEnd, event.end);
+        covered = lastEnd - workStart;
       } else {
-        const lastEvent = mergedEvents[mergedEvents.length - 1];
-        
-        // Se l'evento inizia prima o quando finisce l'ultimo, uniscili
-        if (event.start <= lastEvent.end) {
-          lastEvent.end = Math.max(lastEvent.end, event.end);
-          console.log(`🔗 Eventi uniti: ${event.start}-${event.end} con precedente`);
-        } else {
-          mergedEvents.push({ ...event });
-        }
+        // Gap trovato
+        break;
       }
-    });
-    
-    // 📊 CALCOLA COPERTURA TOTALE NELL'ORARIO DI LAVORO
-    let totalCovered = 0;
-    
-    mergedEvents.forEach(event => {
-      // Considera solo la parte dell'evento nell'orario di lavoro
-      const start = Math.max(event.start, WORK_START);
-      const end = Math.min(event.end, WORK_END);
-      
-      if (end > start) {
-        const duration = end - start;
-        totalCovered += duration;
-        console.log(`⏰ Evento copre ${duration} minuti nell'orario di lavoro`);
-      }
-    });
-    
-    const coveragePercentage = (totalCovered / WORK_DURATION) * 100;
-    
-    console.log(`📊 Copertura totale: ${totalCovered}/${WORK_DURATION} minuti (${coveragePercentage.toFixed(1)}%)`);
-    
-    // 🎯 CONSIDERA COMPLETAMENTE OCCUPATO SE COPERTO ALMENO 90%
-    const isOccupied = coveragePercentage >= 90;
-    
-    if (isOccupied) {
-      console.log('🚫 Giorno COMPLETAMENTE OCCUPATO');
-    } else {
-      console.log('✅ Giorno con disponibilità');
     }
     
+    // Completamente occupato se copre tutto l'orario di lavoro
+    const isOccupied = covered >= (workEnd - workStart);
     return isOccupied;
   }
 
@@ -7698,6 +7653,8 @@ function calendar() {
   // 🔍 FUNZIONE CONTROLLO SLOT OCCUPATI
   function isTimeSlotOccupied(dateTime) {
     return calendar.getEvents().some((event) => {
+      if (!event.start || !event.end) return false;
+      
       var start = new Date(event.start);
       var end = new Date(event.end);
       return dateTime >= start && dateTime < end;
@@ -7727,30 +7684,8 @@ function calendar() {
     // Se non ci sono slot disponibili, il giorno è completamente occupato
     return availableSlots === 0;
   }
-
-  // 🔄 FUNZIONE DI RETRY PER ROBUSTEZZA
-  function forceCalendarRefresh() {
-    console.log('🔄 Forzando refresh calendario...');
-    
-    if (calendar) {
-      // Ricarica eventi dal server
-      calendar.refetchEvents();
-      
-      // Applica styling dopo un breve delay
-      setTimeout(() => {
-        applyAllDaysStyling();
-      }, 200);
-    }
-  }
-
-  // 🎯 ESPORTA FUNZIONI PER DEBUG (opzionale)
-  window.debugCalendar = {
-    applyAllDaysStyling,
-    forceCalendarRefresh,
-    hideCalendarWaiting,
-    checkIfDayCompletelyOccupiedAdvanced
-  };
 }
+
   function studioAnimations() {
     const wrapper = document.getElementById("studio-wrapper");
     const containers = wrapper.querySelectorAll(".ms-img-text-block");
