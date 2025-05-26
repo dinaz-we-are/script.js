@@ -7326,11 +7326,9 @@ function calendar() {
       const selectedDate = selectInfo.start;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-
       if (selectedDate.getUTCDay() === 0 || selectedDate.getUTCDay() === 6) return false;
       if (selectedDate <= today) return false;
       if (isDayCompletelyOccupied(selectedDate)) return false;
-
       return true;
     },
 
@@ -7339,10 +7337,9 @@ function calendar() {
       hideCalendarWaiting();
 
       setTimeout(() => {
-        calendar.render();
-        applyOccupiedDaysStyling();
-        console.log('✅ Styling aggiornato dopo caricamento eventi');
-      }, 150);
+        applyOccupiedDaysStyling(); // ✅ Styling sicuro post-eventi
+        console.log('✅ Styling applicato dopo caricamento eventi');
+      }, 50);
     },
 
     datesSet: function(info) {
@@ -7359,9 +7356,6 @@ function calendar() {
           }
         }
       });
-
-      // 🔁 Applica styling anche a ogni cambio mese
-      applyOccupiedDaysStyling();
     },
 
     select: (info) => openTimeSelection(info.start),
@@ -7378,6 +7372,7 @@ function calendar() {
 
     events: async (fetchInfo, successCallback, failureCallback) => {
       try {
+        console.log("🔄 Caricamento eventi per:", fetchInfo.startStr, "→", fetchInfo.endStr);
         const response = await fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -7412,7 +7407,6 @@ function calendar() {
   }
 
   function applyOccupiedDaysStyling() {
-    // 🔁 Ripulisci vecchio stile
     calendar.el.querySelectorAll('.occupied-day').forEach(el => {
       el.classList.remove('occupied-day');
       el.style = '';
@@ -7478,7 +7472,7 @@ function calendar() {
       if (e.start <= lastEnd) {
         lastEnd = Math.max(lastEnd, e.end);
       } else {
-        return false; // Trovato un buco
+        return false;
       }
     }
     return (lastEnd - workStart) >= (workEnd - workStart);
@@ -7492,12 +7486,10 @@ function calendar() {
       if (!event.start || !event.end) return false;
       const eventDateKey = formatDateForComparison(event.start);
       if (eventDateKey !== dateKey) return false;
-
       const isAllDay = event.allDay ||
         (event.start.getHours() === 0 && event.start.getMinutes() === 0 &&
          event.end.getHours() === 0 && event.end.getMinutes() === 0) ||
         (event.end.getTime() - event.start.getTime() >= 24 * 60 * 60 * 1000);
-
       return isAllDay;
     });
 
@@ -7543,7 +7535,6 @@ function calendar() {
       if (!isTimeSlotOccupied(dt)) {
         const btn = document.createElement("button");
         btn.innerText = `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}`;
-
         btn.addEventListener("click", function () {
           if (currentInputField) {
             currentInputField.value = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${btn.innerText}`;
@@ -7564,6 +7555,7 @@ function calendar() {
     });
   }
 }
+
 
   function studioAnimations() {
     const wrapper = document.getElementById("studio-wrapper");
