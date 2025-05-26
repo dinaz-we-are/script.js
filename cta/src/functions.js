@@ -7326,70 +7326,71 @@ function calendar() {
       const selectedDate = selectInfo.start;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (selectedDate.getUTCDay() === 0 || selectedDate.getUTCDay() === 6) return false;
+
+      const isWeekend = selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+      if (isWeekend) return false;
       if (selectedDate <= today) return false;
       if (isDayCompletelyOccupied(selectedDate)) return false;
+
       return true;
     },
 
-    eventSourceSuccess: function(content, xhr) {    
+    eventSourceSuccess: function(content, xhr) {
       hideCalendarWaiting();
       setTimeout(() => {
-        applyOccupiedDaysStyling();         
+        applyOccupiedDaysStyling();
       }, 50);
     },
 
-  datesSet: function(info) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+    datesSet: function(info) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-  const dayEls = calendarEl.querySelectorAll(".fc-daygrid-day");
-  dayEls.forEach((dayEl) => {
-    const dateStr = dayEl.getAttribute("data-date");
-    if (dateStr) {
-      const cellDate = new Date(dateStr + "T00:00:00");
-      if (cellDate < today) {
-        dayEl.classList.add("fc-day-past");
-      }
-    }
-  });
+      const dayEls = calendarEl.querySelectorAll(".fc-daygrid-day");
+      dayEls.forEach((dayEl) => {
+        const dateStr = dayEl.getAttribute("data-date");
+        if (dateStr) {
+          const cellDate = new Date(dateStr + "T00:00:00");
+          if (cellDate < today) {
+            dayEl.classList.add("fc-day-past");
+          }
+        }
+      });
 
-  // Forza il refetch degli eventi per il nuovo mese
-  calendar.refetchEvents();
-},
-
+      calendar.refetchEvents();
+    },
 
     select: (info) => {
-  const date = info.start;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+      const date = info.start;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-  const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
-  const isPast = date <= today;
-  const isOccupied = isDayCompletelyOccupied(date);
+      const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+      const isPast = date <= today;
+      const isOccupied = isDayCompletelyOccupied(date);
 
-  if (!isWeekend && !isPast && !isOccupied) {
-    openTimeSelection(date);
-  } else {
-    console.log("❌ Giorno selezionato non valido:", date.toISOString().split("T")[0]);
-  }
-},
+      if (!isWeekend && !isPast && !isOccupied) {
+        openTimeSelection(date);
+      } else {
+        console.log("❌ Giorno selezionato non valido:", date.toISOString().split("T")[0]);
+      }
+    },
+
     dateClick: (info) => {
-  const date = info.date;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+      const date = info.date;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-  const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
-  const isPast = date <= today;
-  const isOccupied = isDayCompletelyOccupied(date);
+      const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+      const isPast = date <= today;
+      const isOccupied = isDayCompletelyOccupied(date);
 
-  if (!isWeekend && !isPast && !isOccupied) {
-    openTimeSelection(date);
-  } else {
-    console.log("❌ Giorno non selezionabile:", date.toISOString().split("T")[0]);
-  }
-},
-
+      if (!isWeekend && !isPast && !isOccupied) {
+        openTimeSelection(date);
+      } else {
+        console.log("❌ Giorno non selezionabile:", date.toISOString().split("T")[0]);
+      }
+    },
 
     dayCellClassNames: function (info) {
       const classes = [];
@@ -7401,7 +7402,7 @@ function calendar() {
     },
 
     events: async (fetchInfo, successCallback, failureCallback) => {
-      try {        
+      try {
         const response = await fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
