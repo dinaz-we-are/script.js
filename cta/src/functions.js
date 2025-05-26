@@ -6820,7 +6820,7 @@ function animationPageEnterWebDesign() {
     document.querySelectorAll(".dropdown-container").forEach((faq) => {
       const faqContainer = faq.querySelector(".p-toggle");
       const dropBtn = faq.querySelector(".drop-toggle");
-      const trigger = faq.querySelector(".dropdown-wrapper");
+      const trigger = faq.querySelector(".faq-toggle");
   
       if (!faqContainer || !dropBtn || !trigger) return; // 🔹 Evita errori se gli elementi non esistono
   
