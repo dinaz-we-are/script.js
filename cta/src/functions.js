@@ -7359,8 +7359,37 @@ function calendar() {
 },
 
 
-    select: (info) => openTimeSelection(info.start),
-    dateClick: (info) => openTimeSelection(info.date),
+    select: (info) => {
+  const date = info.start;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
+  const isPast = date <= today;
+  const isOccupied = isDayCompletelyOccupied(date);
+
+  if (!isWeekend && !isPast && !isOccupied) {
+    openTimeSelection(date);
+  } else {
+    console.log("❌ Giorno selezionato non valido:", date.toISOString().split("T")[0]);
+  }
+},
+    dateClick: (info) => {
+  const date = info.date;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
+  const isPast = date <= today;
+  const isOccupied = isDayCompletelyOccupied(date);
+
+  if (!isWeekend && !isPast && !isOccupied) {
+    openTimeSelection(date);
+  } else {
+    console.log("❌ Giorno non selezionabile:", date.toISOString().split("T")[0]);
+  }
+},
+
 
     dayCellClassNames: function (info) {
       const classes = [];
