@@ -7332,31 +7332,32 @@ function calendar() {
       return true;
     },
 
-    eventSourceSuccess: function(content, xhr) {
-      console.log('📅 Eventi caricati:', content.length);
+    eventSourceSuccess: function(content, xhr) {    
       hideCalendarWaiting();
-
       setTimeout(() => {
-        applyOccupiedDaysStyling(); // ✅ Styling sicuro post-eventi
-        console.log('✅ Styling applicato dopo caricamento eventi');
+        applyOccupiedDaysStyling();         
       }, 50);
     },
 
-    datesSet: function(info) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+  datesSet: function(info) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-      const dayEls = calendarEl.querySelectorAll(".fc-daygrid-day");
-      dayEls.forEach((dayEl) => {
-        const dateStr = dayEl.getAttribute("data-date");
-        if (dateStr) {
-          const cellDate = new Date(dateStr + "T00:00:00");
-          if (cellDate < today) {
-            dayEl.classList.add("fc-day-past");
-          }
-        }
-      });
-    },
+  const dayEls = calendarEl.querySelectorAll(".fc-daygrid-day");
+  dayEls.forEach((dayEl) => {
+    const dateStr = dayEl.getAttribute("data-date");
+    if (dateStr) {
+      const cellDate = new Date(dateStr + "T00:00:00");
+      if (cellDate < today) {
+        dayEl.classList.add("fc-day-past");
+      }
+    }
+  });
+
+  // Forza il refetch degli eventi per il nuovo mese
+  calendar.refetchEvents();
+},
+
 
     select: (info) => openTimeSelection(info.start),
     dateClick: (info) => openTimeSelection(info.date),
@@ -7371,8 +7372,7 @@ function calendar() {
     },
 
     events: async (fetchInfo, successCallback, failureCallback) => {
-      try {
-        console.log("🔄 Caricamento eventi per:", fetchInfo.startStr, "→", fetchInfo.endStr);
+      try {        
         const response = await fetch("https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
