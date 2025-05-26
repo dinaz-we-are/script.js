@@ -7325,7 +7325,7 @@ function calendar() {
     buttonText: { today: "oggi" },
     dayHeaderFormat: { weekday: "short" },
 
-    // 🚫 CONTROLLO SELEZIONE - Escludi weekend, oggi e giorni passati
+    // CONTROLLO SELEZIONE - Escludi weekend, oggi e giorni passati
     selectAllow: (selectInfo) => {
       const selectedDate = selectInfo.start;
       const today = new Date();
@@ -7341,32 +7341,27 @@ function calendar() {
         return false;
       }
 
-      // 🔥 NUOVA AGGIUNTA: Escludi giorni completamente occupati
+      // CONTROLLO GIORNI OCCUPATI - Usa date normalizzate
       if (isDayCompletelyOccupied(selectedDate)) {
-        console.log(
-          "🚫 Giorno completamente occupato:",
-          selectedDate.toDateString()
-        );
+        console.log("🚫 Giorno completamente occupato:", formatDateForComparison(selectedDate));
         return false;
       }
 
       return true;
     },
-
-    // 🎯 SOLUZIONE 1 - CALLBACK NATIVI FULLCALENDAR
     
-    // 🔄 DOPO CARICAMENTO EVENTI DAL SERVER
-    eventSourceSuccess: function(content, xhr) {
-      console.log('✅ Eventi caricati dal server');
+    // ✅ FIX: DOPO CARICAMENTO EVENTI DAL SERVER
+    eventSourceSuccess: function(content, xhr) {     
+      console.log('📅 Eventi caricati dal server:', content.length);
       
       // Nascondi Lottie
       hideCalendarWaiting();
       
-      // Forza re-render dopo aver caricato gli eventi
+      // ✅ APPLICA STYLING DOPO CARICAMENTO EVENTI
       setTimeout(() => {
         calendar.render();
         applyOccupiedDaysStyling();
-        console.log('🔄 Calendar re-renderizzato dopo sync eventi');
+        console.log('✅ Styling applicato dopo caricamento eventi');
       }, 100);
     },
     
@@ -7380,7 +7375,7 @@ function calendar() {
       }, 50);
     },
 
-    // 📅 CALLBACK DOPO IL RENDER - Aggiungi classi ai giorni passati
+    // 📅 CALLBACK DOPO IL RENDER
     datesSet: function (info) {
       console.log('📅 Date renderizzate da', info.start, 'a', info.end);
       
@@ -7399,13 +7394,16 @@ function calendar() {
         }
       });
 
-      // Riapplica styling ogni volta che le date cambiano
+      // ✅ APPLICA STYLING SOLO SE CI SONO EVENTI
       setTimeout(() => {
-        applyOccupiedDaysStyling();
+        const events = calendar.getEvents();
+        if (events.length > 0) {
+          applyOccupiedDaysStyling();
+        }
       }, 50);
     },
 
-    // 🎯 EVENT HANDLERS - Semplificati (selectAllow già filtra)
+    // 🎯 EVENT HANDLERS
     select: (info) => {
       openTimeSelection(info.start);
     },
@@ -7425,7 +7423,7 @@ function calendar() {
         classes.push("fc-day-past");
       }
       
-      // NUOVA AGGIUNTA: Classe per giorni completamente occupati
+      // Classe per giorni completamente occupati
       if (info.date > today && isDayCompletelyOccupied(info.date)) {
         classes.push("fc-day-occupied");
       }
@@ -7433,9 +7431,10 @@ function calendar() {
       return classes;
     },
 
-    // EVENTI API - Ripristinato il tuo codice originale
+    // EVENTI API
     events: async (fetchInfo, successCallback, failureCallback) => {
       try {
+        console.log('🔄 Caricamento eventi da server...');
         const response = await fetch(
           "https://us-central1-webflow-project---calltoaction.cloudfunctions.net/getCalendarEvents",
           {
@@ -7451,8 +7450,16 @@ function calendar() {
         if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
 
         const events = await response.json();
+        console.log('📊 Eventi ricevuti:', events.length);
+        
         events.forEach((event) => (event.className = "hidden-event"));
         successCallback(events);
+        
+        // ✅ APPLICA STYLING DOPO SUCCESSO
+        setTimeout(() => {
+          applyOccupiedDaysStyling();
+        }, 150);
+        
       } catch (err) {
         console.error("Errore nel recupero degli eventi:", err);
         failureCallback(err);
@@ -7467,15 +7474,21 @@ function calendar() {
   // RENDER DEL CALENDARIO
   calendar.render();
   
-  // 🔄 FORZA AGGIORNAMENTO DOPO RENDER INIZIALE
-  setTimeout(() => {
-    applyOccupiedDaysStyling();
-    console.log('🎯 Styling iniziale applicato');
-  }, 200);
+  // ❌ RIMOSSO: Non applicare styling prima del caricamento eventi
+  // setTimeout(() => {
+  //   applyOccupiedDaysStyling(); // Questo viene eseguito troppo presto!
+  // }, 200);
 
   // MODIFICA: Identifica automaticamente il campo input nascosto
-  currentInputField =
-    inputFields[0] || document.querySelector(".form-text-field-2");
+  currentInputField = inputFields[0] || document.querySelector(".form-text-field-2");
+
+  // ✅ HELPER: Formatta data per confronti consistenti (sempre in formato locale)
+  function formatDateForComparison(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   // 🔧 FUNZIONE SEMPLICE PER NASCONDERE LOTTIE
   function hideCalendarWaiting() {
@@ -7489,18 +7502,17 @@ function calendar() {
     }
   }
 
-  // 🔧 FUNZIONE PER APPLICARE STYLING AI GIORNI OCCUPATI
+  // ✅ FUNZIONE MIGLIORATA PER APPLICARE STYLING
   function applyOccupiedDaysStyling() {
     const events = calendar.getEvents();
-    console.log('📊 Eventi trovati:', events.length);
+    console.log('📊 Applicazione styling - Eventi trovati:', events.length);
     
     if (events.length === 0) {
-      console.log('⚠️ Nessun evento, riprovo tra 300ms');
-      setTimeout(applyOccupiedDaysStyling, 300);
+      console.log('⚠️ Nessun evento disponibile per lo styling');
       return;
     }
     
-    // Mappa dei giorni completamente occupati
+    // ✅ USA DATE NORMALIZZATE PER CONFRONTI CONSISTENTI
     const occupiedDays = new Map();
     
     events.forEach(event => {
@@ -7509,24 +7521,26 @@ function calendar() {
         return;
       }
       
-      const eventDate = event.start.toDateString();
+      // ✅ USA FORMATO CONSISTENTE PER LE DATE
+      const eventDateKey = formatDateForComparison(event.start);
       
-      if (!occupiedDays.has(eventDate)) {
-        occupiedDays.set(eventDate, []);
+      if (!occupiedDays.has(eventDateKey)) {
+        occupiedDays.set(eventDateKey, []);
       }
       
-      occupiedDays.get(eventDate).push({
+      occupiedDays.get(eventDateKey).push({
         start: event.start.getHours() * 60 + event.start.getMinutes(),
         end: event.end.getHours() * 60 + event.end.getMinutes()
       });
     });
     
+    console.log('📋 Giorni con eventi:', Array.from(occupiedDays.keys()));
+    
     // Controlla ogni giorno se è completamente occupato
-    occupiedDays.forEach((dayEvents, dateString) => {
-      const date = new Date(dateString);
-      
+    occupiedDays.forEach((dayEvents, dateKey) => {
       if (isDayCompletelyOccupiedByEvents(dayEvents)) {
-        const dayElement = calendar.el.querySelector(`[data-date="${date.toISOString().split('T')[0]}"]`);
+        // ✅ USA LO STESSO FORMATO PER TROVARE L'ELEMENTO
+        const dayElement = calendar.el.querySelector(`[data-date="${dateKey}"]`);
         
         if (dayElement) {
           dayElement.classList.add('occupied-day');
@@ -7535,7 +7549,9 @@ function calendar() {
           dayElement.style.pointerEvents = 'none';
           dayElement.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
           
-          console.log('🚫 Giorno completamente occupato:', dateString);
+          console.log('🔴 Giorno completamente occupato stilizzato:', dateKey);
+        } else {
+          console.warn('⚠️ Elemento giorno non trovato per:', dateKey);
         }
       }
     });
@@ -7568,10 +7584,15 @@ function calendar() {
     
     // Completamente occupato se copre tutto l'orario di lavoro
     const isOccupied = covered >= (workEnd - workStart);
+    
+    if (isOccupied) {
+      console.log('🔴 Giorno completamente occupato rilevato');
+    }
+    
     return isOccupied;
   }
 
-  // FUNZIONE SELEZIONE ORARI - Aggiornata e semplificata
+  // FUNZIONE SELEZIONE ORARI
   function openTimeSelection(date) {
     timeSelectionEl.innerHTML = "";
 
@@ -7611,28 +7632,21 @@ function calendar() {
           // ATTIVA AUTOMATICAMENTE IL CHECKBOX
           const dateCheckbox = document.getElementById("date-checkbox");
           if (dateCheckbox) {
-            // Checka il checkbox
             dateCheckbox.checked = true;
 
-            // Simula il click per attivare la validazione Webflow
             const clickEvent = new Event("click", {
               bubbles: true,
               cancelable: true,
             });
             dateCheckbox.dispatchEvent(clickEvent);
 
-            // Anche change event per sicurezza
             const changeEvent = new Event("change", {
               bubbles: true,
               cancelable: true,
             });
             dateCheckbox.dispatchEvent(changeEvent);
 
-            console.log(
-              "✅ Checkbox date-checkbox automaticamente selezionato"
-            );
-          } else {
-            console.warn('⚠️ Checkbox con id "date-checkbox" non trovato');
+            console.log("✅ Checkbox date-checkbox automaticamente selezionato");
           }
 
           // Animazione di chiusura
@@ -7661,14 +7675,14 @@ function calendar() {
     });
   }
 
-  // TUA FUNZIONE ORIGINALE (mantenuta per compatibilità)
+  // ✅ FUNZIONE MIGLIORATA PER CONTROLLO GIORNI OCCUPATI
   function isDayCompletelyOccupied(date) {
     // Genera tutti gli orari possibili per il giorno
     var allTimeSlots = [];
     for (var hour = 10; hour <= 19; hour++) {
       allTimeSlots.push({ hour, minute: 0 }, { hour, minute: 30 });
     }
-    allTimeSlots.push({ hour: 20, minute: 0 }); // Ultimo slot
+    allTimeSlots.push({ hour: 20, minute: 0 });
 
     // Controlla se TUTTI gli orari sono occupati
     var availableSlots = 0;
@@ -7681,8 +7695,13 @@ function calendar() {
       }
     });
 
-    // Se non ci sono slot disponibili, il giorno è completamente occupato
-    return availableSlots === 0;
+    const isOccupied = availableSlots === 0;
+    
+    if (isOccupied) {
+      console.log('🔴 isDayCompletelyOccupied: Giorno occupato -', formatDateForComparison(date));
+    }
+
+    return isOccupied;
   }
 }
 
