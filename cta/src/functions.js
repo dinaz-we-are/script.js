@@ -306,6 +306,8 @@ const showElements = [
           gsap.to(burgerElements.menu, {
             scrollTo: { y: 0, x: 0 },
           });
+          if (burgerElements.wrapper) burgerElements.wrapper.setAttribute("inert", "");
+          document.activeElement?.blur?.(); // per sicurezza
           this.menuOpen = false;
           this.enableBurgerHover();
           this.enableBackHomeLink();
@@ -426,6 +428,8 @@ const showElements = [
           gsap.to(burgerElements.menu, {
             scrollTo: { y: 0, x: 0 },
           });
+          if (burgerElements.wrapper) burgerElements.wrapper.setAttribute("inert", "");
+          document.activeElement?.blur?.(); // per sicurezza
           this.menuOpen = false;
           this.enableBurgerHover();
           this.enableBackHomeLink();
@@ -590,6 +594,8 @@ const showElements = [
         this.disableBurgerHover();
         this.disableBackHomeLink();
         gsap.set(burgerElements.wrapper, { visibility: "visible" });
+        if (burgerElements.wrapper) burgerElements.wrapper.removeAttribute("inert");
+
   
         tl.to(burgerElements.row, {
           y: "0vh",
@@ -757,6 +763,9 @@ const showElements = [
         burger.addEventListener("click", () => this.animateBurger());
       }
       this.animateBurgerHover(); // Inizializza l'hover del burger
+       if (!this.menuOpen && burgerElements.wrapper) {
+    burgerElements.wrapper.setAttribute("inert", "");
+  }
     },
   };
   
