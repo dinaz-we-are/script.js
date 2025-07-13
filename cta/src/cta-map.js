@@ -278,7 +278,7 @@ export default CTAMap;
             {
                "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio – Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it/"
             }
           ]
@@ -297,13 +297,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio – Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Web Studio: Branding, Visual e Logo Design Emozionale.",
+              "name": "CTA Studio | Branding, Visual e Logo Design Emozionale.",
               "item": "https://www.ctastudio.it/branding-e-graphic-design"
             }
           ]
@@ -322,13 +322,13 @@ export default CTAMap;
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
+            "name": "CTA Studio | Branding e Web Design per umane emozioni",
             "item": "https://www.ctastudio.it"
           },
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "CTA Web Studio: Web Design, UI/UX e Sviluppo Siti Web.",
+            "name": "CTA Studio | Web Design, UI/UX e Sviluppo Siti Web.",
             "item": "https://www.ctastudio.it/ui-ux-design"
           }
         ]
@@ -347,13 +347,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Web Studio: Web Booster, SEO e Strategie Digitali.",
+              "name": "CTA Studio | Web Booster, SEO e Strategie Digitali.",
               "item": "https://www.ctastudio.it/web-marketing"
             }
           ]
@@ -372,13 +372,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Web Studio: Contatti - Parlaci del tuo Progetto.",
+              "name": "CTA Studio | Contatti - Parlaci del tuo Progetto.",
               "item": "https://www.ctastudio.it/contatti"
             }
           ]
@@ -397,13 +397,13 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it"
             },
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Web Studio: Chi siamo e la nostra visione.",
+              "name": "CTA Studio | Chi siamo e la nostra visione.",
               "item": "https://www.ctastudio.it/about"
             }
           ]
@@ -422,7 +422,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 1,
-              "name": "CTA Web Studio - Design e Siti Web per Umane Emozioni.",
+              "name": "CTA Studio | Branding e Web Design per umane emozioni",
               "item": "https://www.ctastudio.it"
             },
             {
