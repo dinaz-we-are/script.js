@@ -318,6 +318,8 @@ const showElements = [
               dropdown.classList.remove("open");
             }
           });
+          burgerElements.burgerWrapper.setAttribute("aria-expanded", "false");
+          burgerElements.burgerWrapper.setAttribute("aria-label", "Apri il Menu");
         },
       });
   
@@ -439,6 +441,8 @@ const showElements = [
               dropdown.classList.remove("open");
             }
           });
+           burgerElements.burgerWrapper.setAttribute("aria-expanded", "false");
+          burgerElements.burgerWrapper.setAttribute("aria-label", "Apri il Menu");
         },
       });
   
@@ -587,6 +591,8 @@ const showElements = [
       const tl = gsap.timeline({
         onComplete: () => {
           if (callback) callback();
+          burgerElements.burgerWrapper.setAttribute("aria-expanded", "true");
+          burgerElements.burgerWrapper.setAttribute("aria-label", "Chiudi il Menu");
         },
       });
   
