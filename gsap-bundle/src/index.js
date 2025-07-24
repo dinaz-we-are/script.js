@@ -3,7 +3,6 @@ import { gsap } from "gsap/dist/gsap";
 
 // Importa i plugin di GSAP da dist/
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { Observer } from "gsap/dist/Observer";
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
 import { DrawSVGPlugin } from "gsap/dist/DrawSVGPlugin";
 
@@ -15,10 +14,9 @@ import SplitType from "split-type";
 
 // Registra i plugin con GSAP
 gsap.registerPlugin(
-  ScrollTrigger,
-  Observer,
-  ScrollToPlugin,  
-  DrawSVGPlugin, 
+  ScrollTrigger, 
+  ScrollToPlugin,
+  DrawSVGPlugin,
 );
 
 // Esporta tutto su window per accesso globale
@@ -29,10 +27,9 @@ if (typeof window !== "undefined") {
   window.SplitType = SplitType;
 
   // Plugin singoli se servono da richiamare separatamente
-  window.ScrollTrigger = ScrollTrigger;
-  window.Observer = Observer;
+  window.ScrollTrigger = ScrollTrigger; 
   window.ScrollToPlugin = ScrollToPlugin;
-   window.DrawSVGPlugin = DrawSVGPlugin;    
+  window.DrawSVGPlugin = DrawSVGPlugin; 
  }
 
 

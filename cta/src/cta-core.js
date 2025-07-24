@@ -412,7 +412,7 @@ function cleanUpTriggers() {
       this.instance = new Lenis({
         restoreScrollPosition: false,
         duration: 2,
-        orientation: "both",
+        orientation: "vertical",
         smoothWheel: true,
         smoothTouch: false,
         wheelMultiplier: 2,
@@ -421,9 +421,12 @@ function cleanUpTriggers() {
         prevent: (node) => node.id === "calendar",
       });
   
-      this.instance.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => this.instance.raf(time * 1000));
-      gsap.ticker.lagSmoothing(0);
+      const animate = (time) => {
+      this.instance.raf(time);
+      ScrollTrigger.update(); // mantiene sincronizzati i trigger
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
   
       document.addEventListener(
         "wheel",

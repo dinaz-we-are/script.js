@@ -47,7 +47,7 @@ export default CTAMap;
     "66744f8d053fecc97b97583d": {
       name: "branding",
       jsonKey: "66744f8d053fecc97b97583d",
-      scripts: ["https://cdn.jsdelivr.net/gh/dinaz-we-are/script.js@20a9ac7b9505b9ab97a95f13df0ad1849a1dcc58/gsap-bundle/dist/branding-bundle.js"],
+      scripts: [],
       styles: [],
     },
     "66867d874ba89152319da959": {

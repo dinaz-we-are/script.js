@@ -6,7 +6,7 @@ module.exports = {
   mode: 'production',
   entry: {
   'gsap': './src/index.js',
-  'branding': './src/indexBranding.js'
+  'specificPluginImport': './src/specificPluginImport.js'   
 },
   output: {
     filename: '[name]-bundle.js',  // Nome del file di output

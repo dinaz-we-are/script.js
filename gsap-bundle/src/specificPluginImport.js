@@ -10,13 +10,14 @@ import { InertiaPlugin } from "gsap/dist/InertiaPlugin";
 gsap.registerPlugin(
   MotionPathPlugin,  
   InertiaPlugin,
-  Draggable
+  Draggable,
+
 );
 
 // Esporta su window per compatibilità con Webflow
 if (typeof window !== "undefined") {  
  window.MotionPathPlugin = MotionPathPlugin;
   window.Draggable = Draggable;
-    window.InertiaPlugin = InertiaPlugin;
+    window.InertiaPlugin = InertiaPlugin;     
 }
 
