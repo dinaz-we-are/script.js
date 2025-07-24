@@ -271,7 +271,7 @@ export default CTAMap;
       json: `{
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "url": "https://www.ctastudio.it/",
+        "url": "https://www.ctastudio.it",
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [
@@ -303,7 +303,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio | Branding, Visual e Logo Design Emozionale.",
+              "name": "CTA Studio | Branding, Visual e Logo Design Emozionale",
               "item": "https://www.ctastudio.it/branding-e-graphic-design"
             }
           ]
@@ -328,7 +328,7 @@ export default CTAMap;
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "CTA Studio | Web Design, UI/UX e Sviluppo Siti Web.",
+            "name": "CTA Studio | Web Design, UI/UX e Sviluppo Siti Web",
             "item": "https://www.ctastudio.it/ui-ux-design"
           }
         ]
@@ -353,7 +353,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio | Web Booster, SEO e Strategie Digitali.",
+              "name": "CTA Studio | Web Booster & SEO AI Ready",
               "item": "https://www.ctastudio.it/web-marketing"
             }
           ]
@@ -378,7 +378,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio | Contatti - Parlaci del tuo Progetto.",
+              "name": "CTA Studio | Contatti - Parlaci del tuo Progetto",
               "item": "https://www.ctastudio.it/contatti"
             }
           ]
@@ -403,7 +403,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "CTA Studio | Chi siamo e la nostra visione.",
+              "name": "CTA Studio | Chi siamo e la nostra visione",
               "item": "https://www.ctastudio.it/about"
             }
           ]
@@ -428,7 +428,7 @@ export default CTAMap;
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "PROPOSITO - Il Web Magazine per ispirare, crescere e realizzare.",
+              "name": "PROPOSITO - Il Web Magazine per ispirare, crescere e realizzare",
               "item": "https://www.ctastudio.it/proposito/home"
             }
           ]
